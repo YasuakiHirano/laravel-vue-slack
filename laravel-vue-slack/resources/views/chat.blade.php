@@ -6,8 +6,8 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <title>laravel vue slack</title>
     </head>
-    <body>
-        <div id="app">
+    <body class="h-screen w-screen">
+        <div id="app" class="h-screen w-screen">
             <router-view></router-view>
         </div>
         <script src="{{ asset('js/app.js') }}"></script>
