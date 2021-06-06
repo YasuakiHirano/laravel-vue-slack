@@ -1,0 +1,50 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: laravel_vue_nginx
+    ports:
+      - 8095:8080
+    depends_on:
+      - php
+      - db
+    volumes:
+      - ./nginx/server.conf:/etc/nginx/conf.d/default.conf
+      - ../:/var/www/html
+
+  php:
+    build: ./php
+    container_name: laravel_vue_php
+    ports:
+      - 6001:6001
+    depends_on:
+      - db
+    volumes:
+      - ../:/var/www/html
+      - ./php/log/:/var/log/php/
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: laravel_vue_phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    depends_on:
+      - db
+    ports:
+      - 8888:80
+
+  db:
+    image: mysql:8.0
+    container_name: laravel_vue_mysql
+    ports:
+      - 13306:3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/log/:/var/log/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      TZ: Asia/Tokyo
