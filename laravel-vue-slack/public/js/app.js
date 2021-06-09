@@ -16796,12 +16796,16 @@ var _withId = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.withScopeId)("dat
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-80d584ac");
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"fixed h-10 w-screen head-color overflow-y-hidden\" data-v-80d584ac></div><div class=\"fixed h-screen w-3/12 side-menu mt-10\" data-v-80d584ac><div class=\"p-3 mb-3 text-white border-t-2 border-b-2 slack-name-area\" data-v-80d584ac> LaravelVueSlack </div><div class=\"pl-3 pb-2 text-sm text-white text-opacity-50\" data-v-80d584ac>スレッド</div><div class=\"pl-3 pb-2 text-sm text-white text-opacity-50\" data-v-80d584ac>メンション＆リアクション</div><div class=\"pl-3 pb-2 text-sm text-white text-opacity-50\" data-v-80d584ac>チャンネル</div></div><div class=\"flex h-screen\" data-v-80d584ac><div class=\"w-3/12 empty-side-menu\" data-v-80d584ac> </div><div class=\"w-screen mt-10 pl-3 pt-3 overflow-y-scroll\" data-v-80d584ac><div class=\"w-11/12 pl-2\" data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac></div></div></div>", 3);
+var _hoisted_1 = {
+  "class": "main"
+};
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"header\" data-v-80d584ac></div><div class=\"side-menu\" data-v-80d584ac><div class=\"p-3 mb-3 text-white border-t-2 border-b-2 slack-name-area\" data-v-80d584ac> LaravelVueSlack </div><div class=\"pl-3 pb-2 text-sm text-white text-opacity-50\" data-v-80d584ac>スレッド</div><div class=\"pl-3 pb-2 text-sm text-white text-opacity-50\" data-v-80d584ac>メンション＆リアクション</div><div class=\"pl-3 pb-2 text-sm text-white text-opacity-50\" data-v-80d584ac>チャンネル</div></div><div class=\"message-area\" data-v-80d584ac><div data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac> test<br data-v-80d584ac></div><div class=\"text-area text-center\" data-v-80d584ac><textarea class=\"resize-none border border-gray-800 rounded-md p-3 input-text h-4/5 mt-2\" data-v-80d584ac></textarea><div class=\"bg-gray-200 border-gray-500 icon-area rounded-md border\" data-v-80d584ac>icon area</div></div></div>", 3);
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [_hoisted_1]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [_hoisted_2]);
 });
 
 /***/ }),
@@ -21380,7 +21384,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.head-color[data-v-80d584ac] {\n  background-color:#350d36;\n}\n.side-menu[data-v-80d584ac] {\n  background-color:#3F0E40;\n  min-width: 15rem;\n  max-width: 15rem;\n}\n.empty-side-menu[data-v-80d584ac] {\n  min-width: 15rem;\n  max-width: 15rem;\n}\n.slack-name-area[data-v-80d584ac] {\n  border-color:#521953;\n  border-width: 1px;\n  font-weight: bold;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.main[data-v-80d584ac] {\n  display: grid;\n  grid-template-columns: minmax(180px, 20%) 1fr;\n  grid-auto-rows: 30px calc(100vh - 30px);\n  min-height: 100vh;\n  margin: 0;\n}\n.header[data-v-80d584ac] {\n  grid-row: 1;\n  grid-column: 1 / span 2;\n  background-color:#350d36;\n}\n.side-menu[data-v-80d584ac] {\n  grid-row: 2;\n  grid-column: 1;\n  overflow-y: scroll;\n  overflow-x: hidden;\n  background-color:#3F0E40;\n}\n.message-area[data-v-80d584ac] {\n  grid-row: 2;\n  grid-column: 2;\n  overflow-y: hidden;\n  overflow-x: hidden;\n\n  display: grid;\n  grid-auto-rows: 1fr 100px;\n}\n.input-text[data-v-80d584ac]{\n  width: 97%;\n}\n.icon-area[data-v-80d584ac] {\n  text-align: right;\n  position: absolute;\n  width: 200px;\n  height: 35px;\n  bottom: 13px;\n  right: 16px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
