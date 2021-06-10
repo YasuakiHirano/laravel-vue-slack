@@ -3,38 +3,103 @@
         <div class="header">
         </div>
         <div class="side-menu">
-            <div class="p-3 mb-3 text-white border-t-2 border-b-2 slack-name-area">
+            <div class="p-3 mb-3 text-white border-l-0 border-r-0 border slack-name-area">
                 LaravelVueSlack
             </div>
-            <div class="pl-3 pb-2 text-sm text-white text-opacity-50">スレッド</div>
-            <div class="pl-3 pb-2 text-sm text-white text-opacity-50">メンション＆リアクション</div>
-            <div class="pl-3 pb-2 text-sm text-white text-opacity-50">チャンネル</div>
+            <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+              </svg>
+              スレッド</div>
+            <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
+              </svg>
+              メンション＆リアクション
+            </div>
+            <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex justify-between" @click="toggleChannels()">
+              <div class="flex">
+                <template v-if="state.toggleChannel">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </template>
+                <template v-else>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                  </svg>
+                </template>
+                チャンネル
+              </div>
+              <div class="mr-5 text-lg">
+                +
+              </div>
+            </div>
+            <div v-if="state.toggleChannel">
+              <div class="m-auto w-9/12 text-white text-opacity-70 ">
+              #&nbsp;&nbsp;general
+              </div>
+            </div>
         </div>
         <div class="message-area">
-            <div>
+            <div class="border pt-2 pl-5 text-lg font-bold">
+                # channel name.<br/>
+            </div>
+            <div class="p-5 pt-3">
                 test<br/>
                 test<br/>
                 test<br/>
             </div>
             <div class="text-area text-center">
                 <textarea class="resize-none border border-gray-800 rounded-md p-3 input-text h-4/5 mt-2"></textarea>
-                <div class="bg-gray-200 border-gray-500 icon-area rounded-md border">icon area</div>
+                <div class="bg-gray-200 border-gray-500 icon-area rounded-md border flex pt-1 pb-1 justify-end">
+                  <div class="border border-green-800 bg-red-400 hover:bg-red-600 rounded p-1 ml-3 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div class="border border-green-800 bg-yellow-400 hover:bg-yellow-600 rounded p-1 ml-3 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="border border-green-800 bg-green-400 hover:bg-green-600 rounded p-1 ml-3 mr-3 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                  </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { reactive } from 'vue';
 export default {
-  mounted() {
-    console.log('Component mounted.')
-  }
+  setup() {
+    const state = reactive({
+      toggleChannel: false
+    });
+
+    const toggleChannels = () => {
+      if (state.toggleChannel) {
+        state.toggleChannel = false;
+      } else {
+        state.toggleChannel = true;
+      }
+    }
+    return { 
+      state,
+      toggleChannels
+    }
+  },
 }
 </script>
 <style scoped>
 .main {
   display: grid;
-  grid-template-columns: minmax(180px, 20%) 1fr;
+  grid-template-columns: minmax(210px, 20%) 1fr;
   grid-auto-rows: 30px calc(100vh - 30px);
   min-height: 100vh;
   margin: 0;
@@ -58,7 +123,7 @@ export default {
   overflow-x: hidden;
 
   display: grid;
-  grid-auto-rows: 1fr 100px;
+  grid-auto-rows: 50px 1fr 100px;
 }
 .input-text{
   width: 97%;
@@ -66,9 +131,9 @@ export default {
 .icon-area {
   text-align: right;
   position: absolute;
-  width: 200px;
-  height: 35px;
-  bottom: 13px;
+  width: 145px;
+  height: 40px;
+  bottom: 15px;
   right: 16px;
 }
 </style>
