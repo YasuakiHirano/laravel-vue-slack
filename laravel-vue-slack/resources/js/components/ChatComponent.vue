@@ -3,7 +3,7 @@
         <div class="header">
         </div>
         <div class="side-menu">
-            <div class="p-3 mb-3 text-white border-l-0 border-r-0 border slack-name-area">
+            <div class="p-3 mb-3 text-white border-l-0 border-r-0 border border-white border-opacity-20">
                 LaravelVueSlack
             </div>
             <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex">
@@ -42,13 +42,102 @@
             </div>
         </div>
         <div class="message-area">
-            <div class="border pt-2 pl-5 text-lg font-bold">
-                # channel name.<br/>
+            <div class="border text-lg font-bold flex justify-between">
+                <div class="pt-2 pl-5">
+                # channel name.
+                </div>
+                <div class="border mr-4 w-14 rounded-md mt-2 mb-2 hover:bg-gray-100 cursor-pointer flex justify-between">
+                    <div class="m-1 ml-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                    <div class="mt-1 mr-3 text-sm">
+                        10
+                    </div>
+                </div>
             </div>
-            <div class="p-5 pt-3">
-                test<br/>
-                test<br/>
-                test<br/>
+            <div class="w-full overflow-y-scroll">
+                <div class="border mt-5 border-b-0 w-full">
+                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
+                        6月9日(水)
+                    </div>
+                    <div class="p-5 pt-0 flex">
+                        <div class="w-12">
+                            <img src="image/user_image.png" class="w-11 border rounded-md" />
+                        </div>
+                        <div class="ml-2">
+                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
+                            test<br/>
+                            test<br/>
+                            test<br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="border mt-5 border-b-0 w-full">
+                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
+                        6月10日(木)
+                    </div>
+                    <div class="p-5 pt-0 flex">
+                        <div class="w-12">
+                            <img src="image/user_image.png" class="w-11 border rounded-md" />
+                        </div>
+                        <div class="ml-2">
+                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
+                            test<br/>
+                            test<br/>
+                            test<br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="border mt-5 border-b-0 w-full">
+                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
+                        6月11日(金)
+                    </div>
+                    <div class="p-5 pt-0 flex">
+                        <div class="w-12">
+                            <img src="image/user_image.png" class="w-11 border rounded-md" />
+                        </div>
+                        <div class="ml-2">
+                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
+                            test<br/>
+                            test<br/>
+                            test<br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="border mt-5 border-b-0 w-full">
+                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
+                        6月12日(土)
+                    </div>
+                    <div class="p-5 pt-0 flex">
+                        <div class="w-12">
+                            <img src="image/user_image.png" class="w-11 border rounded-md" />
+                        </div>
+                        <div class="ml-2">
+                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
+                            test<br/>
+                            test<br/>
+                            test<br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="border mt-5 border-b-0 w-full">
+                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
+                        今日
+                    </div>
+                    <div class="p-5 pt-0 flex">
+                        <div class="w-12">
+                            <img src="image/user_image.png" class="w-11 border rounded-md" />
+                        </div>
+                        <div class="ml-2">
+                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
+                            test<br/>
+                            test<br/>
+                            test<br/>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="text-area text-center">
                 <textarea class="resize-none border border-gray-800 rounded-md p-3 input-text h-4/5 mt-2"></textarea>
@@ -89,7 +178,7 @@ export default {
         state.toggleChannel = true;
       }
     }
-    return { 
+    return {
       state,
       toggleChannels
     }
@@ -133,7 +222,7 @@ export default {
   position: absolute;
   width: 145px;
   height: 40px;
-  bottom: 15px;
-  right: 16px;
+  bottom: 18px;
+  right: 20px;
 }
 </style>
