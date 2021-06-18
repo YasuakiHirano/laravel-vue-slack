@@ -1,7 +1,6 @@
 <template>
     <div class="main">
-        <div class="header">
-        </div>
+        <div class="header"></div>
         <div class="side-menu">
             <div class="p-3 mb-3 text-white border-l-0 border-r-0 border border-white border-opacity-20">
                 LaravelVueSlack
