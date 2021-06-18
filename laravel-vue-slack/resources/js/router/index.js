@@ -3,13 +3,13 @@ import * as VueRouter from 'vue-router';
 const routes = [
   {
     path: '/',
-    name: 'LoginComponent',
-    component: require('../components/LoginComponent.vue').default
+    name: 'Login',
+    component: require('../components/pages/Login.vue').default
   },
   {
     path: '/chat',
-    name: 'ChatComponent',
-    component: require('../components/ChatComponent.vue').default
+    name: 'Chat',
+    component: require('../components/pages/Chat.vue').default
   },
 ]
 

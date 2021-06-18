@@ -36,5 +36,28 @@ import { createApp } from 'vue'
 import router from './router'
 
 const app = createApp({})
+
 app.use(router)
 app.mount('#app')
+
+
+// atoms
+import ChatUserImage from './components/atoms/ChatUserImage.vue'
+import ChatUserName from './components/atoms/ChatUserName.vue'
+import ChatUserDate from './components/atoms/ChatUserDate.vue'
+
+import ShowDate from './components/atoms/ShowDate.vue'
+import ReactionIcon from './components/atoms/ReactionIcon.vue'
+import ReactionNumber from './components/atoms/ReactionIcon.vue'
+
+// molecules
+import ReactionCircle  from './components/molecules/ReactionCircle.vue'
+
+app.component('chat-user-image', ChatUserImage)
+app.component('chat-user-name', ChatUserName)
+app.component('chat-user-date', ChatUserDate)
+app.component('show-date', ShowDate)
+app.component('reaction-icon', ReactionIcon)
+app.component('reaction-number', ReactionNumber)
+
+app.component('reaction-circle', ReactionCircle)

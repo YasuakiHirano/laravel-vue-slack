@@ -108,25 +108,19 @@
                     </div>
                 </div>
                 <div class="border mt-5 border-b-0 w-full">
-                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
-                        6月12日(土)
-                    </div>
+                    <show-date>6月12日(土）</show-date>
                     <div class="p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1">
                         <div class="w-12">
-                            <img src="image/user_image.png" class="w-11 border rounded-md" />
+                            <chat-user-image image="image/user_image.png" />
                         </div>
                         <div class="ml-2">
-                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
+                            <div><chat-user-name>taro</chat-user-name><chat-user-date>08:00</chat-user-date></div>
                             test<br/>
                             test<br/>
                             test<br/>
                             <div class="flex mt-1">
-                                <div class="bg-blue-200 text-center pl-1 pr-1 rounded-full border-blue-700 text-base border-2">
-                                    <span>😆</span><span class="text-blue-700 ml-1 text-sm">5</span>
-                                </div>
-                                <div class="bg-blue-200 text-center ml-1 pl-1 pr-1 rounded-full border-blue-700 text-base border-2">
-                                    <span>👍🏻</span><span class="text-blue-700 ml-1 text-sm">10</span>
-                                </div>
+                                <reaction-circle :number="5" icon="😆" class="mr-1" />
+                                <reaction-circle :number="10" icon="👍" class="mr-1"  />
                             </div>
                         </div>
                     </div>
