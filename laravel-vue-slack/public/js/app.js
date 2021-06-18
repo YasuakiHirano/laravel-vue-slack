@@ -16858,7 +16858,7 @@ var _hoisted_3 = {
 
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
   "class": "p-3 mb-3 text-white border-l-0 border-r-0 border border-white border-opacity-20"
-}, " LaravelVueSlack ", -1
+}, " laravel-vue-slack ", -1
 /* HOISTED */
 );
 
@@ -17206,7 +17206,7 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
   "class": "text-4xl"
-}, "Sign in to localhost.", -1
+}, "Sign in to laravel-vue-slack.", -1
 /* HOISTED */
 );
 
@@ -21807,7 +21807,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.main[data-v-80d584ac] {\n  display: grid;\n  grid-template-columns: minmax(210px, 20%) 1fr;\n  grid-auto-rows: 30px calc(100vh - 30px);\n  min-height: 100vh;\n  margin: 0;\n}\n.header[data-v-80d584ac] {\n  grid-row: 1;\n  grid-column: 1 / span 2;\n  background-color:#350d36;\n}\n.side-menu[data-v-80d584ac] {\n  grid-row: 2;\n  grid-column: 1;\n  overflow-y: scroll;\n  overflow-x: hidden;\n  background-color:#3F0E40;\n}\n.message-area[data-v-80d584ac] {\n  grid-row: 2;\n  grid-column: 2;\n  overflow-y: hidden;\n  overflow-x: hidden;\n\n  display: grid;\n  grid-auto-rows: 50px 1fr 100px;\n}\n.input-text[data-v-80d584ac]{\n  width: 97%;\n}\n.icon-area[data-v-80d584ac] {\n  text-align: right;\n  position: absolute;\n  width: 145px;\n  height: 40px;\n  bottom: 18px;\n  right: 20px;\n}\n.message-tool-area[data-v-80d584ac] {\n  position: absolute;\n  height: 40px;\n  top: -15px;\n  right: 30px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.main[data-v-80d584ac] {\n  display: grid;\n  grid-template-columns: minmax(210px, 20%) 1fr;\n  grid-auto-rows: 30px calc(100vh - 30px);\n  min-height: 100vh;\n  margin: 0;\n}\n.header[data-v-80d584ac] {\n  grid-row: 1;\n  grid-column: 1 / span 2;\n  background-color:#350d36;\n}\n.side-menu[data-v-80d584ac] {\n  grid-row: 2;\n  grid-column: 1;\n  overflow-y: scroll;\n  overflow-x: hidden;\n  background-color:#3F0E40;\n}\n.message-area[data-v-80d584ac] {\n  grid-row: 2;\n  grid-column: 2;\n  overflow-y: hidden;\n  overflow-x: hidden;\n\n  display: grid;\n  grid-auto-rows: 50px 1fr 100px;\n}\n.input-text[data-v-80d584ac]{\n  width: 97%;\n}\n.icon-area[data-v-80d584ac] {\n  text-align: right;\n  position: absolute;\n  width: 145px;\n  height: 40px;\n  bottom: 18px;\n  right: 20px;\n}\n.message-tool-area[data-v-80d584ac] {\n  position: absolute;\n  height: 40px;\n  top: -15px;\n  right: 30px;\n}\n@media screen and (max-width: 500px) {\n.main[data-v-80d584ac] {\n    grid-template-columns: 1fr;\n}\n.side-menu[data-v-80d584ac] {\n    display: none;\n}\n.message-area[data-v-80d584ac] {\n    grid-column: 1;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

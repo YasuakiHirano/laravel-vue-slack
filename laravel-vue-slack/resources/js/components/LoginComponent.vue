@@ -6,7 +6,7 @@
       </svg>
       LaravelVueSlack
     </div>
-    <div class="text-4xl">Sign in to localhost.</div>
+    <div class="text-4xl">Sign in to laravel-vue-slack.</div>
     <div class="w-96 m-auto text-left pt-8">
       <div class="mb-2">
         <label for="email">Email address</label>

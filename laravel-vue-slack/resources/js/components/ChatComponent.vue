@@ -3,7 +3,7 @@
         <div class="header"></div>
         <div class="side-menu">
             <div class="p-3 mb-3 text-white border-l-0 border-r-0 border border-white border-opacity-20">
-                LaravelVueSlack
+                laravel-vue-slack
             </div>
             <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -251,5 +251,16 @@ export default {
   height: 40px;
   top: -15px;
   right: 30px;
+}
+@media screen and (max-width: 500px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+  .side-menu {
+    display: none;
+  }
+  .message-area {
+    grid-column: 1;
+  }
 }
 </style>
