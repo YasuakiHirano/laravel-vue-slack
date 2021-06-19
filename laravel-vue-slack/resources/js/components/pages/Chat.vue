@@ -109,7 +109,8 @@
                 </div>
                 <div class="border mt-5 border-b-0 w-full">
                     <show-date>6月12日(土）</show-date>
-                    <div class="p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1">
+                    <div class="group p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
+                        <message-area-icons />
                         <div class="w-12">
                             <chat-user-image image="image/user_image.png" />
                         </div>
@@ -130,18 +131,7 @@
                         今日
                     </div>
                     <div class="group p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
-                        <div class="opacity-0 group-hover:opacity-100 bg-white border-2 border-gray-300 shadow-lg rounded-md border flex pt-1 pb-1 justify-end message-tool-area pr-3 pl-3">
-                          <div class="mr-1 p-1 hover:bg-gray-200 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </div>
-                          <div class="p-1 hover:bg-gray-200 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                            </svg>
-                          </div>
-                        </div>
+                        <message-area-icons />
                         <div class="w-12">
                             <img src="image/user_image.png" class="w-11 border rounded-md" />
                         </div>
@@ -155,24 +145,8 @@
                 </div>
             </div>
             <div class="text-area text-center">
-                <textarea class="resize-none border border-gray-800 rounded-md p-3 input-text h-4/5 mt-2" placeholder="#channel nameへのメッセージ"></textarea>
-                <div class="bg-gray-200 border-gray-500 icon-area rounded-md border flex pt-1 pb-1 justify-end">
-                  <div class="border border-green-800 bg-red-400 hover:bg-red-600 rounded p-1 ml-3 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
-                    </svg>
-                  </div>
-                  <div class="border border-green-800 bg-yellow-400 hover:bg-yellow-600 rounded p-1 ml-3 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div class="border border-green-800 bg-green-400 hover:bg-green-600 rounded p-1 ml-3 mr-3 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                  </div>
-                </div>
+                <chat-text-area class="mt-2" />
+                <text-area-icons class="icon-area" />
             </div>
         </div>
     </div>
@@ -180,7 +154,9 @@
 
 <script>
 import { reactive } from 'vue';
+import MessageAreaIcons from '../molecules/MessageAreaIcons.vue';
 export default {
+  components: { MessageAreaIcons },
   setup() {
     const state = reactive({
       toggleChannel: false
@@ -228,9 +204,6 @@ export default {
 
   display: grid;
   grid-auto-rows: 50px 1fr 100px;
-}
-.input-text{
-  width: 97%;
 }
 .icon-area {
   text-align: right;

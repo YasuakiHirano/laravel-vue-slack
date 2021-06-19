@@ -40,24 +40,38 @@ const app = createApp({})
 app.use(router)
 app.mount('#app')
 
-
 // atoms
 import ChatUserImage from './components/atoms/ChatUserImage.vue'
 import ChatUserName from './components/atoms/ChatUserName.vue'
 import ChatUserDate from './components/atoms/ChatUserDate.vue'
-
+import ChatTextArea from './components/atoms/ChatTextArea.vue'
 import ShowDate from './components/atoms/ShowDate.vue'
 import ReactionIcon from './components/atoms/ReactionIcon.vue'
 import ReactionNumber from './components/atoms/ReactionIcon.vue'
-
-// molecules
-import ReactionCircle  from './components/molecules/ReactionCircle.vue'
+import MentionBoderIcon from './components/atoms/MentionBorderIcon.vue'
+import ReactionBorderIcon from './components/atoms/ReactionBorderIcon.vue'
+import ReactionMessageIcon from './components/atoms/ReactionMessageIcon.vue'
+import ThreadMessageIcon from './components/atoms/ThreadMessageIcon.vue'
+import SendMessageBorderIcon from './components/atoms/SendMessageBorderIcon.vue'
 
 app.component('chat-user-image', ChatUserImage)
 app.component('chat-user-name', ChatUserName)
 app.component('chat-user-date', ChatUserDate)
+app.component('chat-text-area', ChatTextArea)
 app.component('show-date', ShowDate)
 app.component('reaction-icon', ReactionIcon)
 app.component('reaction-number', ReactionNumber)
+app.component('mention-border-icon', MentionBoderIcon)
+app.component('reaction-border-icon', ReactionBorderIcon)
+app.component('reaction-message-icon', ReactionMessageIcon)
+app.component('thread-message-icon', ThreadMessageIcon)
+app.component('send-message-border-icon', SendMessageBorderIcon)
+
+// molecules
+import ReactionCircle  from './components/molecules/ReactionCircle.vue'
+import TextAreaIcons  from './components/molecules/TextAreaIcons.vue'
+import MessageAreaIcons  from './components/molecules/MessageAreaIcons.vue'
 
 app.component('reaction-circle', ReactionCircle)
+app.component('text-area-icons', TextAreaIcons)
+app.component('message-area-icons', MessageAreaIcons)
