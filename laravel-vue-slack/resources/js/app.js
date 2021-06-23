@@ -48,11 +48,17 @@ import ChatTextArea from './components/atoms/ChatTextArea.vue'
 import ShowDate from './components/atoms/ShowDate.vue'
 import ReactionIcon from './components/atoms/ReactionIcon.vue'
 import ReactionNumber from './components/atoms/ReactionIcon.vue'
-import MentionBoderIcon from './components/atoms/MentionBorderIcon.vue'
+import MentionBorderIcon from './components/atoms/MentionBorderIcon.vue'
 import ReactionBorderIcon from './components/atoms/ReactionBorderIcon.vue'
-import ReactionMessageIcon from './components/atoms/ReactionMessageIcon.vue'
-import ThreadMessageIcon from './components/atoms/ThreadMessageIcon.vue'
 import SendMessageBorderIcon from './components/atoms/SendMessageBorderIcon.vue'
+import ServiceTitle from './components/atoms/ServiceTitle.vue'
+import ThreadIcon from './components/atoms/ThreadIcon.vue'
+import MentionIcon from './components/atoms/MentionIcon.vue'
+import ArrowRightIcon from './components/atoms/ArrowRightIcon.vue'
+import ArrowBottomIcon from './components/atoms/ArrowBottomIcon.vue'
+import PlusIcon from './components/atoms/PlusIcon.vue'
+import HappyIcon from './components/atoms/HappyIcon.vue'
+import UserIcon from './components/atoms/UserIcon.vue'
 
 app.component('chat-user-image', ChatUserImage)
 app.component('chat-user-name', ChatUserName)
@@ -61,17 +67,35 @@ app.component('chat-text-area', ChatTextArea)
 app.component('show-date', ShowDate)
 app.component('reaction-icon', ReactionIcon)
 app.component('reaction-number', ReactionNumber)
-app.component('mention-border-icon', MentionBoderIcon)
+app.component('mention-border-icon', MentionBorderIcon)
 app.component('reaction-border-icon', ReactionBorderIcon)
-app.component('reaction-message-icon', ReactionMessageIcon)
-app.component('thread-message-icon', ThreadMessageIcon)
 app.component('send-message-border-icon', SendMessageBorderIcon)
+app.component('service-title', ServiceTitle)
+app.component('thread-icon', ThreadIcon)
+app.component('mention-icon', MentionIcon)
+app.component('arrow-right-icon', ArrowRightIcon)
+app.component('arrow-bottom-icon', ArrowBottomIcon)
+app.component('plus-icon', PlusIcon)
+app.component('happy-icon', HappyIcon)
+app.component('user-icon', UserIcon)
 
 // molecules
 import ReactionCircle  from './components/molecules/ReactionCircle.vue'
 import TextAreaIcons  from './components/molecules/TextAreaIcons.vue'
 import MessageAreaIcons  from './components/molecules/MessageAreaIcons.vue'
+import MentionReactionMenu  from './components/molecules/MentionReactionMenu.vue'
+import ThreadMenu  from './components/molecules/ThreadMenu.vue'
+import ChannelMenu  from './components/molecules/ChannelMenu.vue'
+import UserEntryCount  from './components/molecules/UserEntryCount.vue'
 
 app.component('reaction-circle', ReactionCircle)
 app.component('text-area-icons', TextAreaIcons)
 app.component('message-area-icons', MessageAreaIcons)
+app.component('mention-reaction-menu', MentionReactionMenu)
+app.component('thread-menu', ThreadMenu)
+app.component('channel-menu', ChannelMenu)
+app.component('user-entry-count', UserEntryCount)
+
+// organisms
+import SideMenu  from './components/organisms/SideMenu.vue'
+app.component('side-menu', SideMenu)

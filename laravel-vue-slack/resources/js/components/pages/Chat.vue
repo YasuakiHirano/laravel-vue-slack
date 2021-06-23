@@ -2,40 +2,10 @@
     <div class="main">
         <div class="header"></div>
         <div class="side-menu">
-            <div class="p-3 mb-3 text-white border-l-0 border-r-0 border border-white border-opacity-20">
-                laravel-vue-slack
-            </div>
-            <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
-              スレッド</div>
-            <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
-              </svg>
-              メンション＆リアクション
-            </div>
-            <div class="pl-3 pb-2 text-sm text-white text-opacity-70 cursor-pointer flex justify-between" @click="toggleChannels()">
-              <div class="flex">
-                <template v-if="state.toggleChannel">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </template>
-                <template v-else>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </template>
-                チャンネル
-              </div>
-              <div class="mr-5 opacity-60 hover:opacity-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-              </div>
-            </div>
+            <service-title />
+            <thread-menu />
+            <mention-reaction-menu />
+            <channel-menu class="pl-3" @click="toggleChannels()" :toggle="state.toggleChannel" />
             <div v-if="state.toggleChannel">
               <div class="m-auto w-9/12 text-white text-opacity-70 ">
               #&nbsp;&nbsp;general
@@ -45,18 +15,9 @@
         <div class="message-area">
             <div class="border text-lg font-bold flex justify-between">
                 <div class="pt-2 pl-5">
-                # channel name.
+                  # channel name.
                 </div>
-                <div class="border mr-4 w-14 rounded-md mt-2 mb-2 hover:bg-gray-100 cursor-pointer flex justify-between">
-                    <div class="m-1 ml-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                    <div class="mt-1 mr-3 text-sm">
-                        10
-                    </div>
-                </div>
+                <user-entry-count class="mr-4 mt-2 mb-2">10</user-entry-count>
             </div>
             <div class="w-full overflow-y-scroll">
                 <div class="border mt-5 border-b-0 w-full">
@@ -154,9 +115,7 @@
 
 <script>
 import { reactive } from 'vue';
-import MessageAreaIcons from '../molecules/MessageAreaIcons.vue';
 export default {
-  components: { MessageAreaIcons },
   setup() {
     const state = reactive({
       toggleChannel: false

@@ -1,9 +1,7 @@
 <template>
   <div class="w-10/12 m-auto text-center">
     <div class="text-3xl pt-8 pb-8 pr-10 flex justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-yellow-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
+      <happy-icon class="h-9 w-9 text-yellow-600 mr-3" />
       LaravelVueSlack
     </div>
     <div class="text-4xl">Sign in to laravel-vue-slack.</div>
