@@ -3,8 +3,8 @@
       <service-title />
       <thread-menu />
       <mention-reaction-menu />
-      <channel-menu class="pl-3" :toggle="toggle" />
-      <div v-if="state.toggleChannel">
+      <channel-menu class="pl-3" @event:ToggleChannel="toggleShowList" />
+      <div v-if="isShowList">
         <div class="m-auto w-9/12 text-white text-opacity-70 ">
         #&nbsp;&nbsp;general
         </div>
@@ -13,7 +13,19 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 export default {
-  props: ['toggle']
+  setup() {
+    const isShowList = ref(false);
+
+    const toggleShowList = (toggle) => {
+      isShowList.value = toggle;
+    }
+
+    return {
+      isShowList,
+      toggleShowList
+    }
+  },
 }
 </script>

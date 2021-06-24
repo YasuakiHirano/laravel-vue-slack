@@ -41,6 +41,10 @@ app.use(router)
 app.mount('#app')
 
 // atoms
+import SignInButton from './components/atoms/SignInButton.vue'
+import SignInText from './components/atoms/SignInText.vue'
+import SignInFormLabel from './components/atoms/SignInFormLabel.vue'
+import SignInFormText from './components/atoms/SignInFormText.vue'
 import ChatUserImage from './components/atoms/ChatUserImage.vue'
 import ChatUserName from './components/atoms/ChatUserName.vue'
 import ChatUserDate from './components/atoms/ChatUserDate.vue'
@@ -60,6 +64,10 @@ import PlusIcon from './components/atoms/PlusIcon.vue'
 import HappyIcon from './components/atoms/HappyIcon.vue'
 import UserIcon from './components/atoms/UserIcon.vue'
 
+app.component('sign-in-text', SignInText)
+app.component('sign-in-button', SignInButton)
+app.component('sign-in-form-label', SignInFormLabel)
+app.component('sign-in-form-text', SignInFormText)
 app.component('chat-user-image', ChatUserImage)
 app.component('chat-user-name', ChatUserName)
 app.component('chat-user-date', ChatUserDate)
@@ -80,6 +88,7 @@ app.component('happy-icon', HappyIcon)
 app.component('user-icon', UserIcon)
 
 // molecules
+import AppTitle from './components/molecules/AppTitle.vue'
 import ReactionCircle  from './components/molecules/ReactionCircle.vue'
 import TextAreaIcons  from './components/molecules/TextAreaIcons.vue'
 import MessageAreaIcons  from './components/molecules/MessageAreaIcons.vue'
@@ -88,6 +97,7 @@ import ThreadMenu  from './components/molecules/ThreadMenu.vue'
 import ChannelMenu  from './components/molecules/ChannelMenu.vue'
 import UserEntryCount  from './components/molecules/UserEntryCount.vue'
 
+app.component('app-title', AppTitle)
 app.component('reaction-circle', ReactionCircle)
 app.component('text-area-icons', TextAreaIcons)
 app.component('message-area-icons', MessageAreaIcons)
@@ -98,4 +108,8 @@ app.component('user-entry-count', UserEntryCount)
 
 // organisms
 import SideMenu  from './components/organisms/SideMenu.vue'
+import ShowChannelName  from './components/organisms/ShowChannelName.vue'
+import ChatInputArea  from './components/organisms/ChatInputArea.vue'
 app.component('side-menu', SideMenu)
+app.component('show-channel-name', ShowChannelName)
+app.component('chat-input-area', ChatInputArea)

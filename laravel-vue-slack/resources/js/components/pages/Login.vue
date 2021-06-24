@@ -1,20 +1,13 @@
 <template>
   <div class="w-10/12 m-auto text-center">
-    <div class="text-3xl pt-8 pb-8 pr-10 flex justify-center">
-      <happy-icon class="h-9 w-9 text-yellow-600 mr-3" />
-      LaravelVueSlack
-    </div>
-    <div class="text-4xl">Sign in to laravel-vue-slack.</div>
+    <app-title class="pt-8 pb-8 pr-10" />
+    <sign-in-text>Sign in to laravel-vue-slack.</sign-in-text>
     <div class="w-96 m-auto text-left pt-8">
-      <div class="mb-2">
-        <label for="email">Email address</label>
-      </div>
-      <input type="text" name="email" id="email" placeholder="name@example.com" class="w-full p-2 mb-5 rounded-md border border-gray-500 shadow-sm focus:ring-4 focus:ring-blue-300" />
-      <div class="mb-2">
-        <label for="password">Password</label>
-      </div>
-      <input type="password" name="password" id="password" placeholder="Your password" class="w-full p-2 rounded-md border border-gray-500 shadow-sm focus:ring-4 focus:ring-blue-300" />
-      <button class="w-full rounded-md bg-blue-500 hover:bg-blue-700 text-2xl text-white pt-1 pb-1 mt-8" @click="signIn">Sign in</button>
+      <sign-in-form-label class="mb-2" forText="email" showText="Email address" />
+      <sign-in-form-text  class="mb-2" type="text" name="email" id="email" placeholder="name@example.com" />
+      <sign-in-form-label class="mb-2" forText="password" showText="Password" />
+      <sign-in-form-text  class="mb-5" type="password" name="password" id="password" placeholder="Your password" />
+      <sign-in-button @event:SignIn="signIn" />
     </div>
   </div>
 </template>

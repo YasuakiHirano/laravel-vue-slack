@@ -1,24 +1,9 @@
 <template>
     <div class="main">
         <div class="header"></div>
-        <div class="side-menu">
-            <service-title />
-            <thread-menu />
-            <mention-reaction-menu />
-            <channel-menu class="pl-3" @click="toggleChannels()" :toggle="state.toggleChannel" />
-            <div v-if="state.toggleChannel">
-              <div class="m-auto w-9/12 text-white text-opacity-70 ">
-              #&nbsp;&nbsp;general
-              </div>
-            </div>
-        </div>
+        <side-menu class="side-menu" />
         <div class="message-area">
-            <div class="border text-lg font-bold flex justify-between">
-                <div class="pt-2 pl-5">
-                  # channel name.
-                </div>
-                <user-entry-count class="mr-4 mt-2 mb-2">10</user-entry-count>
-            </div>
+            <show-channel-name># channel name.</show-channel-name>
             <div class="w-full overflow-y-scroll">
                 <div class="border mt-5 border-b-0 w-full">
                     <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
@@ -105,10 +90,7 @@
                     </div>
                 </div>
             </div>
-            <div class="text-area text-center">
-                <chat-text-area class="mt-2" />
-                <text-area-icons class="icon-area" />
-            </div>
+            <chat-input-area />
         </div>
     </div>
 </template>
@@ -121,16 +103,8 @@ export default {
       toggleChannel: false
     });
 
-    const toggleChannels = () => {
-      if (state.toggleChannel) {
-        state.toggleChannel = false;
-      } else {
-        state.toggleChannel = true;
-      }
-    }
     return {
-      state,
-      toggleChannels
+      state
     }
   },
 }
@@ -163,14 +137,6 @@ export default {
 
   display: grid;
   grid-auto-rows: 50px 1fr 100px;
-}
-.icon-area {
-  text-align: right;
-  position: absolute;
-  width: 145px;
-  height: 40px;
-  bottom: 18px;
-  right: 20px;
 }
 .message-tool-area {
   position: absolute;
