@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // ユーザー登録
 Route::post('/user', [UserController::class, 'create']);
+Route::get('/user', [UserController::class, 'find']);
 
 // サインイン
 Route::post('/signin', [SignInController::class, 'signIn']);

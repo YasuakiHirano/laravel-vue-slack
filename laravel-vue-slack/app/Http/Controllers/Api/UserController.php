@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use \Symfony\Component\HttpFoundation\Response;;
 
@@ -30,5 +31,10 @@ class UserController extends Controller
         ]);
 
         return response()->json('User registration completed', Response::HTTP_OK);
+    }
+
+    public function find () {
+        $user = Auth::user();
+        return response()->json($user, Response::HTTP_OK);
     }
 }

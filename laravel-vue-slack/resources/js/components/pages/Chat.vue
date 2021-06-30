@@ -1,6 +1,7 @@
 <template>
     <div class="main">
-        <div class="header"></div>
+        <loading-display :isShow="showLoading" />
+        <chat-header class="header" :userName="userName" />
         <side-menu class="side-menu" />
         <div class="message-area">
             <show-channel-name># channel name.</show-channel-name>
@@ -96,15 +97,26 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive, onMounted, ref } from 'vue'
+import { FindUser } from '../../apis/user.api.js'
 export default {
   setup() {
+    let userName = ref('')
+    let showLoading = ref(true)
     const state = reactive({
       toggleChannel: false
     });
 
+    onMounted(async () => {
+      const user = await FindUser()
+      userName.value = user.name
+      showLoading.value = false
+    });
+
     return {
-      state
+      state,
+      userName,
+      showLoading
     }
   },
 }

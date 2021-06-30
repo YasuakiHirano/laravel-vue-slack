@@ -63,6 +63,8 @@ import ArrowBottomIcon from './components/atoms/ArrowBottomIcon.vue'
 import PlusIcon from './components/atoms/PlusIcon.vue'
 import HappyIcon from './components/atoms/HappyIcon.vue'
 import UserIcon from './components/atoms/UserIcon.vue'
+import UserInformation from './components/atoms/UserInformation.vue'
+import Loading from './components/atoms/Loading.vue'
 
 app.component('sign-in-text', SignInText)
 app.component('sign-in-button', SignInButton)
@@ -86,6 +88,8 @@ app.component('arrow-bottom-icon', ArrowBottomIcon)
 app.component('plus-icon', PlusIcon)
 app.component('happy-icon', HappyIcon)
 app.component('user-icon', UserIcon)
+app.component('user-information', UserInformation)
+app.component('loading', Loading)
 
 // molecules
 import AppTitle from './components/molecules/AppTitle.vue'
@@ -96,6 +100,8 @@ import MentionReactionMenu  from './components/molecules/MentionReactionMenu.vue
 import ThreadMenu  from './components/molecules/ThreadMenu.vue'
 import ChannelMenu  from './components/molecules/ChannelMenu.vue'
 import UserEntryCount  from './components/molecules/UserEntryCount.vue'
+import ChatHeader  from './components/molecules/ChatHeader.vue'
+import LoadingDisplay  from './components/molecules/LoadingDisplay.vue'
 
 app.component('app-title', AppTitle)
 app.component('reaction-circle', ReactionCircle)
@@ -105,6 +111,8 @@ app.component('mention-reaction-menu', MentionReactionMenu)
 app.component('thread-menu', ThreadMenu)
 app.component('channel-menu', ChannelMenu)
 app.component('user-entry-count', UserEntryCount)
+app.component('chat-header', ChatHeader)
+app.component('loading-display', LoadingDisplay)
 
 // organisms
 import SideMenu  from './components/organisms/SideMenu.vue'
