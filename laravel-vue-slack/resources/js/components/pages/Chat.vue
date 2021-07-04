@@ -134,6 +134,8 @@
 <script>
 import { reactive, onMounted, ref } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
+import { SendInvitationMail } from '../../apis/mail.api.js'
+
 export default {
   setup() {
     let userName = ref('')
@@ -161,9 +163,12 @@ export default {
       }
     }
 
-    const sendInvitationMail = () => {
+    const sendInvitationMail = async () => {
       showAddMember.value = false
+      showLoading.value = true
       console.log('sendInvitationMail')
+      await SendInvitationMail()
+      showLoading.value = false
       showAddMemberSuccess.value = true
     }
 
