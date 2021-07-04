@@ -2,7 +2,7 @@
     <div class="main">
         <loading-display :isShow="showLoading" />
         <chat-header class="header" :userName="userName" />
-        <side-menu class="side-menu" />
+        <side-menu class="side-menu" @event:AddMember="toggleAddMemberModal" />
         <div class="message-area">
             <show-channel-name># channel name.</show-channel-name>
             <div class="w-full overflow-y-scroll">
@@ -93,6 +93,41 @@
             </div>
             <chat-input-area />
         </div>
+        <app-modal
+          :showModal="showAddMember"
+          :showAction="true"
+          :showCancel="true"
+          actionText="送信"
+          cancelText="キャンセル"
+          @event:modalClose="toggleAddMemberModal"
+          @event:modalAction="sendInvitationMail"
+          >
+          <template v-slot:app-icon>
+            <user-icon class="h-5 w-5" />
+          </template>
+          <template v-slot:app-title>
+            メンバーを招待します
+          </template>
+          <template v-slot:app-content>
+            <form-text class="mb-2" type="text" v-model="email" name="email" id="email" placeholder="name@example.com" />
+          </template>
+        </app-modal>
+        <app-modal
+          :showModal="showAddMemberSuccess"
+          :showAction="true"
+          :showCancel="false"
+          actionText="終了"
+          @event:modalAction="toggleAddMemberSuccessModal">
+          <template v-slot:app-icon>
+            <user-icon class="h-5 w-5" />
+          </template>
+          <template v-slot:app-title>
+            送信済み
+          </template>
+          <template v-slot:app-content>
+            メンバーの招待が完了しました！
+          </template>
+        </app-modal>
     </div>
 </template>
 
@@ -102,10 +137,35 @@ import { FindUser } from '../../apis/user.api.js'
 export default {
   setup() {
     let userName = ref('')
+    let email = ref('')
     let showLoading = ref(true)
+    let showAddMember = ref(false)
+    let showAddMemberSuccess = ref(false)
     const state = reactive({
       toggleChannel: false
     });
+
+    const toggleAddMemberModal = () => {
+      if (showAddMember.value) {
+        showAddMember.value = false
+      } else {
+        showAddMember.value = true
+      }
+    }
+
+    const toggleAddMemberSuccessModal = () => {
+      if (showAddMemberSuccess.value) {
+        showAddMemberSuccess.value = false
+      } else {
+        showAddMemberSuccess.value = true
+      }
+    }
+
+    const sendInvitationMail = () => {
+      showAddMember.value = false
+      console.log('sendInvitationMail')
+      showAddMemberSuccess.value = true
+    }
 
     onMounted(async () => {
       const user = await FindUser()
@@ -116,7 +176,13 @@ export default {
     return {
       state,
       userName,
-      showLoading
+      email,
+      showLoading,
+      showAddMember,
+      showAddMemberSuccess,
+      sendInvitationMail,
+      toggleAddMemberModal,
+      toggleAddMemberSuccessModal
     }
   },
 }

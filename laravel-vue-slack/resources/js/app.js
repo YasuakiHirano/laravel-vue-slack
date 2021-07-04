@@ -43,8 +43,10 @@ app.mount('#app')
 // atoms
 import SignInButton from './components/atoms/SignInButton.vue'
 import SignInText from './components/atoms/SignInText.vue'
-import SignInFormLabel from './components/atoms/SignInFormLabel.vue'
-import SignInFormText from './components/atoms/SignInFormText.vue'
+import FormLabel from './components/atoms/FormLabel.vue'
+import FormText from './components/atoms/FormText.vue'
+import FormActionButton from './components/atoms/FormActionButton.vue'
+import FormCancelButton from './components/atoms/FormCancelButton.vue'
 import ChatUserImage from './components/atoms/ChatUserImage.vue'
 import ChatUserName from './components/atoms/ChatUserName.vue'
 import ChatUserDate from './components/atoms/ChatUserDate.vue'
@@ -68,8 +70,10 @@ import Loading from './components/atoms/Loading.vue'
 
 app.component('sign-in-text', SignInText)
 app.component('sign-in-button', SignInButton)
-app.component('sign-in-form-label', SignInFormLabel)
-app.component('sign-in-form-text', SignInFormText)
+app.component('form-label', FormLabel)
+app.component('form-text', FormText)
+app.component('form-action-button', FormActionButton)
+app.component('form-cancel-button', FormCancelButton)
 app.component('chat-user-image', ChatUserImage)
 app.component('chat-user-name', ChatUserName)
 app.component('chat-user-date', ChatUserDate)
@@ -102,6 +106,7 @@ import ChannelMenu  from './components/molecules/ChannelMenu.vue'
 import UserEntryCount  from './components/molecules/UserEntryCount.vue'
 import ChatHeader  from './components/molecules/ChatHeader.vue'
 import LoadingDisplay  from './components/molecules/LoadingDisplay.vue'
+import AddMember  from './components/molecules/AddMember.vue'
 
 app.component('app-title', AppTitle)
 app.component('reaction-circle', ReactionCircle)
@@ -113,11 +118,14 @@ app.component('channel-menu', ChannelMenu)
 app.component('user-entry-count', UserEntryCount)
 app.component('chat-header', ChatHeader)
 app.component('loading-display', LoadingDisplay)
+app.component('add-member', AddMember)
 
 // organisms
 import SideMenu  from './components/organisms/SideMenu.vue'
 import ShowChannelName  from './components/organisms/ShowChannelName.vue'
 import ChatInputArea  from './components/organisms/ChatInputArea.vue'
+import AppModal  from './components/organisms/AppModal.vue'
 app.component('side-menu', SideMenu)
 app.component('show-channel-name', ShowChannelName)
 app.component('chat-input-area', ChatInputArea)
+app.component('app-modal', AppModal)

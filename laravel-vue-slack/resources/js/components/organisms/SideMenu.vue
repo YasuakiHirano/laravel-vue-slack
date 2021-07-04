@@ -3,6 +3,7 @@
       <service-title />
       <thread-menu />
       <mention-reaction-menu />
+      <add-member @click="$emit('event:AddMember')" />
       <channel-menu class="pl-3" @event:ToggleChannel="toggleShowList" />
       <div v-if="isShowList">
         <div class="m-auto w-9/12 text-white text-opacity-70 ">
