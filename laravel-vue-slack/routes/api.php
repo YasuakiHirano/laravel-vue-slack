@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // 招待メール送信
     Route::post('/mail/invitation', [MailController::class, 'sendInvitation']);
+    Route::post('/mail/invitation/callback', [MailController::class, 'invitationCallback']);
 });
 
 

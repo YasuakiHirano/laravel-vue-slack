@@ -16860,8 +16860,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['type', 'name', 'id', 'placeholder']
+  props: ['type', 'name', 'id', 'placeholder'],
+  setup: function setup(props, context) {
+    var text = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)('');
+
+    var updateText = function updateText() {
+      context.emit('event:updateText', text);
+    };
+
+    return {
+      text: text,
+      updateText: updateText
+    };
+  }
 });
 
 /***/ }),
@@ -17153,6 +17167,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     };
 
+    var updateEmail = function updateEmail(text) {
+      email.value = text.value;
+    };
+
     var sendInvitationMail = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -17161,9 +17179,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 showAddMember.value = false;
                 showLoading.value = true;
-                console.log('sendInvitationMail');
+                console.log('sendInvitationMail', email.value);
                 _context.next = 5;
-                return (0,_apis_mail_api_js__WEBPACK_IMPORTED_MODULE_3__.SendInvitationMail)();
+                return (0,_apis_mail_api_js__WEBPACK_IMPORTED_MODULE_3__.SendInvitationMail)(email.value);
 
               case 5:
                 showLoading.value = false;
@@ -17212,7 +17230,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       showAddMemberSuccess: showAddMemberSuccess,
       sendInvitationMail: sendInvitationMail,
       toggleAddMemberModal: toggleAddMemberModal,
-      toggleAddMemberSuccessModal: toggleAddMemberSuccessModal
+      toggleAddMemberSuccessModal: toggleAddMemberSuccessModal,
+      updateEmail: updateEmail
     };
   }
 });
@@ -17552,15 +17571,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("input", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("input", {
     type: $props.type,
     name: $props.name,
     id: $props.id,
     placeholder: $props.placeholder,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+      return $setup.text = $event;
+    }),
+    onChange: _cache[2] || (_cache[2] = function () {
+      return $setup.updateText && $setup.updateText.apply($setup, arguments);
+    }),
     "class": "w-full p-2 rounded-md border border-gray-500 shadow-sm focus:ring-4 focus:ring-blue-300"
-  }, null, 8
-  /* PROPS */
-  , ["type", "name", "id", "placeholder"]);
+  }, null, 40
+  /* PROPS, HYDRATE_EVENTS */
+  , ["type", "name", "id", "placeholder"])), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelDynamic, $setup.text]]);
 }
 
 /***/ }),
@@ -18845,16 +18870,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_form_text, {
         "class": "mb-2",
         type: "text",
-        modelValue: $setup.email,
-        "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-          return $setup.email = $event;
-        }),
+        "onEvent:updateText": $setup.updateEmail,
         name: "email",
         id: "email",
         placeholder: "name@example.com"
       }, null, 8
       /* PROPS */
-      , ["modelValue"])];
+      , ["onEvent:updateText"])];
     }),
     _: 1
     /* STABLE */
@@ -19003,7 +19025,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var SendInvitationMail = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(email, password) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(email) {
     var sentEmail;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
@@ -19012,8 +19034,7 @@ var SendInvitationMail = /*#__PURE__*/function () {
             sentEmail = false;
             _context.next = 3;
             return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/mail/invitation', {
-              'email': email,
-              'password': password
+              'email': email
             }).then(function (result) {
               if (result.status === 200) {
                 sentEmail = true;
@@ -19031,7 +19052,7 @@ var SendInvitationMail = /*#__PURE__*/function () {
     }, _callee);
   }));
 
-  return function SendInvitationMail(_x, _x2) {
+  return function SendInvitationMail(_x) {
     return _ref.apply(this, arguments);
   };
 }();

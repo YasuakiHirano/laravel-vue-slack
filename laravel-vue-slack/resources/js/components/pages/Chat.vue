@@ -109,7 +109,7 @@
             メンバーを招待します
           </template>
           <template v-slot:app-content>
-            <form-text class="mb-2" type="text" v-model="email" name="email" id="email" placeholder="name@example.com" />
+            <form-text class="mb-2" type="text" @event:updateText="updateEmail" name="email" id="email" placeholder="name@example.com" />
           </template>
         </app-modal>
         <app-modal
@@ -162,12 +162,15 @@ export default {
         showAddMemberSuccess.value = true
       }
     }
+    const updateEmail = (text) => {
+      email.value = text.value
+    }
 
     const sendInvitationMail = async () => {
       showAddMember.value = false
       showLoading.value = true
-      console.log('sendInvitationMail')
-      await SendInvitationMail()
+      console.log('sendInvitationMail', email.value)
+      await SendInvitationMail(email.value)
       showLoading.value = false
       showAddMemberSuccess.value = true
     }
@@ -187,7 +190,8 @@ export default {
       showAddMemberSuccess,
       sendInvitationMail,
       toggleAddMemberModal,
-      toggleAddMemberSuccessModal
+      toggleAddMemberSuccessModal,
+      updateEmail,
     }
   },
 }
