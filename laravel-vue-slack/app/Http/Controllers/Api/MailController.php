@@ -25,14 +25,11 @@ class MailController extends Controller
         ]);
 
         $param = encrypt($userInformation->id);
-        $callbackUrl = url('/') . '/api/mail/invitaion/callback?param='.$param;
+        $callbackUrl = url('/') . '/mail/invitation/callback?param='.$param;
 
         // TODO: メール送信
         logger()->info(Lang::get('message.mail.invitation', ['url' => $callbackUrl]));
 
         return  response()->json('Success: Send Invitation Mail', Response::HTTP_OK);
-    }
-
-    public function invitationCallback(Request $request) {
     }
 }

@@ -38,9 +38,9 @@ import router from './router'
 const app = createApp({})
 
 app.use(router)
-app.mount('#app')
 
 // atoms
+import AccountCreateButton from './components/atoms/AccountCreateButton.vue'
 import SignInButton from './components/atoms/SignInButton.vue'
 import SignInText from './components/atoms/SignInText.vue'
 import FormLabel from './components/atoms/FormLabel.vue'
@@ -68,6 +68,7 @@ import UserIcon from './components/atoms/UserIcon.vue'
 import UserInformation from './components/atoms/UserInformation.vue'
 import Loading from './components/atoms/Loading.vue'
 
+app.component('account-create-button', AccountCreateButton)
 app.component('sign-in-text', SignInText)
 app.component('sign-in-button', SignInButton)
 app.component('form-label', FormLabel)
@@ -129,3 +130,10 @@ app.component('side-menu', SideMenu)
 app.component('show-channel-name', ShowChannelName)
 app.component('chat-input-area', ChatInputArea)
 app.component('app-modal', AppModal)
+
+// page
+import AccountCreate  from './components/pages/AccountCreate.vue'
+app.component('account-create', AccountCreate)
+
+// id="app"にマウント
+app.mount('#app')

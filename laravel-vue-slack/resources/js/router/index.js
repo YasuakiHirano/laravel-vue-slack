@@ -10,7 +10,7 @@ const routes = [
     path: '/chat',
     name: 'Chat',
     component: require('../components/pages/Chat.vue').default
-  },
+  }
 ]
 
 const router = VueRouter.createRouter({
