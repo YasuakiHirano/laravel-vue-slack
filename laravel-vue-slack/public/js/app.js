@@ -17128,25 +17128,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _apis_user_api_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../apis/user.api.js */ "./resources/js/apis/user.api.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['sendEmail'],
   setup: function setup(props) {
-    console.log(props.sendEmail);
-    var email = '';
-    email = 'test';
+    var inputName = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('');
+    var inputPassword = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('');
 
     var accountCreate = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var created;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _context.next = 2;
+                return (0,_apis_user_api_js__WEBPACK_IMPORTED_MODULE_2__.CreateUser)(props.sendEmail, inputName.value, inputPassword.value);
+
+              case 2:
+                created = _context.sent;
+
+                if (created) {
+                  location.href = location.protocol + "//" + location.host + "/#/chat";
+                }
+
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -17161,7 +17176,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     return {
       accountCreate: accountCreate,
-      email: email
+      inputName: inputName,
+      inputPassword: inputPassword
     };
   }
 });
@@ -18814,9 +18830,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_form_text, {
     "class": "mb-5",
     type: "text",
-    modelValue: _ctx.userName,
+    modelValue: $setup.inputName,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return _ctx.userName = $event;
+      return $setup.inputName = $event;
     }),
     name: "user_name",
     id: "user_name",
@@ -18830,9 +18846,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_form_text, {
     "class": "mb-5",
     type: "password",
-    modelValue: _ctx.password,
+    modelValue: $setup.inputPassword,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return _ctx.password = $event;
+      return $setup.inputPassword = $event;
     }),
     name: "password",
     id: "password",
@@ -19310,7 +19326,8 @@ var FetchUsers = function FetchUsers() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FindUser": () => (/* binding */ FindUser)
+/* harmony export */   "FindUser": () => (/* binding */ FindUser),
+/* harmony export */   "CreateUser": () => (/* binding */ CreateUser)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
@@ -19349,6 +19366,40 @@ var FindUser = /*#__PURE__*/function () {
 
   return function FindUser() {
     return _ref.apply(this, arguments);
+  };
+}();
+var CreateUser = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(email, name, password) {
+    var created;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            created = false;
+            _context2.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/user', {
+              'email': email,
+              'name': name,
+              'password': password
+            }).then(function (result) {
+              if (result.status === 200) {
+                created = true;
+              }
+            });
+
+          case 3:
+            return _context2.abrupt("return", created);
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function CreateUser(_x, _x2, _x3) {
+    return _ref2.apply(this, arguments);
   };
 }();
 

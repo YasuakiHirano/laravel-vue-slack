@@ -7,3 +7,17 @@ export const FindUser = async () => {
   })
   return user.data
 }
+
+export const CreateUser = async (email, name, password) => {
+  let created = false
+  await axios.post('/api/user', {
+    'email': email,
+    'name': name,
+    'password': password
+  }).then((result) => {
+    if (result.status === 200) {
+      created = true
+    }
+  })
+  return created
+}

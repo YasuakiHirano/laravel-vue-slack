@@ -18,7 +18,10 @@ class MailController extends Controller
                 throw new Exception("User not found.");
             }
 
-            return view('account_create', ['sendEmail' => $userInformation->send_email]);
+            return view('account_create', [
+                'sendEmail' => $userInformation->send_email,
+                'userInformationId' => encrypt($userInformation->id),
+            ]);
         } catch (\Throwable $e){
             logger()->info($e);
 

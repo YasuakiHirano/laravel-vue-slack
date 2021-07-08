@@ -27,12 +27,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // 招待メール送信
     Route::post('/mail/invitation', [MailController::class, 'sendInvitation']);
+    Route::get('/user', [UserController::class, 'find']);
 });
-
 
 // ユーザー登録
 Route::post('/user', [UserController::class, 'create']);
-Route::get('/user', [UserController::class, 'find']);
 
 // サインイン
 Route::post('/signin', [SignInController::class, 'signIn']);

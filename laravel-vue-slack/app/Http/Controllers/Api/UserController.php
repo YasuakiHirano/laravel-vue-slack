@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\UserInformation;
 use \Symfony\Component\HttpFoundation\Response;;
 
 class UserController extends Controller
@@ -16,21 +17,27 @@ class UserController extends Controller
         /** @var Illuminate\Validation\Validator $validator */
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required'
         ]);
+
+        $userInformation = UserInformation::whereSendEmail($request->email)->first();
+        if (is_null($userInformation)) {
+            return response()->json('Not found user entry data.', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         if ($validator->fails()) {
             return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        User::create([
+        $user = User::create([
             'name' =>  $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        Auth::attempt($user);
 
-        return response()->json('User registration completed', Response::HTTP_OK);
+        return response()->json('User registration completed.', Response::HTTP_OK);
     }
 
     public function find () {
