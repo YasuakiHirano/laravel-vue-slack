@@ -48,7 +48,6 @@ class MailController extends Controller
 
         $response = $sendgrid->send($email);
         if ($response->statusCode() == Response::HTTP_ACCEPTED) {
-            logger()->info($response);
             return  response()->json('Success: Send Invitation Mail', Response::HTTP_OK);
         } else {
             return  response()->json('Faild: Send Invitation Mail', Response::HTTP_INTERNAL_SERVER_ERROR);

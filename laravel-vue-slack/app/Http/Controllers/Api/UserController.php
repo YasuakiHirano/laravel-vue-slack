@@ -30,12 +30,18 @@ class UserController extends Controller
             return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $user = User::create([
+        // ユーザー作成
+        User::create([
             'name' =>  $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        Auth::attempt($user);
+
+        // ログイン処理
+        Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
 
         return response()->json('User registration completed.', Response::HTTP_OK);
     }
