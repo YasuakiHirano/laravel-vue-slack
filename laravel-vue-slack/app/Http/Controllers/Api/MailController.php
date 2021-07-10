@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
-use App\Models\UserInformation as ModelsUserInformation;
 use Illuminate\Http\Request;
 use App\Models\UserInformation;
 use \Symfony\Component\HttpFoundation\Response;
@@ -28,7 +27,7 @@ class MailController extends Controller
         $userInformation = UserInformation::create([
             'image_number' => $imageNumber,
             'send_email' => $request->email,
-            'status' => '0',
+            'status' => config('const.user_status.unregisterd'),
         ]);
 
         $param = encrypt($userInformation->id);
@@ -48,6 +47,9 @@ class MailController extends Controller
 
         $response = $sendgrid->send($email);
         if ($response->statusCode() == Response::HTTP_ACCEPTED) {
+            // ユーザーステータス更新
+            UserInformation::whereSendEmail($request->email)->update(['status' => config('const.user_status.registerd')]);
+
             return  response()->json('Success: Send Invitation Mail', Response::HTTP_OK);
         } else {
             return  response()->json('Faild: Send Invitation Mail', Response::HTTP_INTERNAL_SERVER_ERROR);

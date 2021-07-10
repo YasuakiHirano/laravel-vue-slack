@@ -37,6 +37,9 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // ユーザーステータス更新
+        UserInformation::whereSendEmail($request->email)->update(['status' => config('const.user_status.registerd')]);
+
         // ログイン処理
         Auth::attempt([
             'email' => $request->email,
