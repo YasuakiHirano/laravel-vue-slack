@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\ChannelUser;
 use App\Models\UserInformation;
 use \Symfony\Component\HttpFoundation\Response;;
 
@@ -31,10 +32,16 @@ class UserController extends Controller
         }
 
         // ユーザー作成
-        User::create([
+        $user = User::create([
             'name' =>  $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        // デフォルトのチャンネルを追加する
+        ChannelUser::create([
+            'user_id' => $user->id,
+            'channel_id' => config('const.default_channel_id')
         ]);
 
         // ユーザーステータス更新

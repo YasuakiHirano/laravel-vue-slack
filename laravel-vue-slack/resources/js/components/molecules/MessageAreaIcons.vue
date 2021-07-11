@@ -14,4 +14,10 @@ export default {
 }
 </script>
 <style scoped>
+.message-tool-area {
+  position: absolute;
+  height: 40px;
+  top: -15px;
+  right: 30px;
+}
 </style>

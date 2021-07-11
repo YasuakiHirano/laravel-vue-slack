@@ -6,8 +6,8 @@
       <add-member @click="$emit('event:AddMember')" />
       <channel-menu class="pl-3" @event:ToggleChannel="toggleShowList" />
       <div v-if="isShowList">
-        <div v-for="channel in channels" :key="channel.name" class="m-auto w-9/12 text-white text-opacity-70 ">
-        #&nbsp;&nbsp;{{ channel.name }}
+        <div v-for="channel in channels" :key="channel.name" class="m-auto w-9/12 text-white text-opacity-70">
+          #&nbsp;&nbsp;{{ channel.name }}
         </div>
       </div>
   </div>
@@ -18,21 +18,21 @@ import { ref, onMounted, reactive } from 'vue'
 import { FetchChannel } from '../../apis/channel.api.js'
 export default {
   setup() {
-    let channels = reactive();
-    const isShowList = ref(false);
+    const channels = ref([])
+    const isShowList = ref(false)
 
     const toggleShowList = (toggle) => {
-      isShowList.value = toggle;
+      isShowList.value = toggle
     }
 
     onMounted(async () => {
-      channels = await FetchChannel();
-      console.log(channels)
+      channels.value = await FetchChannel()
     });
 
     return {
       isShowList,
-      toggleShowList
+      toggleShowList,
+      channels
     }
   },
 }

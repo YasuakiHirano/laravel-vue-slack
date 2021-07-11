@@ -22,20 +22,17 @@ use App\Http\Controllers\Api\ChannelController;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // ログインユーザー取得
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/users', [UserController::class, 'find']);
+
+    // チャンネル
+    Route::get('/channels', [ChannelController::class, 'fetch']);
 
     // 招待メール送信
     Route::post('/mail/invitation', [MailController::class, 'sendInvitation']);
-    Route::get('/user', [UserController::class, 'find']);
-
-    // チャンネル
-    Route::get('/channel/all', [ChannelController::class, 'fetch']);
 });
 
 // ユーザー登録
-Route::post('/user', [UserController::class, 'create']);
+Route::post('/users', [UserController::class, 'create']);
 
 // サインイン
 Route::post('/signin', [SignInController::class, 'signIn']);

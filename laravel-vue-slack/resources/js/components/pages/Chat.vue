@@ -4,94 +4,20 @@
         <chat-header class="header" :userName="userName" />
         <side-menu class="side-menu" @event:AddMember="toggleAddMemberModal" />
         <div class="message-area">
-            <show-channel-name># channel name.</show-channel-name>
-            <div class="w-full overflow-y-scroll">
-                <div class="border mt-5 border-b-0 w-full">
-                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
-                        6月9日(水)
-                    </div>
-                    <div class="p-5 pt-0 flex">
-                        <div class="w-12">
-                            <img src="image/user_image.png" class="w-11 border rounded-md" />
-                        </div>
-                        <div class="ml-2">
-                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
-                            test<br/>
-                            test<br/>
-                            test<br/>
-                        </div>
-                    </div>
-                </div>
-                <div class="border mt-5 border-b-0 w-full">
-                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
-                        6月10日(木)
-                    </div>
-                    <div class="p-5 pt-0 flex">
-                        <div class="w-12">
-                            <img src="image/user_image.png" class="w-11 border rounded-md" />
-                        </div>
-                        <div class="ml-2">
-                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
-                            test<br/>
-                            test<br/>
-                            test<br/>
-                        </div>
-                    </div>
-                </div>
-                <div class="border mt-5 border-b-0 w-full">
-                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
-                        6月11日(金)
-                    </div>
-                    <div class="p-5 pt-0 flex">
-                        <div class="w-12">
-                            <img src="image/user_image.png" class="w-11 border rounded-md" />
-                        </div>
-                        <div class="ml-2">
-                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
-                            test<br/>
-                            test<br/>
-                            test<br/>
-                        </div>
-                    </div>
-                </div>
-                <div class="border mt-5 border-b-0 w-full">
-                    <show-date>6月12日(土）</show-date>
-                    <div class="group p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
-                        <message-area-icons />
-                        <div class="w-12">
-                            <chat-user-image image="image/user_image.png" />
-                        </div>
-                        <div class="ml-2">
-                            <div><chat-user-name>taro</chat-user-name><chat-user-date>08:00</chat-user-date></div>
-                            test<br/>
-                            test<br/>
-                            test<br/>
-                            <div class="flex mt-1">
-                                <reaction-circle :number="5" icon="😆" class="mr-1" />
-                                <reaction-circle :number="10" icon="👍" class="mr-1"  />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="border mt-5 border-b-0 w-full">
-                    <div class="border -mt-3 bg-white p-1 rounded-3xl w-28 m-auto text-xs text-center font-bold">
-                        今日
-                    </div>
-                    <div class="group p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
-                        <message-area-icons />
-                        <div class="w-12">
-                            <img src="image/user_image.png" class="w-11 border rounded-md" />
-                        </div>
-                        <div class="ml-2">
-                            <div class="font-bold text-sm">user name<span class="ml-1 text-xs font-normal text-gray-400">8:00</span></div>
-                            test<br/>
-                            test<br/>
-                            test<br/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <chat-input-area />
+          <show-channel-name># channel name.</show-channel-name>
+          <div class="w-full overflow-y-scroll">
+            <span v-for="message in messages" :key="message.id">
+                <chat-message
+                class="mt-5 w-full"
+                :date="message.date"
+                :imagePath="message.imagePath"
+                :postUserName="message.postUserName"
+                :postTime="message.postTime"
+                :mentions="message.mentions"
+                :content="message.content" />
+            </span>
+          </div>
+          <chat-input-area />
         </div>
         <app-modal
           :showModal="showAddMember"
@@ -140,9 +66,53 @@ export default {
   setup() {
     let userName = ref('')
     let email = ref('')
+    let messages = ref([])
     let showLoading = ref(true)
     let showAddMember = ref(false)
     let showAddMemberSuccess = ref(false)
+
+    messages.value = [
+      {
+        id: 1,
+        date: '6月12日(土）',
+        imagePath: 'image/user_image.png',
+        postUserName: 'taro',
+        postTime: '08:00',
+        content: "test<br>hoge<br>test",
+        mentions: [{
+          id: 1,
+          number: 10,
+          icon: '😵'
+        },{
+          id: 2,
+          number: 13,
+          icon: '😇'
+        },]
+      },
+      {
+        id: 2,
+        date: '6月13日(日）',
+        imagePath: 'image/user_image.png',
+        postUserName: 'taro',
+        postTime: '08:00',
+        content: "test<br>hoge<br>test",
+        mentions: null
+      },
+      {
+        id: 3,
+        date: '今日',
+        imagePath: 'image/user_image.png',
+        postUserName: 'taro',
+        postTime: '08:00',
+        content: "test<br>hoge<br>test",
+        mentions: [{
+          id: 1,
+          number: 7,
+          icon: '👍🏻'
+        }]
+      }
+    ]
+
     const state = reactive({
       toggleChannel: false
     });
@@ -192,6 +162,7 @@ export default {
       toggleAddMemberModal,
       toggleAddMemberSuccessModal,
       updateEmail,
+      messages,
     }
   },
 }
@@ -224,12 +195,6 @@ export default {
 
   display: grid;
   grid-auto-rows: 50px 1fr 100px;
-}
-.message-tool-area {
-  position: absolute;
-  height: 40px;
-  top: -15px;
-  right: 30px;
 }
 @media screen and (max-width: 500px) {
   .main {

@@ -39,7 +39,7 @@ class MailController extends Controller
 
         $email = new Mail();
         $email->setFrom(env('MAIL_FROM_ADDRESS'), env("APP_NAME"));
-        $email->setSubject(Lang::get('message.mail.subject'));
+        $email->setSubject(Lang::get('message.mail.invitation.title'));
         $email->addTo($request->email);
         $email->addContent("text/plain", $mailContents);
 

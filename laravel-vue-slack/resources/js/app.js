@@ -125,10 +125,12 @@ app.component('add-member', AddMember)
 import SideMenu  from './components/organisms/SideMenu.vue'
 import ShowChannelName  from './components/organisms/ShowChannelName.vue'
 import ChatInputArea  from './components/organisms/ChatInputArea.vue'
+import ChatMessage  from './components/organisms/ChatMessage.vue'
 import AppModal  from './components/organisms/AppModal.vue'
 app.component('side-menu', SideMenu)
 app.component('show-channel-name', ShowChannelName)
 app.component('chat-input-area', ChatInputArea)
+app.component('chat-message', ChatMessage)
 app.component('app-modal', AppModal)
 
 // page
