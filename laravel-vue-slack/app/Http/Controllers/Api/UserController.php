@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ChannelUser;
 use App\Models\UserInformation;
-use \Symfony\Component\HttpFoundation\Response;;
+use \Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {

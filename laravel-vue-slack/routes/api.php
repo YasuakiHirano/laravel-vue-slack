@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SignInController;
 use App\Http\Controllers\Api\ChannelController;
+use App\Http\Controllers\Api\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // チャンネル
     Route::get('/channels', [ChannelController::class, 'fetch']);
+
+    // メッセージ
+    Route::post('/messages', [MessageController::class, 'create']);
 
     // 招待メール送信
     Route::post('/mail/invitation', [MailController::class, 'sendInvitation']);
