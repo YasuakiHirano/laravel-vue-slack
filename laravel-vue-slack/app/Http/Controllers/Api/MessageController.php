@@ -24,4 +24,14 @@ class MessageController extends Controller
 
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
+
+    public function fetch(Request $request) {
+        // TODO: 返すデータの修正
+        $messages = Message::whereUserId(Auth::id())
+                ->whereChannelId($request->channel_id)
+                ->with('reactions')
+                ->get();
+
+        return  response()->json($messages, Response::HTTP_OK);
+    }
 }

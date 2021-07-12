@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // メッセージ
     Route::post('/messages', [MessageController::class, 'create']);
+    Route::get('/messages', [MessageController::class, 'fetch']);
 
     // 招待メール送信
     Route::post('/mail/invitation', [MailController::class, 'sendInvitation']);

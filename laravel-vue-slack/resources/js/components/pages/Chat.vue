@@ -61,11 +61,13 @@
 import { reactive, onMounted, ref } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
+import { FetchMessages } from '../../apis/message.api.js'
 
 export default {
   setup() {
     let userName = ref('')
     let email = ref('')
+    let selectChannel = ref(1)
     let messages = ref([])
     let showLoading = ref(true)
     let showAddMember = ref(false)
@@ -74,7 +76,7 @@ export default {
     messages.value = [
       {
         id: 1,
-        date: '6月12日(土）',
+        date: '6月12日(土)',
         imagePath: 'image/user_image.png',
         postUserName: 'taro',
         postTime: '08:00',
@@ -91,7 +93,7 @@ export default {
       },
       {
         id: 2,
-        date: '6月13日(日）',
+        date: '6月13日(日)',
         imagePath: 'image/user_image.png',
         postUserName: 'taro',
         postTime: '08:00',
@@ -147,6 +149,7 @@ export default {
 
     onMounted(async () => {
       const user = await FindUser()
+      messages.value = await FetchMessages(selectChannel.value)
       userName.value = user.name
       showLoading.value = false
     });

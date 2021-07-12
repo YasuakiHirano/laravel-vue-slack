@@ -12,3 +12,16 @@ export const CreateMessage = async (channelId, content) => {
   })
   return created
 }
+
+export const FetchMessages = async (channelId) => {
+    let messages = null
+    await axios.get('/api/messages', {
+      params: {
+        'channel_id': channelId,
+      }
+    }).then((result) => {
+        messages = result
+    })
+    console.log(messages.data)
+    return messages.data
+}

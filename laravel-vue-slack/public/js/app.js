@@ -17318,6 +17318,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _apis_user_api_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../apis/user.api.js */ "./resources/js/apis/user.api.js");
 /* harmony import */ var _apis_mail_api_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../apis/mail.api.js */ "./resources/js/apis/mail.api.js");
+/* harmony import */ var _apis_message_api_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../apis/message.api.js */ "./resources/js/apis/message.api.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -17327,17 +17328,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   setup: function setup() {
     var userName = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('');
     var email = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('');
+    var selectChannel = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(1);
     var messages = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)([]);
     var showLoading = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(true);
     var showAddMember = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
     var showAddMemberSuccess = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
     messages.value = [{
       id: 1,
-      date: '6月12日(土）',
+      date: '6月12日(土)',
       imagePath: 'image/user_image.png',
       postUserName: 'taro',
       postTime: '08:00',
@@ -17353,7 +17356,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }]
     }, {
       id: 2,
-      date: '6月13日(日）',
+      date: '6月13日(日)',
       imagePath: 'image/user_image.png',
       postUserName: 'taro',
       postTime: '08:00',
@@ -17436,10 +17439,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 2:
               user = _context2.sent;
+              _context2.next = 5;
+              return (0,_apis_message_api_js__WEBPACK_IMPORTED_MODULE_4__.FetchMessages)(selectChannel.value);
+
+            case 5:
+              messages.value = _context2.sent;
               userName.value = user.name;
               showLoading.value = false;
 
-            case 5:
+            case 8:
             case "end":
               return _context2.stop();
           }
@@ -19492,7 +19500,8 @@ var SendInvitationMail = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CreateMessage": () => (/* binding */ CreateMessage)
+/* harmony export */   "CreateMessage": () => (/* binding */ CreateMessage),
+/* harmony export */   "FetchMessages": () => (/* binding */ FetchMessages)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
@@ -19536,6 +19545,39 @@ var CreateMessage = /*#__PURE__*/function () {
 
   return function CreateMessage(_x, _x2) {
     return _ref.apply(this, arguments);
+  };
+}();
+var FetchMessages = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(channelId) {
+    var messages;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            messages = null;
+            _context2.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/messages', {
+              params: {
+                'channel_id': channelId
+              }
+            }).then(function (result) {
+              messages = result;
+            });
+
+          case 3:
+            console.log(messages.data);
+            return _context2.abrupt("return", messages.data);
+
+          case 5:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function FetchMessages(_x3) {
+    return _ref2.apply(this, arguments);
   };
 }();
 

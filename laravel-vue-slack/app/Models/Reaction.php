@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Message extends Model
+class Reaction extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'channel_id', 'content'];
-
-    public function reactions() {
-        return $this->hasMany(Reaction::class);
-    }
+    protected $fillable = ['message_id', 'reaction_user_id', 'icon', 'number'];
 }
