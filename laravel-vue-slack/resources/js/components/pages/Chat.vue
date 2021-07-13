@@ -65,55 +65,13 @@ import { FetchMessages } from '../../apis/message.api.js'
 
 export default {
   setup() {
-    let userName = ref('')
-    let email = ref('')
-    let selectChannel = ref(1)
-    let messages = ref([])
-    let showLoading = ref(true)
-    let showAddMember = ref(false)
-    let showAddMemberSuccess = ref(false)
-
-    messages.value = [
-      {
-        id: 1,
-        date: '6月12日(土)',
-        imagePath: 'image/user_image.png',
-        postUserName: 'taro',
-        postTime: '08:00',
-        content: "test<br>hoge<br>test",
-        mentions: [{
-          id: 1,
-          number: 10,
-          icon: '😵'
-        },{
-          id: 2,
-          number: 13,
-          icon: '😇'
-        },]
-      },
-      {
-        id: 2,
-        date: '6月13日(日)',
-        imagePath: 'image/user_image.png',
-        postUserName: 'taro',
-        postTime: '08:00',
-        content: "test<br>hoge<br>test",
-        mentions: null
-      },
-      {
-        id: 3,
-        date: '今日',
-        imagePath: 'image/user_image.png',
-        postUserName: 'taro',
-        postTime: '08:00',
-        content: "test<br>hoge<br>test",
-        mentions: [{
-          id: 1,
-          number: 7,
-          icon: '👍🏻'
-        }]
-      }
-    ]
+    const userName = ref('')
+    const email = ref('')
+    const selectChannel = ref(1)
+    const messages = ref([])
+    const showLoading = ref(true)
+    const showAddMember = ref(false)
+    const showAddMemberSuccess = ref(false)
 
     const state = reactive({
       toggleChannel: false
