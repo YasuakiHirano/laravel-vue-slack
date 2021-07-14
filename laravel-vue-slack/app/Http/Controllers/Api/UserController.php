@@ -47,7 +47,7 @@ class UserController extends Controller
         // ユーザーステータス更新
         UserInformation::whereSendEmail($request->email)->update([
             'user_id' => $user->id,
-            'status' => config('const.user_status.registerd')
+            'status' => config('const.user_status.registered')
         ]);
 
         // ログイン処理

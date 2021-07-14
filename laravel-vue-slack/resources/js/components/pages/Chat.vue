@@ -2,9 +2,15 @@
     <div class="main">
         <loading-display :isShow="showLoading" />
         <chat-header class="header" :userName="userName" />
-        <side-menu class="side-menu" @event:AddMember="toggleAddMemberModal" />
+        <side-menu class="side-menu" @event:AddMember="toggleAddMemberModal" @event:FetchChannels="fetchChannels" />
         <div class="message-area">
-          <show-channel-name># channel name.</show-channel-name>
+          <show-channel-name>
+              <div class="flex">
+                <div v-if="isChannelPublic"><hash-icon class="mt-1 w-5 h-5"></hash-icon></div>
+                <div v-else><lock-icon class="mt-1 w-5 h-5"></lock-icon></div>
+                <div class="mr-1">{{ channelName }}</div>
+              </div>
+          </show-channel-name>
           <div class="w-full overflow-y-scroll">
             <span v-for="message in messages" :key="message.id">
                 <chat-message
@@ -67,6 +73,8 @@ export default {
   setup() {
     const userName = ref('')
     const email = ref('')
+    const channelName = ref('')
+    const isChannelPublic = ref(false)
     const selectChannel = ref(1)
     const messages = ref([])
     const showLoading = ref(true)
@@ -92,6 +100,7 @@ export default {
         showAddMemberSuccess.value = true
       }
     }
+
     const updateEmail = (text) => {
       email.value = text.value
     }
@@ -99,16 +108,28 @@ export default {
     const sendInvitationMail = async () => {
       showAddMember.value = false
       showLoading.value = true
-      console.log('sendInvitationMail', email.value)
       await SendInvitationMail(email.value)
       showLoading.value = false
       showAddMemberSuccess.value = true
     }
 
+    const fetchChannels = (channels) => {
+      // チャンネル情報から現在のチャンネル名取得
+      const channel = channels.find(channel => channel.id === selectChannel.value)
+
+      channelName.value = channel.name
+      isChannelPublic.value = channel.is_public ? true : false
+    }
+
     onMounted(async () => {
+      // ユーザー取得
       const user = await FindUser()
-      messages.value = await FetchMessages(selectChannel.value)
       userName.value = user.name
+
+      // 選択中のチャンネルメッセージ取得
+      messages.value = await FetchMessages(selectChannel.value)
+
+      // ダイアログを非表示
       showLoading.value = false
     });
 
@@ -123,7 +144,10 @@ export default {
       toggleAddMemberModal,
       toggleAddMemberSuccessModal,
       updateEmail,
+      fetchChannels,
       messages,
+      channelName,
+      isChannelPublic,
     }
   },
 }

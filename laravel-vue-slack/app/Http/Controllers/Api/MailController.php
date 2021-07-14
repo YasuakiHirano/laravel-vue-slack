@@ -48,7 +48,7 @@ class MailController extends Controller
         $response = $sendgrid->send($email);
         if ($response->statusCode() == Response::HTTP_ACCEPTED) {
             // ユーザーステータス更新
-            UserInformation::whereSendEmail($request->email)->update(['status' => config('const.user_status.registerd')]);
+            UserInformation::whereSendEmail($request->email)->update(['status' => config('const.user_status.send_mail')]);
 
             return  response()->json('Success: Send Invitation Mail', Response::HTTP_OK);
         } else {

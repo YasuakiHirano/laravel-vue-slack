@@ -17,7 +17,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { FetchChannel } from '../../apis/channel.api.js'
 export default {
-  setup() {
+  setup(props, context) {
     const channels = ref([])
     const isShowList = ref(false)
 
@@ -26,7 +26,9 @@ export default {
     }
 
     onMounted(async () => {
-      channels.value = await FetchChannel()
+      const responseChannels = await FetchChannel()
+      channels.value = responseChannels
+      context.emit('event:FetchChannels', responseChannels)
     });
 
     return {
