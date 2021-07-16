@@ -11,7 +11,7 @@
                 <div class="mr-1">{{ channelName }}</div>
               </div>
           </show-channel-name>
-          <div class="w-full overflow-y-scroll">
+          <div class="w-full overflow-y-scroll" ref="messageListArea">
             <span v-for="message in messages" :key="message.id">
                 <chat-message
                 class="mt-5 w-full"
@@ -80,6 +80,7 @@ export default {
     const showLoading = ref(true)
     const showAddMember = ref(false)
     const showAddMemberSuccess = ref(false)
+    const messageListArea = ref(null)
 
     const state = reactive({
       toggleChannel: false
@@ -113,6 +114,10 @@ export default {
       showAddMemberSuccess.value = true
     }
 
+    const scrollMessageListArea = () => {
+      messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
+    }
+
     const fetchChannels = (channels) => {
       // チャンネル情報から現在のチャンネル名取得
       const channel = channels.find(channel => channel.id === selectChannel.value)
@@ -131,6 +136,10 @@ export default {
 
       // ダイアログを非表示
       showLoading.value = false
+      window.Echo.channel(channelName.value + "-channel").listen('.MessageEvent', result => {
+        messages.value.push(result.message)
+        scrollMessageListArea()
+      });
     });
 
     return {
@@ -148,6 +157,7 @@ export default {
       messages,
       channelName,
       isChannelPublic,
+      messageListArea,
     }
   },
 }
