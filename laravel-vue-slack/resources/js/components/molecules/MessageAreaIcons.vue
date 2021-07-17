@@ -6,6 +6,12 @@
     <div class="p-1 hover:bg-gray-200 rounded-md">
       <thread-icon class="h-6 w-6" />
     </div>
+    <div class="p-1 hover:bg-gray-200 rounded-md">
+      <edit-icon class="h-6 w-6" />
+    </div>
+    <div class="p-1 hover:bg-gray-200 rounded-md">
+      <delete-icon class="h-6 w-6" />
+    </div>
   </div>
 </template>
 

@@ -67,6 +67,8 @@ import HappyIcon from './components/atoms/HappyIcon.vue'
 import UserIcon from './components/atoms/UserIcon.vue'
 import LockIcon from './components/atoms/LockIcon.vue'
 import HashIcon from './components/atoms/HashIcon.vue'
+import EditIcon from './components/atoms/EditIcon.vue'
+import DeleteIcon from './components/atoms/DeleteIcon.vue'
 import UserInformation from './components/atoms/UserInformation.vue'
 import Loading from './components/atoms/Loading.vue'
 
@@ -97,6 +99,8 @@ app.component('happy-icon', HappyIcon)
 app.component('user-icon', UserIcon)
 app.component('lock-icon', LockIcon)
 app.component('hash-icon', HashIcon)
+app.component('edit-icon', EditIcon)
+app.component('delete-icon', DeleteIcon)
 app.component('user-information', UserInformation)
 app.component('loading', Loading)
 
