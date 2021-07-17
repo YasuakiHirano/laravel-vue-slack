@@ -13,14 +13,18 @@
           </show-channel-name>
           <div class="w-full overflow-y-scroll" ref="messageListArea">
             <span v-for="message in messages" :key="message.id">
-                <chat-message
-                class="mt-5 w-full"
-                :date="message.date"
-                :imagePath="message.imagePath"
-                :postUserName="message.postUserName"
-                :postTime="message.postTime"
-                :mentions="message.mentions"
-                :content="message.content" />
+                <transition-group name="message" tag="div">
+                  <chat-message
+                  class="mt-5 w-full"
+                  :messageId="message.id"
+                  :date="message.date"
+                  :imagePath="message.imagePath"
+                  :postUserName="message.postUserName"
+                  :postTime="message.postTime"
+                  :mentions="message.mentions"
+                  :content="message.content"
+                  @event:deleteMessage="deleteMessage" />
+                </transition-group>
             </span>
           </div>
           <chat-input-area :channelName="channelName" />
@@ -64,7 +68,7 @@
 </template>
 
 <script>
-import { reactive, onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages } from '../../apis/message.api.js'
@@ -122,6 +126,10 @@ export default {
       isChannelPublic.value = channel.is_public ? true : false
     }
 
+    const deleteMessage = (messageId) => {
+      messages.value = messages.value.filter(function (value) { return value.id != messageId } )
+    }
+
     onMounted(async () => {
       // ユーザー取得
       const user = await FindUser()
@@ -132,12 +140,16 @@ export default {
 
       // ダイアログを非表示
       showLoading.value = false
-      window.Echo.channel(channelName.value + "-channel").listen('.MessageEvent', result => {
+      window.Echo.channel(channelName.value + "-create-message").listen('.MessageEvent', result => {
         messages.value.push(result.message)
 
         nextTick(() => {
           scrollMessageListArea()
         })
+      });
+
+      window.Echo.channel(channelName.value + "-delete-message").listen('.MessageEvent', result => {
+        deleteMessage(result.message)
       });
 
       nextTick(() => {
@@ -161,6 +173,7 @@ export default {
       isChannelPublic,
       selectChannel,
       messageListArea,
+      deleteMessage
     }
   },
 }
@@ -204,5 +217,12 @@ export default {
   .message-area {
     grid-column: 1;
   }
+}
+
+.v-enter-active, .v-leave-active {
+  transition: opacity 1s;
+}
+.v-enter, .v-leave-to {
+  opacity: 0;
 }
 </style>

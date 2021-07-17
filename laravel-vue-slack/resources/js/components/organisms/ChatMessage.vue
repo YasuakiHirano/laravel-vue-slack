@@ -2,7 +2,7 @@
   <div class="border border-b-0">
     <show-date v-if="date !== ''">{{ date }}</show-date>
     <div class="group p-5 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
-      <message-area-icons />
+      <message-area-icons :messageId="messageId" @event:deleteMessage="deleteMessage" />
       <div class="w-12">
         <chat-user-image :image="imagePath" />
       </div>
@@ -20,7 +20,16 @@
 </template>
 <script>
 export default({
-  props: ['date', 'imagePath', 'postUserName', 'postTime', 'content', 'mentions']
+  props: ['messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'mentions'],
+  setup(props, context) {
+    const deleteMessage = (messageId) => {
+      context.emit('event:deleteMessage', messageId)
+    }
+
+    return {
+      deleteMessage
+    }
+  }
 })
 </script>
 <style>

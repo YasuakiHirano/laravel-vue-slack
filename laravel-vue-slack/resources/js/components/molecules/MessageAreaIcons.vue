@@ -10,13 +10,27 @@
       <edit-icon class="h-6 w-6" />
     </div>
     <div class="p-1 hover:bg-gray-200 rounded-md">
-      <delete-icon class="h-6 w-6" />
+      <delete-icon @click="deleteMessage" class="h-6 w-6" />
     </div>
   </div>
 </template>
 
 <script>
+import { DeleteMessage } from '../../apis/message.api'
 export default {
+  props: ['messageId'],
+  setup(props, context) {
+    const deleteMessage = async () => {
+      let deleted = await DeleteMessage(props.messageId)
+      if (deleted) {
+        context.emit('event:deleteMessage', props.messageId)
+      }
+    }
+
+    return {
+      deleteMessage
+    }
+  }
 }
 </script>
 <style scoped>

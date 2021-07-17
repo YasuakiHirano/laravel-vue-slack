@@ -13,6 +13,18 @@ export const CreateMessage = async (channelId, content) => {
   return created
 }
 
+export const DeleteMessage = async (messageId) => {
+    let deleted = false
+    await axios.delete('/api/messages', {
+      params: {
+        'message_id': messageId,
+      }
+    }).then((result) => {
+      deleted = true
+    })
+    return deleted
+}
+
 export const FetchMessages = async (channelId) => {
     let messages = null
     await axios.get('/api/messages', {
@@ -20,7 +32,7 @@ export const FetchMessages = async (channelId) => {
         'channel_id': channelId,
       }
     }).then((result) => {
-        messages = result
+      messages = result
     })
     console.log(messages.data)
     return messages.data
