@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted, ref, nextTick } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages } from '../../apis/message.api.js'
@@ -138,8 +138,15 @@ export default {
       showLoading.value = false
       window.Echo.channel(channelName.value + "-channel").listen('.MessageEvent', result => {
         messages.value.push(result.message)
-        scrollMessageListArea()
+
+        nextTick(() => {
+          scrollMessageListArea()
+        })
       });
+
+      nextTick(() => {
+        scrollMessageListArea()
+      })
     });
 
     return {

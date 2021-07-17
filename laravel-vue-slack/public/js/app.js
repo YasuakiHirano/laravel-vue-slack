@@ -17407,7 +17407,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
       channelName.value = channel.name;
       isChannelPublic.value = channel.is_public ? true : false;
-      scrollMessageListArea();
     };
 
     (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -17432,10 +17431,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               showLoading.value = false;
               window.Echo.channel(channelName.value + "-channel").listen('.MessageEvent', function (result) {
                 messages.value.push(result.message);
+                (0,vue__WEBPACK_IMPORTED_MODULE_1__.nextTick)(function () {
+                  scrollMessageListArea();
+                });
+              });
+              (0,vue__WEBPACK_IMPORTED_MODULE_1__.nextTick)(function () {
                 scrollMessageListArea();
               });
 
-            case 9:
+            case 10:
             case "end":
               return _context2.stop();
           }
