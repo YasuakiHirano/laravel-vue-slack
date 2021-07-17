@@ -24,18 +24,25 @@ class MessageController extends Controller
             'content' => $request->content
         ]);
 
-        $messageQuery = (new Message())->createMessageQuery();
+        $messageModel = new Message();
+        $messageQuery = $messageModel->createMessageQuery($request->channel_id);
 
         $selectMessage = $messageQuery
                             ->where('messages.id', '=', $message->id)
                             ->first();
 
+        if ($messageModel->countTodayMessage() != 0) {
+            if (isset($selectMessage->date)) {
+                $selectMessage->date = '';
+            }
+        }
+
         broadcast(new MessageEvent('general-channel', $selectMessage->toArray()));
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
 
-    public function fetch() {
-        $messageQuery = (new Message())->createMessageQuery();
+    public function fetch(Request $request) {
+        $messageQuery = (new Message())->createMessageQuery($request->channel_id);
 
         $messages = $messageQuery
                         ->orderBy('messages.created_at')

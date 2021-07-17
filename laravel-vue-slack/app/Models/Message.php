@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class Message extends Model
 {
@@ -18,7 +19,7 @@ class Message extends Model
         return $this->hasMany(Reaction::class);
     }
 
-    public function createMessageQuery() {
+    public function createMessageQuery($channelId) {
         return $this::select([
             'messages.id',
             DB::raw("DATE_FORMAT(messages.created_at, '%Y年%m月%d日') as date"),
@@ -34,6 +35,11 @@ class Message extends Model
        ->join('user_information', function($join) {
            $join->on('users.id', '=', 'user_information.user_id');
        })
+       ->whereChannelId($channelId)
        ->with('reactions');
+    }
+
+    public function countTodayMessage() {
+        return $this::where(DB::raw("DATE_FORMAT(messages.created_at, '%Y-%m-%d')"), '=', Carbon::now()->format('Y-m-d'))->count();
     }
 }
