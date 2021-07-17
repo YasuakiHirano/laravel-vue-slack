@@ -4,7 +4,7 @@
         <chat-header class="header" :userName="userName" />
         <side-menu class="side-menu" @event:AddMember="toggleAddMemberModal" @event:FetchChannels="fetchChannels" />
         <div class="message-area">
-          <show-channel-name>
+          <show-channel-name :channelId="selectChannel">
               <div class="flex">
                 <div v-if="isChannelPublic"><hash-icon class="mt-1 w-5 h-5"></hash-icon></div>
                 <div v-else><lock-icon class="mt-1 w-5 h-5"></lock-icon></div>
@@ -23,7 +23,7 @@
                 :content="message.content" />
             </span>
           </div>
-          <chat-input-area />
+          <chat-input-area :channelName="channelName" />
         </div>
         <app-modal
           :showModal="showAddMember"
@@ -81,10 +81,6 @@ export default {
     const showAddMember = ref(false)
     const showAddMemberSuccess = ref(false)
     const messageListArea = ref(null)
-
-    const state = reactive({
-      toggleChannel: false
-    });
 
     const toggleAddMemberModal = () => {
       if (showAddMember.value) {
@@ -150,7 +146,6 @@ export default {
     });
 
     return {
-      state,
       userName,
       email,
       showLoading,
@@ -164,6 +159,7 @@ export default {
       messages,
       channelName,
       isChannelPublic,
+      selectChannel,
       messageListArea,
     }
   },

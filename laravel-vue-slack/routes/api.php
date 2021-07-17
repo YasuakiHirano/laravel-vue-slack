@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // チャンネル
     Route::get('/channels', [ChannelController::class, 'fetch']);
+    Route::get('/channels/user_count', [ChannelController::class, 'countChannelUser']);
 
     // メッセージ
     Route::post('/messages', [MessageController::class, 'create']);

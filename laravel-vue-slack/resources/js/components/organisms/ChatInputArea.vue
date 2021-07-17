@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <chat-text-area ref="chatTextArea" class="mt-2" />
+    <chat-text-area ref="chatTextArea" :channelName="channelName" class="mt-2" />
     <text-area-icons class="icon-area" @event:clickMessageIcon="sendMessage" />
   </div>
 </template>
@@ -8,6 +8,7 @@
 import { ref } from 'vue'
 import { CreateMessage } from '../../apis/message.api.js'
 export default({
+  props: ['channelName'],
   setup() {
     const chatTextArea = ref(null)
 

@@ -1,5 +1,5 @@
 <template>
-  <textarea class="resize-none border border-gray-800 rounded-md input-text p-3 h-4/5 mt-2" v-model="text" placeholder="#channel nameへのメッセージ"></textarea>
+  <textarea class="resize-none border border-gray-800 rounded-md input-text p-3 h-4/5 mt-2" v-model="text" :placeholder="channelName + ' へのメッセージ'"></textarea>
 </template>
 
 <script>

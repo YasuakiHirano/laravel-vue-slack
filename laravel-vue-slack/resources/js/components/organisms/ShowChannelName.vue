@@ -3,6 +3,25 @@
       <div class="pt-2 pl-5">
         <slot />
       </div>
-      <user-entry-count class="mr-4 mt-2 mb-2">10</user-entry-count>
-  </div> 
+      <user-entry-count class="mr-4 mt-2 mb-2">{{ count }}</user-entry-count>
+  </div>
 </template>
+<script>
+import { ref, onMounted } from 'vue'
+import { CountChannelUsers } from '../../apis/channel.api.js'
+
+export default {
+  props:['channelId'],
+  setup(props) {
+    const count = ref(0)
+
+    onMounted(async () => {
+      count.value = await CountChannelUsers(props.channelId)
+    });
+
+    return {
+      count
+    }
+  }
+}
+</script>

@@ -7,6 +7,7 @@ use App\Models\Channel;
 use App\Models\ChannelUser;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
@@ -18,5 +19,10 @@ class ChannelController extends Controller
         $channels = Channel::whereIn('id', $channelIds)->get();
 
         return response()->json($channels, Response::HTTP_OK);
+    }
+
+    public function countChannelUser(Request $request) {
+        $count = ChannelUser::whereChannelId($request->channel_id)->count();
+        return response()->json($count, Response::HTTP_OK);
     }
 }
