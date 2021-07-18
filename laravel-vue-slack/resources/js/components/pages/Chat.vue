@@ -12,20 +12,20 @@
               </div>
           </show-channel-name>
           <div class="w-full overflow-y-scroll" ref="messageListArea">
-            <span v-for="message in messages" :key="message.id">
-                <transition-group name="message" tag="div">
-                  <chat-message
-                  class="mt-5 w-full"
-                  :messageId="message.id"
-                  :date="message.date"
-                  :imagePath="message.imagePath"
-                  :postUserName="message.postUserName"
-                  :postTime="message.postTime"
-                  :mentions="message.mentions"
-                  :content="message.content"
-                  @event:deleteMessage="deleteMessage" />
-                </transition-group>
-            </span>
+            <transition-group name="list" tag="div">
+              <div v-for="message in messages" :key="message.id">
+                 <chat-message
+                 class="mt-5 w-full"
+                 :messageId="message.id"
+                 :date="message.date"
+                 :imagePath="message.imagePath"
+                 :postUserName="message.postUserName"
+                 :postTime="message.postTime"
+                 :mentions="message.mentions"
+                 :content="message.content"
+                 @event:deleteMessage="deleteMessage" />
+              </div>
+            </transition-group>
           </div>
           <chat-input-area :channelName="channelName" />
         </div>
@@ -218,11 +218,12 @@ export default {
     grid-column: 1;
   }
 }
-
-.v-enter-active, .v-leave-active {
-  transition: opacity 1s;
+.list-enter-active,
+.list-leave-active {
+  transition: opacity 0.5s ease;
 }
-.v-enter, .v-leave-to {
+.list-enter-from,
+.list-leave-to {
   opacity: 0;
 }
 </style>
