@@ -27,7 +27,7 @@
               </div>
             </transition-group>
           </div>
-          <chat-input-area :channelName="channelName" />
+          <chat-input-area :channelId="selectChannel" :channelName="channelName" class="mt-2" />
         </div>
         <app-modal
           :showModal="showAddMember"
@@ -127,7 +127,15 @@ export default {
     }
 
     const deleteMessage = (messageId) => {
-      messages.value = messages.value.filter(function (value) { return value.id != messageId } )
+      messages.value = messages.value.filter(function (message) { return message.id != messageId } )
+    }
+
+    const updateMessage = (content, messageId) => {
+      messages.value.forEach(message => {
+        if (message.id == messageId) {
+          message.content = content
+        }
+      })
     }
 
     onMounted(async () => {
@@ -149,7 +157,11 @@ export default {
       });
 
       window.Echo.channel(channelName.value + "-delete-message").listen('.MessageEvent', result => {
-        deleteMessage(result.message)
+        deleteMessage(result.messageId)
+      });
+
+      window.Echo.channel(channelName.value + "-update-message").listen('.MessageEvent', result => {
+        updateMessage(result.message, result.messageId)
       });
 
       nextTick(() => {

@@ -1,13 +1,18 @@
 <template>
-  <textarea class="resize-none border border-gray-800 rounded-md input-text p-3 h-4/5 mt-2" v-model="text" :placeholder="channelName + ' へのメッセージ'"></textarea>
+  <textarea
+    class="resize-none border border-gray-800 rounded-md input-text p-3"
+    v-model="text"
+    :placeholder="channelName != undefined ? channelName + ' へのメッセージ' : ''"
+  ></textarea>
 </template>
 
 <script>
 import { ref } from 'vue'
 export default {
-  props:['channelName'],
-  setup() {
+  props:['channelName', 'content'],
+  setup(props) {
     const text = ref('')
+    text.value = props.content
 
     return {
       text

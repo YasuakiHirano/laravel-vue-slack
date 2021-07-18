@@ -54,6 +54,7 @@ import ChatTextArea from './components/atoms/ChatTextArea.vue'
 import ShowDate from './components/atoms/ShowDate.vue'
 import ReactionIcon from './components/atoms/ReactionIcon.vue'
 import ReactionNumber from './components/atoms/ReactionIcon.vue'
+import CancelBorderIcon from './components/atoms/CancelBorderIcon.vue'
 import MentionBorderIcon from './components/atoms/MentionBorderIcon.vue'
 import ReactionBorderIcon from './components/atoms/ReactionBorderIcon.vue'
 import SendMessageBorderIcon from './components/atoms/SendMessageBorderIcon.vue'
@@ -86,6 +87,7 @@ app.component('chat-text-area', ChatTextArea)
 app.component('show-date', ShowDate)
 app.component('reaction-icon', ReactionIcon)
 app.component('reaction-number', ReactionNumber)
+app.component('cancel-border-icon', CancelBorderIcon)
 app.component('mention-border-icon', MentionBorderIcon)
 app.component('reaction-border-icon', ReactionBorderIcon)
 app.component('send-message-border-icon', SendMessageBorderIcon)

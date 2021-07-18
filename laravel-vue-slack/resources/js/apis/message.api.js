@@ -13,6 +13,19 @@ export const CreateMessage = async (channelId, content) => {
   return created
 }
 
+export const UpdateMessage = async (messageId, content) => {
+    let updated = false
+    await axios.put('/api/messages', {
+      'message_id': messageId,
+      'content': content
+    }).then((result) => {
+      if (result.status === 200) {
+        updated = true
+      }
+    })
+    return updated
+  }
+
 export const DeleteMessage = async (messageId) => {
     let deleted = false
     await axios.delete('/api/messages', {

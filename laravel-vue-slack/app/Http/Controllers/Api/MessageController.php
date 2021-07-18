@@ -37,21 +37,8 @@ class MessageController extends Controller
             }
         }
 
-        broadcast(new MessageEvent('general-create-message', $selectMessage->toArray()));
+        broadcast(new MessageEvent('general-create-message', $selectMessage->toArray(), null));
         return response()->json('Message registration completed.', Response::HTTP_OK);
-    }
-
-    public function delete(Request $request) {
-        $message = Message::find($request->message_id);
-        if ($message->user_id !== Auth::id()) {
-            return response()->json(['error' => '他のユーザーの投稿は削除できません。'], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-        $deleteMessageId = $message->id;
-
-        $message->delete();
-
-        broadcast(new MessageEvent('general-delete-message', $deleteMessageId));
-        return response()->json('Message delete completed.', Response::HTTP_OK);
     }
 
     public function fetch(Request $request) {
@@ -72,5 +59,31 @@ class MessageController extends Controller
         }
 
         return  response()->json($messages, Response::HTTP_OK);
+    }
+
+    public function update(Request $request) {
+        $request->validate([
+            'message_id' => 'required',
+            'content' => 'required',
+        ]);
+
+        $message = Message::find($request->message_id);
+        $message->update([
+            'content' => $request->content
+        ]);
+
+        broadcast(new MessageEvent('general-update-message', $request->content, $message->id));
+        return response()->json('Message update completed.', Response::HTTP_OK);
+    }
+
+    public function delete(Request $request) {
+        $message = Message::find($request->message_id);
+        if ($message->user_id !== Auth::id()) {
+            return response()->json(['error' => '他のユーザーの投稿は削除できません。'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $message->delete();
+
+        broadcast(new MessageEvent('general-delete-message', null, $message->id));
+        return response()->json('Message delete completed.', Response::HTTP_OK);
     }
 }

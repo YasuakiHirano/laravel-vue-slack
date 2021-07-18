@@ -7,7 +7,7 @@
       <thread-icon class="h-6 w-6" />
     </div>
     <div class="p-1 hover:bg-gray-200 rounded-md">
-      <edit-icon class="h-6 w-6" />
+      <edit-icon @click="editMessage" class="h-6 w-6" />
     </div>
     <div class="p-1 hover:bg-gray-200 rounded-md">
       <delete-icon @click="deleteMessage" class="h-6 w-6" />
@@ -27,8 +27,13 @@ export default {
       }
     }
 
+    const editMessage = async () => {
+      context.emit('event:editMessage', props.messageId)
+    }
+
     return {
-      deleteMessage
+      deleteMessage,
+      editMessage
     }
   }
 }
