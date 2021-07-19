@@ -58,6 +58,7 @@ import CancelBorderIcon from './components/atoms/CancelBorderIcon.vue'
 import MentionBorderIcon from './components/atoms/MentionBorderIcon.vue'
 import ReactionBorderIcon from './components/atoms/ReactionBorderIcon.vue'
 import SendMessageBorderIcon from './components/atoms/SendMessageBorderIcon.vue'
+import SpeakerIcon from './components/atoms/SpeakerIcon.vue'
 import ServiceTitle from './components/atoms/ServiceTitle.vue'
 import ThreadIcon from './components/atoms/ThreadIcon.vue'
 import MentionIcon from './components/atoms/MentionIcon.vue'
@@ -91,6 +92,7 @@ app.component('cancel-border-icon', CancelBorderIcon)
 app.component('mention-border-icon', MentionBorderIcon)
 app.component('reaction-border-icon', ReactionBorderIcon)
 app.component('send-message-border-icon', SendMessageBorderIcon)
+app.component('speaker-icon', SpeakerIcon)
 app.component('service-title', ServiceTitle)
 app.component('thread-icon', ThreadIcon)
 app.component('mention-icon', MentionIcon)

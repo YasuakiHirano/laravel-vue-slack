@@ -2,7 +2,11 @@
     <div class="main">
         <loading-display :isShow="showLoading" />
         <chat-header class="header" :userName="userName" />
-        <side-menu class="side-menu" @event:AddMember="toggleAddMemberModal" @event:FetchChannels="fetchChannels" />
+        <side-menu
+          class="side-menu"
+          @event:AddMember="toggleAddMemberModal"
+          @event:FetchChannels="fetchChannels"
+          @event:AddChannel="toggleAddChannelModal" />
         <div class="message-area">
           <show-channel-name :channelId="selectChannel">
               <div class="flex">
@@ -29,6 +33,8 @@
           </div>
           <chat-input-area :channelId="selectChannel" :channelName="channelName" class="mt-2" />
         </div>
+        <!--モーダル実装-->
+        <!--メンバー招待-->
         <app-modal
           :showModal="showAddMember"
           :showAction="true"
@@ -64,6 +70,36 @@
             メンバーの招待が完了しました！
           </template>
         </app-modal>
+        <!--チャンネル追加-->
+        <app-modal
+          :showModal="showAddChannel"
+          :showAction="true"
+          :showCancel="true"
+          actionText="追加"
+          cancelText="キャンセル"
+          @event:modalClose="toggleAddChannelModal"
+          @event:modalAction="addChannel"
+          >
+          <template v-slot:app-icon>
+            <speaker-icon class="h-5 w-5" />
+          </template>
+          <template v-slot:app-title>
+            チャンネルを追加します。
+          </template>
+          <template v-slot:app-content>
+            <form-label class="mb-2" forText="channel_name" showText="名前" />
+            <form-text class="mb-2" type="text" name="channel_name" id="channel_name" placeholder="チャンネル名" />
+            <form-label class="mb-2" forText="description" showText="説明" />
+            <form-text class="mb-2" type="description" name="description" id="description" placeholder="説明" />
+            <span>プライベートにする</span>
+            <div>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox text-green-600 h-4 w-4" name="is_private">
+                    <span class="ml-2">プライベートチャンネルにする</span>
+                </label>
+            </div>
+          </template>
+        </app-modal>
     </div>
 </template>
 
@@ -85,6 +121,7 @@ export default {
     const showAddMember = ref(false)
     const showAddMemberSuccess = ref(false)
     const messageListArea = ref(null)
+    const showAddChannel = ref(false)
 
     const toggleAddMemberModal = () => {
       if (showAddMember.value) {
@@ -102,6 +139,14 @@ export default {
       }
     }
 
+    const toggleAddChannelModal = () => {
+      if (showAddChannel.value) {
+        showAddChannel.value = false
+      } else {
+        showAddChannel.value = true
+      }
+    }
+
     const updateEmail = (text) => {
       email.value = text.value
     }
@@ -112,6 +157,10 @@ export default {
       await SendInvitationMail(email.value)
       showLoading.value = false
       showAddMemberSuccess.value = true
+    }
+
+    const addChannel = async () => {
+
     }
 
     const scrollMessageListArea = () => {
@@ -175,10 +224,13 @@ export default {
       showLoading,
       showAddMember,
       showAddMemberSuccess,
+      showAddChannel,
       sendInvitationMail,
       toggleAddMemberModal,
       toggleAddMemberSuccessModal,
+      toggleAddChannelModal,
       updateEmail,
+      addChannel,
       fetchChannels,
       messages,
       channelName,

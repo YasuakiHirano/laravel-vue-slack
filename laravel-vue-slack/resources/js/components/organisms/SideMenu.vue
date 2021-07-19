@@ -4,7 +4,10 @@
       <thread-menu />
       <mention-reaction-menu />
       <add-member @click="$emit('event:AddMember')" />
-      <channel-menu class="pl-3" @event:ToggleChannel="toggleShowList" />
+      <channel-menu
+        class="pl-3"
+        @event:ToggleChannel="toggleShowList"
+        @event:AddChannel="$emit('event:AddChannel')" />
       <div v-if="isShowList">
         <div v-for="channel in channels" :key="channel.name" class="m-auto w-9/12 text-white text-opacity-70">
           #&nbsp;&nbsp;{{ channel.name }}
