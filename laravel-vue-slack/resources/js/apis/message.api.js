@@ -49,6 +49,5 @@ export const FetchMessages = async (channelId) => {
     }).then((result) => {
       messages = result
     })
-    console.log(messages.data)
     return messages.data
 }

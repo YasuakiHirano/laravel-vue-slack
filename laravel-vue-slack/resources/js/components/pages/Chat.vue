@@ -141,6 +141,7 @@ export default {
     const addChannelName = ref('')
     const addChannelDescription = ref('')
     const addChannelIsPrivate = ref(false)
+    let listenChannels = []
 
     const toggleAddMemberModal = () => {
       showAddMember.value = showAddMember.value ? false : true
@@ -235,21 +236,28 @@ export default {
 
       // ダイアログを非表示
       showLoading.value = false
-      window.Echo.channel(selectChannel.value + "-create-message").listen('.MessageEvent', result => {
-        messages.value.push(result.message)
 
-        nextTick(() => {
-          scrollMessageListArea()
-        })
-      });
+      const messageChannelKey = selectChannel.value
+      if (listenChannels.indexOf(messageChannelKey) === -1) {
 
-      window.Echo.channel(selectChannel.value + "-delete-message").listen('.MessageEvent', result => {
-        deleteMessage(result.messageId)
-      });
+        window.Echo.channel(messageChannelKey + "-create-message").listen('.MessageEvent', result => {
+            messages.value.push(result.message)
 
-      window.Echo.channel(selectChannel.value + "-update-message").listen('.MessageEvent', result => {
-        updateMessage(result.message, result.messageId)
-      });
+            nextTick(() => {
+            scrollMessageListArea()
+            })
+        });
+
+        window.Echo.channel(messageChannelKey + "-delete-message").listen('.MessageEvent', result => {
+            deleteMessage(result.messageId)
+        });
+
+        window.Echo.channel(messageChannelKey + "-update-message").listen('.MessageEvent', result => {
+            updateMessage(result.message, result.messageId)
+        });
+
+        listenChannels.push(messageChannelKey)
+      }
 
       nextTick(() => {
         scrollMessageListArea()
