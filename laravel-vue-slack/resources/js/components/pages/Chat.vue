@@ -29,8 +29,7 @@
                  :postUserName="message.postUserName"
                  :postTime="message.postTime"
                  :mentions="message.mentions"
-                 :content="message.content"
-                 @event:deleteMessage="deleteMessage" />
+                 :content="message.content" />
               </div>
             </transition-group>
           </div>

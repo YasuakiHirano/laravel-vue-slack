@@ -16,15 +16,11 @@
 </template>
 
 <script>
-import { DeleteMessage } from '../../apis/message.api'
 export default {
   props: ['messageId', 'channelId'],
   setup(props, context) {
     const deleteMessage = async () => {
-      let deleted = await DeleteMessage(props.messageId)
-      if (deleted) {
-        context.emit('event:deleteMessage', props.messageId, props.channelId)
-      }
+      context.emit('event:deleteMessage', props.messageId, props.channelId)
     }
 
     const editMessage = async () => {

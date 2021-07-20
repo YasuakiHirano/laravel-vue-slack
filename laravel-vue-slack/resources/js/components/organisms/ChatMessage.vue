@@ -34,15 +34,15 @@
 <script>
 import { ref } from 'vue'
 import { UpdateMessage } from '../../apis/message.api.js'
+import { DeleteMessage } from '../../apis/message.api'
 
 export default({
   props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'mentions'],
   setup(props, context) {
     const isEditMode = ref(false)
 
-    const deleteMessage = (messageId, channelId) => {
-      console.log(messageId)
-      context.emit('event:deleteMessage', messageId, channelId)
+    const deleteMessage = async (messageId, channelId) => {
+      await DeleteMessage(messageId, channelId)
     }
 
     const editMessage = () => {
