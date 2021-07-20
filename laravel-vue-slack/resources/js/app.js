@@ -45,6 +45,7 @@ import SignInButton from './components/atoms/SignInButton.vue'
 import SignInText from './components/atoms/SignInText.vue'
 import FormLabel from './components/atoms/FormLabel.vue'
 import FormText from './components/atoms/FormText.vue'
+import FormCheckbox from './components/atoms/FormCheckbox.vue'
 import FormActionButton from './components/atoms/FormActionButton.vue'
 import FormCancelButton from './components/atoms/FormCancelButton.vue'
 import ChatUserImage from './components/atoms/ChatUserImage.vue'
@@ -79,6 +80,7 @@ app.component('sign-in-text', SignInText)
 app.component('sign-in-button', SignInButton)
 app.component('form-label', FormLabel)
 app.component('form-text', FormText)
+app.component('form-checkbox', FormCheckbox)
 app.component('form-action-button', FormActionButton)
 app.component('form-cancel-button', FormCancelButton)
 app.component('chat-user-image', ChatUserImage)

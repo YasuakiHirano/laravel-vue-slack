@@ -1,5 +1,20 @@
 import axios from 'axios'
 
+export const CreateChannel = async (name, description, isPrivate) => {
+    let created = false
+    await axios.post('/api/channels', {
+      'name': name,
+      'description': description,
+      'is_private': isPrivate
+    }).then((result) => {
+      if (result.status === 200) {
+        created = true
+      }
+    })
+    return created
+  }
+
+
 export const FetchChannel = async () => {
   let channels = null
   await axios.get('/api/channels').then((result) => {

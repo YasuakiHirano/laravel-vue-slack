@@ -37,7 +37,7 @@ class MessageController extends Controller
             }
         }
 
-        broadcast(new MessageEvent('general-create-message', $selectMessage->toArray(), null));
+        broadcast(new MessageEvent($request->channel_id . '-create-message', $selectMessage->toArray(), null));
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
 
@@ -65,6 +65,7 @@ class MessageController extends Controller
         $request->validate([
             'message_id' => 'required',
             'content' => 'required',
+            'channel_id' => 'required',
         ]);
 
         $message = Message::find($request->message_id);
@@ -72,18 +73,23 @@ class MessageController extends Controller
             'content' => $request->content
         ]);
 
-        broadcast(new MessageEvent('general-update-message', $request->content, $message->id));
+        broadcast(new MessageEvent($request->channel_id . '-update-message', $request->content, $message->id));
         return response()->json('Message update completed.', Response::HTTP_OK);
     }
 
     public function delete(Request $request) {
+        $request->validate([
+            'message_id' => 'required',
+            'channel_id' => 'required',
+        ]);
+
         $message = Message::find($request->message_id);
         if ($message->user_id !== Auth::id()) {
             return response()->json(['error' => '他のユーザーの投稿は削除できません。'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $message->delete();
 
-        broadcast(new MessageEvent('general-delete-message', null, $message->id));
+        broadcast(new MessageEvent($request->channel_id . '-delete-message', null, $message->id));
         return response()->json('Message delete completed.', Response::HTTP_OK);
     }
 }

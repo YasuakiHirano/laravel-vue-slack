@@ -13,11 +13,12 @@ export const CreateMessage = async (channelId, content) => {
   return created
 }
 
-export const UpdateMessage = async (messageId, content) => {
+export const UpdateMessage = async (messageId, content, channelId) => {
     let updated = false
     await axios.put('/api/messages', {
       'message_id': messageId,
-      'content': content
+      'content': content,
+      'channel_id': channelId,
     }).then((result) => {
       if (result.status === 200) {
         updated = true
@@ -26,11 +27,12 @@ export const UpdateMessage = async (messageId, content) => {
     return updated
   }
 
-export const DeleteMessage = async (messageId) => {
+export const DeleteMessage = async (messageId, channelId) => {
     let deleted = false
     await axios.delete('/api/messages', {
       params: {
         'message_id': messageId,
+        'channel_id': channelId,
       }
     }).then((result) => {
       deleted = true

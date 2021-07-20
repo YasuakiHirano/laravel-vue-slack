@@ -4,6 +4,8 @@
         <chat-header class="header" :userName="userName" />
         <side-menu
           class="side-menu"
+          :channelId="selectChannel"
+          @event:SelectChannel="changeChannel"
           @event:AddMember="toggleAddMemberModal"
           @event:FetchChannels="fetchChannels"
           @event:AddChannel="toggleAddChannelModal" />
@@ -20,6 +22,7 @@
               <div v-for="message in messages" :key="message.id">
                  <chat-message
                  class="mt-5 w-full"
+                 :channelId="selectChannel"
                  :messageId="message.id"
                  :date="message.date"
                  :imagePath="message.imagePath"
@@ -88,16 +91,27 @@
           </template>
           <template v-slot:app-content>
             <form-label class="mb-2" forText="channel_name" showText="名前" />
-            <form-text class="mb-2" type="text" name="channel_name" id="channel_name" placeholder="チャンネル名" />
+            <form-text class="mb-2" type="text" @event:updateText="updateAddChannelName" name="channel_name" id="channel_name" placeholder="チャンネル名" />
             <form-label class="mb-2" forText="description" showText="説明" />
-            <form-text class="mb-2" type="description" name="description" id="description" placeholder="説明" />
-            <span>プライベートにする</span>
-            <div>
-                <label class="inline-flex items-center">
-                    <input type="checkbox" class="form-checkbox text-green-600 h-4 w-4" name="is_private">
-                    <span class="ml-2">プライベートチャンネルにする</span>
-                </label>
-            </div>
+            <form-text class="mb-2" type="description" @event:updateText="updateAddChannelDescription" name="description" id="description" placeholder="説明" />
+            <span>プライベート設定</span>
+            <form-checkbox label="プライベートチャンネルにする" @event:updateCheck="updateAddChannelIsPrivate" />
+          </template>
+        </app-modal>
+        <app-modal
+          :showModal="showAddChannelSuccess"
+          :showAction="true"
+          :showCancel="false"
+          actionText="終了"
+          @event:modalAction="toggleAddChannelSuccessModal">
+          <template v-slot:app-icon>
+            <user-icon class="h-5 w-5" />
+          </template>
+          <template v-slot:app-title>
+            作成完了
+          </template>
+          <template v-slot:app-content>
+            チャンネルの作成が完了しました！
           </template>
         </app-modal>
     </div>
@@ -108,12 +122,14 @@ import { onMounted, ref, nextTick } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages } from '../../apis/message.api.js'
+import { CreateChannel } from '../../apis/channel.api.js'
 
 export default {
   setup() {
     const userName = ref('')
     const email = ref('')
     const channelName = ref('')
+    const channelList = ref('')
     const isChannelPublic = ref(false)
     const selectChannel = ref(1)
     const messages = ref([])
@@ -122,33 +138,41 @@ export default {
     const showAddMemberSuccess = ref(false)
     const messageListArea = ref(null)
     const showAddChannel = ref(false)
+    const showAddChannelSuccess = ref(false)
+    const addChannelName = ref('')
+    const addChannelDescription = ref('')
+    const addChannelIsPrivate = ref(false)
 
     const toggleAddMemberModal = () => {
-      if (showAddMember.value) {
-        showAddMember.value = false
-      } else {
-        showAddMember.value = true
-      }
+      showAddMember.value = showAddMember.value ? false : true
     }
 
     const toggleAddMemberSuccessModal = () => {
-      if (showAddMemberSuccess.value) {
-        showAddMemberSuccess.value = false
-      } else {
-        showAddMemberSuccess.value = true
-      }
+      showAddMemberSuccess.value = showAddMemberSuccess.value ? false : true
     }
 
     const toggleAddChannelModal = () => {
-      if (showAddChannel.value) {
-        showAddChannel.value = false
-      } else {
-        showAddChannel.value = true
-      }
+      showAddChannel.value = showAddChannel.value ? false : true
+    }
+
+    const toggleAddChannelSuccessModal = () => {
+      showAddChannelSuccess.value = showAddChannelSuccess.value ? false : true
     }
 
     const updateEmail = (text) => {
       email.value = text.value
+    }
+
+    const updateAddChannelName = (text) => {
+      addChannelName.value = text.value
+    }
+
+    const updateAddChannelDescription = (text) => {
+      addChannelDescription.value = text.value
+    }
+
+    const updateAddChannelIsPrivate = (value) => {
+      addChannelIsPrivate.value = value
     }
 
     const sendInvitationMail = async () => {
@@ -160,16 +184,31 @@ export default {
     }
 
     const addChannel = async () => {
-
+      showAddChannel.value = false
+      showLoading.value = true
+      await CreateChannel(addChannelName.value, addChannelDescription.value, addChannelIsPrivate.value)
+      showLoading.value = false
+      showAddChannelSuccess.value = true
     }
 
     const scrollMessageListArea = () => {
       messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
     }
 
+    const changeChannel = async (channelId) => {
+      selectChannel.value = channelId
+      await initLoading()
+      findChannelName()
+    }
+
     const fetchChannels = (channels) => {
+      channelList.value = channels
+      findChannelName()
+    }
+
+    const findChannelName = () => {
       // チャンネル情報から現在のチャンネル名取得
-      const channel = channels.find(channel => channel.id === selectChannel.value)
+      const channel = channelList.value.find(channel => channel.id === selectChannel.value)
 
       channelName.value = channel.name
       isChannelPublic.value = channel.is_public ? true : false
@@ -187,7 +226,7 @@ export default {
       })
     }
 
-    onMounted(async () => {
+    const initLoading = async() => {
       // ユーザー取得
       const user = await FindUser()
       userName.value = user.name
@@ -197,7 +236,7 @@ export default {
 
       // ダイアログを非表示
       showLoading.value = false
-      window.Echo.channel(channelName.value + "-create-message").listen('.MessageEvent', result => {
+      window.Echo.channel(selectChannel.value + "-create-message").listen('.MessageEvent', result => {
         messages.value.push(result.message)
 
         nextTick(() => {
@@ -205,17 +244,21 @@ export default {
         })
       });
 
-      window.Echo.channel(channelName.value + "-delete-message").listen('.MessageEvent', result => {
+      window.Echo.channel(selectChannel.value + "-delete-message").listen('.MessageEvent', result => {
         deleteMessage(result.messageId)
       });
 
-      window.Echo.channel(channelName.value + "-update-message").listen('.MessageEvent', result => {
+      window.Echo.channel(selectChannel.value + "-update-message").listen('.MessageEvent', result => {
         updateMessage(result.message, result.messageId)
       });
 
       nextTick(() => {
         scrollMessageListArea()
       })
+    }
+
+    onMounted(async () => {
+      await initLoading()
     });
 
     return {
@@ -233,11 +276,21 @@ export default {
       addChannel,
       fetchChannels,
       messages,
+      channelList,
       channelName,
       isChannelPublic,
       selectChannel,
       messageListArea,
-      deleteMessage
+      deleteMessage,
+      changeChannel,
+      updateAddChannelName,
+      updateAddChannelDescription,
+      updateAddChannelIsPrivate,
+      addChannelName,
+      addChannelDescription,
+      addChannelIsPrivate,
+      showAddChannelSuccess,
+      toggleAddChannelSuccessModal,
     }
   },
 }

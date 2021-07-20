@@ -11,6 +11,30 @@ use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
+    public function create(Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'is_private' => 'required',
+        ]);
+
+        $userId = Auth::id();
+
+        $channel = Channel::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'make_user_id' => $userId,
+            'is_public' => $request->is_private ? false : true,
+        ]);
+
+        ChannelUser::create([
+            'user_id' => $userId,
+            'channel_id' => $channel->id
+        ]);
+
+        return response()->json('Channel registration completed.', Response::HTTP_OK);
+    }
+
     public function fetch() {
         $userId = Auth::id();
         $channelUsers = ChannelUser::whereUserId($userId)->get();

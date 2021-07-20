@@ -4,6 +4,7 @@
     <div class="group p-5 pr-0 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
       <message-area-icons
         :messageId="messageId"
+        :channelId="channelId"
         @event:deleteMessage="deleteMessage"
         @event:editMessage="editMessage"
       />
@@ -35,12 +36,13 @@ import { ref } from 'vue'
 import { UpdateMessage } from '../../apis/message.api.js'
 
 export default({
-  props: ['messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'mentions'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'mentions'],
   setup(props, context) {
     const isEditMode = ref(false)
 
-    const deleteMessage = (messageId) => {
-      context.emit('event:deleteMessage', messageId)
+    const deleteMessage = (messageId, channelId) => {
+      console.log(messageId)
+      context.emit('event:deleteMessage', messageId, channelId)
     }
 
     const editMessage = () => {
@@ -48,7 +50,7 @@ export default({
     }
 
     const updateMessage = async (messageId, content) => {
-      const updated = await UpdateMessage(messageId, content)
+      const updated = await UpdateMessage(messageId, content, props.channelId)
       if (updated) {
         isEditMode.value = false
       }

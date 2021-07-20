@@ -10,7 +10,11 @@
         @event:AddChannel="$emit('event:AddChannel')" />
       <div v-if="isShowList">
         <div v-for="channel in channels" :key="channel.name" class="m-auto w-9/12 text-white text-opacity-70">
-          #&nbsp;&nbsp;{{ channel.name }}
+          <div :class="'w-full flex p-1 cursor-pointer ' + (channel.id === channelId ? 'bg-indigo-900 rounded-lg' : '')" @click="selectChannel(channel.id)">
+            <div v-if="channel.is_public"><hash-icon class="mt-1 mr-2 w-4 h-4" /></div>
+            <div v-else><lock-icon class="mt-1 mr-2 w-4 h-4" /></div>
+            {{ channel.name }}
+          </div>
         </div>
       </div>
   </div>
@@ -20,12 +24,17 @@
 import { ref, onMounted, reactive } from 'vue'
 import { FetchChannel } from '../../apis/channel.api.js'
 export default {
+  props: ['channelId'],
   setup(props, context) {
     const channels = ref([])
     const isShowList = ref(false)
 
     const toggleShowList = (toggle) => {
       isShowList.value = toggle
+    }
+
+    const selectChannel = (channelId) => {
+      context.emit('event:SelectChannel', channelId)
     }
 
     onMounted(async () => {
@@ -37,7 +46,8 @@ export default {
     return {
       isShowList,
       toggleShowList,
-      channels
+      channels,
+      selectChannel
     }
   },
 }
