@@ -147,6 +147,16 @@ app.component('chat-input-area', ChatInputArea)
 app.component('chat-message', ChatMessage)
 app.component('app-modal', AppModal)
 
+// - modal
+import AddMemberModal  from './components/organisms/AddMemberModal.vue'
+import AddMemberSuccessModal  from './components/organisms/AddMemberSuccessModal.vue'
+import AddChannelModal  from './components/organisms/AddChannelModal.vue'
+import AddChannelSuccessModal  from './components/organisms/AddChannelSuccessModal.vue'
+app.component('add-member-modal', AddMemberModal)
+app.component('add-member-success-modal', AddMemberSuccessModal)
+app.component('add-channel-modal', AddChannelModal)
+app.component('add-channel-success-modal', AddChannelSuccessModal)
+
 // page
 import AccountCreate  from './components/pages/AccountCreate.vue'
 app.component('account-create', AccountCreate)

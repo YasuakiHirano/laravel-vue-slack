@@ -6,9 +6,9 @@
           class="side-menu"
           :channelId="selectChannel"
           @event:SelectChannel="changeChannel"
-          @event:AddMember="toggleAddMemberModal"
           @event:FetchChannels="fetchChannels"
-          @event:AddChannel="toggleAddChannelModal" />
+          @event:AddMember="showAddMember = true"
+          @event:AddChannel="showAddChannel = true" />
         <div class="message-area">
           <show-channel-name :channelId="selectChannel">
               <div class="flex">
@@ -36,83 +36,26 @@
           <chat-input-area :channelId="selectChannel" :channelName="channelName" class="mt-2" />
         </div>
         <!--モーダル実装-->
-        <!--メンバー招待-->
-        <app-modal
+        <!----メンバー招待---->
+        <add-member-modal
           :showModal="showAddMember"
-          :showAction="true"
-          :showCancel="true"
-          actionText="送信"
-          cancelText="キャンセル"
-          @event:modalClose="toggleAddMemberModal"
           @event:modalAction="sendInvitationMail"
-          >
-          <template v-slot:app-icon>
-            <user-icon class="h-5 w-5" />
-          </template>
-          <template v-slot:app-title>
-            メンバーを招待します
-          </template>
-          <template v-slot:app-content>
-            <form-text class="mb-2" type="text" @event:updateText="updateEmail" name="email" id="email" placeholder="name@example.com" />
-          </template>
-        </app-modal>
-        <app-modal
+          @event:modalClose="showAddMember = false"
+          @event:updateText="updateEmail" />
+        <add-member-success-modal
           :showModal="showAddMemberSuccess"
-          :showAction="true"
-          :showCancel="false"
-          actionText="終了"
-          @event:modalAction="toggleAddMemberSuccessModal">
-          <template v-slot:app-icon>
-            <user-icon class="h-5 w-5" />
-          </template>
-          <template v-slot:app-title>
-            送信済み
-          </template>
-          <template v-slot:app-content>
-            メンバーの招待が完了しました！
-          </template>
-        </app-modal>
-        <!--チャンネル追加-->
-        <app-modal
+          @event:modalAction="showAddMemberSuccess = false" />
+        <!----チャンネル追加---->
+        <add-channel-modal
           :showModal="showAddChannel"
-          :showAction="true"
-          :showCancel="true"
-          actionText="追加"
-          cancelText="キャンセル"
-          @event:modalClose="toggleAddChannelModal"
+          @event:modalClose="showAddChannel = false"
           @event:modalAction="addChannel"
-          >
-          <template v-slot:app-icon>
-            <speaker-icon class="h-5 w-5" />
-          </template>
-          <template v-slot:app-title>
-            チャンネルを追加します。
-          </template>
-          <template v-slot:app-content>
-            <form-label class="mb-2" forText="channel_name" showText="名前" />
-            <form-text class="mb-2" type="text" @event:updateText="updateAddChannelName" name="channel_name" id="channel_name" placeholder="チャンネル名" />
-            <form-label class="mb-2" forText="description" showText="説明" />
-            <form-text class="mb-2" type="description" @event:updateText="updateAddChannelDescription" name="description" id="description" placeholder="説明" />
-            <span>プライベート設定</span>
-            <form-checkbox label="プライベートチャンネルにする" @event:updateCheck="updateAddChannelIsPrivate" />
-          </template>
-        </app-modal>
-        <app-modal
+          @event:updateAddChannelName="updateAddChannelName"
+          @event:updateAddChannelDescription="updateAddChannelDescription"
+          @event:updateAddChannelIsPrivate="updateAddChannelIsPrivate" />
+        <add-channel-success-modal
           :showModal="showAddChannelSuccess"
-          :showAction="true"
-          :showCancel="false"
-          actionText="終了"
-          @event:modalAction="toggleAddChannelSuccessModal">
-          <template v-slot:app-icon>
-            <user-icon class="h-5 w-5" />
-          </template>
-          <template v-slot:app-title>
-            作成完了
-          </template>
-          <template v-slot:app-content>
-            チャンネルの作成が完了しました！
-          </template>
-        </app-modal>
+          @event:modalAction="showAddChannelSuccess = false" />
     </div>
 </template>
 
@@ -142,22 +85,6 @@ export default {
     const addChannelDescription = ref('')
     const addChannelIsPrivate = ref(false)
     let listenChannels = []
-
-    const toggleAddMemberModal = () => {
-      showAddMember.value = showAddMember.value ? false : true
-    }
-
-    const toggleAddMemberSuccessModal = () => {
-      showAddMemberSuccess.value = showAddMemberSuccess.value ? false : true
-    }
-
-    const toggleAddChannelModal = () => {
-      showAddChannel.value = showAddChannel.value ? false : true
-    }
-
-    const toggleAddChannelSuccessModal = () => {
-      showAddChannelSuccess.value = showAddChannelSuccess.value ? false : true
-    }
 
     const updateEmail = (text) => {
       email.value = text.value
@@ -276,9 +203,6 @@ export default {
       showAddMemberSuccess,
       showAddChannel,
       sendInvitationMail,
-      toggleAddMemberModal,
-      toggleAddMemberSuccessModal,
-      toggleAddChannelModal,
       updateEmail,
       addChannel,
       fetchChannels,
@@ -297,7 +221,6 @@ export default {
       addChannelDescription,
       addChannelIsPrivate,
       showAddChannelSuccess,
-      toggleAddChannelSuccessModal,
     }
   },
 }
