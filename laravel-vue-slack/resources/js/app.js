@@ -152,10 +152,12 @@ import AddMemberModal  from './components/organisms/AddMemberModal.vue'
 import AddMemberSuccessModal  from './components/organisms/AddMemberSuccessModal.vue'
 import AddChannelModal  from './components/organisms/AddChannelModal.vue'
 import AddChannelSuccessModal  from './components/organisms/AddChannelSuccessModal.vue'
+import ChannelDetailModal  from './components/organisms/ChannelDetailModal.vue'
 app.component('add-member-modal', AddMemberModal)
 app.component('add-member-success-modal', AddMemberSuccessModal)
 app.component('add-channel-modal', AddChannelModal)
 app.component('add-channel-success-modal', AddChannelSuccessModal)
+app.component('channel-detail-modal', ChannelDetailModal)
 
 // page
 import AccountCreate  from './components/pages/AccountCreate.vue'

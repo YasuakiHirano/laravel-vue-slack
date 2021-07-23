@@ -12,4 +12,19 @@ class Channel extends Model
     use SoftDeletes;
 
     protected $fillable = ['name', 'description', 'make_user_id', 'is_public'];
+
+    public function fetchChannelList($channelIds) {
+        return $this::select([
+            'channels.id',
+            'channels.name',
+            'channels.description',
+            'users.name as create_user',
+            'channels.is_public',
+        ])
+        ->join('users', function($join) {
+            $join->on('users.id', '=', 'channels.make_user_id');
+        })
+        ->whereIn('channels.id', $channelIds)
+        ->get();
+    }
 }

@@ -40,7 +40,7 @@ class ChannelController extends Controller
         $channelUsers = ChannelUser::whereUserId($userId)->get();
 
         $channelIds = $channelUsers->pluck('channel_id');
-        $channels = Channel::whereIn('id', $channelIds)->get();
+        $channels = (new Channel())->fetchChannelList($channelIds);
 
         return response()->json($channels, Response::HTTP_OK);
     }

@@ -10,7 +10,10 @@
           @event:AddMember="showAddMember = true"
           @event:AddChannel="showAddChannel = true" />
         <div class="message-area">
-          <show-channel-name :channelId="selectChannel">
+          <show-channel-name
+            :channelId="selectChannel"
+            @event:openChannelDetail="showChannelDetail = true"
+          >
               <div class="flex">
                 <div v-if="isChannelPublic"><hash-icon class="mt-1 w-5 h-5"></hash-icon></div>
                 <div v-else><lock-icon class="mt-1 w-5 h-5"></lock-icon></div>
@@ -56,6 +59,15 @@
         <add-channel-success-modal
           :showModal="showAddChannelSuccess"
           @event:modalAction="showAddChannelSuccess = false" />
+        <!----チャンネル情報表示-->
+        <channel-detail-modal
+          :description="channelDescription"
+          :createUser="channelCreateUser"
+          :showModal="showChannelDetail"
+          :isChannelPublic="isChannelPublic"
+          :channelName="channelName"
+          @event:editChannelDescription="showEditChannelDescription = true"
+          @event:modalAction="showChannelDetail = false" />
     </div>
 </template>
 
@@ -71,6 +83,8 @@ export default {
     const userName = ref('')
     const email = ref('')
     const channelName = ref('')
+    const channelDescription = ref('')
+    const channelCreateUser = ref('')
     const channelList = ref('')
     const isChannelPublic = ref(false)
     const selectChannel = ref(1)
@@ -78,6 +92,8 @@ export default {
     const showLoading = ref(true)
     const showAddMember = ref(false)
     const showAddMemberSuccess = ref(false)
+    const showChannelDetail = ref(false)
+    const showEditChannelDescription = ref(false)
     const messageListArea = ref(null)
     const showAddChannel = ref(false)
     const showAddChannelSuccess = ref(false)
@@ -138,6 +154,8 @@ export default {
       const channel = channelList.value.find(channel => channel.id === selectChannel.value)
 
       channelName.value = channel.name
+      channelDescription.value = channel.description
+      channelCreateUser.value = channel.create_user
       isChannelPublic.value = channel.is_public ? true : false
     }
 
@@ -202,6 +220,9 @@ export default {
       showAddMember,
       showAddMemberSuccess,
       showAddChannel,
+      showAddChannelSuccess,
+      showChannelDetail,
+      showEditChannelDescription,
       sendInvitationMail,
       updateEmail,
       addChannel,
@@ -209,6 +230,8 @@ export default {
       messages,
       channelList,
       channelName,
+      channelDescription,
+      channelCreateUser,
       isChannelPublic,
       selectChannel,
       messageListArea,
@@ -220,7 +243,6 @@ export default {
       addChannelName,
       addChannelDescription,
       addChannelIsPrivate,
-      showAddChannelSuccess,
     }
   },
 }
