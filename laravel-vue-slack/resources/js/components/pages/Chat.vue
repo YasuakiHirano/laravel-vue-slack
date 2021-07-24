@@ -12,7 +12,9 @@
         <div class="message-area">
           <show-channel-name
             :channelId="selectChannel"
-            @event:openChannelDetail="showChannelDetail = true"
+            @event:clickCountChannel="isChannelTab = false;showChannelDetail = true;"
+            @event:openChannelDetail="isChannelTab = true;showChannelDetail = true;"
+            @event:isChannelUpdate="isChannelUpdate"
           >
               <div class="flex">
                 <div v-if="isChannelPublic"><hash-icon class="mt-1 w-5 h-5"></hash-icon></div>
@@ -61,13 +63,22 @@
           @event:modalAction="showAddChannelSuccess = false" />
         <!----チャンネル情報表示-->
         <channel-detail-modal
+          :showModal="showChannelDetail"
+          :isChannelTab="isChannelTab"
+          :channelId="selectChannel"
+          :channelUsers="channelUsers"
           :description="channelDescription"
           :createUser="channelCreateUser"
-          :showModal="showChannelDetail"
           :isChannelPublic="isChannelPublic"
           :channelName="channelName"
           @event:editChannelDescription="showEditChannelDescription = true"
           @event:modalAction="showChannelDetail = false" />
+        <channel-description-edit-modal
+          :showModal="showEditChannelDescription"
+          :description="channelDescription"
+          @event:modalAction="updateChannelDescription"
+          @event:updateDescription="updateDescription"
+          @event:modalClose="showEditChannelDescription = false" />
     </div>
 </template>
 
@@ -76,7 +87,8 @@ import { onMounted, ref, nextTick } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages } from '../../apis/message.api.js'
-import { CreateChannel } from '../../apis/channel.api.js'
+import { CreateChannel, UpdateChannel } from '../../apis/channel.api.js'
+import { FetchChannelUsers } from '../../apis/channelUser.api.js'
 
 export default {
   setup() {
@@ -86,6 +98,8 @@ export default {
     const channelDescription = ref('')
     const channelCreateUser = ref('')
     const channelList = ref('')
+    const channelUsers = ref([])
+    const isChannelTab = ref(true)
     const isChannelPublic = ref(false)
     const selectChannel = ref(1)
     const messages = ref([])
@@ -171,10 +185,31 @@ export default {
       })
     }
 
+    const updateChannelDescription = async () => {
+      // チャンネルの説明を更新
+      await UpdateChannel(selectChannel.value, null, channelDescription.value, null)
+      showEditChannelDescription.value = false
+    }
+
+    const updateDescription = (text) => {
+      channelDescription.value = text
+    }
+
+    const openMembersModal = () => {
+      isChannelTab.value = false
+      showChannelDetail.value = true
+    }
+
+    const isChannelUpdate = (value) => {
+      isChannelTab.value = value
+    }
+
     const initLoading = async() => {
       // ユーザー取得
       const user = await FindUser()
       userName.value = user.name
+
+      channelUsers.value = await FetchChannelUsers(selectChannel.value);
 
       // 選択中のチャンネルメッセージ取得
       messages.value = await FetchMessages(selectChannel.value)
@@ -186,19 +221,19 @@ export default {
       if (listenChannels.indexOf(messageChannelKey) === -1) {
 
         window.Echo.channel(messageChannelKey + "-create-message").listen('.MessageEvent', result => {
-            messages.value.push(result.message)
+          messages.value.push(result.message)
 
-            nextTick(() => {
+          nextTick(() => {
             scrollMessageListArea()
-            })
+          })
         });
 
         window.Echo.channel(messageChannelKey + "-delete-message").listen('.MessageEvent', result => {
-            deleteMessage(result.messageId)
+          deleteMessage(result.messageId)
         });
 
         window.Echo.channel(messageChannelKey + "-update-message").listen('.MessageEvent', result => {
-            updateMessage(result.message, result.messageId)
+          updateMessage(result.message, result.messageId)
         });
 
         listenChannels.push(messageChannelKey)
@@ -232,7 +267,10 @@ export default {
       channelName,
       channelDescription,
       channelCreateUser,
+      channelUsers,
+      isChannelTab,
       isChannelPublic,
+      isChannelUpdate,
       selectChannel,
       messageListArea,
       deleteMessage,
@@ -240,9 +278,12 @@ export default {
       updateAddChannelName,
       updateAddChannelDescription,
       updateAddChannelIsPrivate,
+      updateChannelDescription,
+      updateDescription,
       addChannelName,
       addChannelDescription,
       addChannelIsPrivate,
+      openMembersModal,
     }
   },
 }

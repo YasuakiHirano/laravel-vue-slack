@@ -1,6 +1,7 @@
 <template>
   <div class="text-center">
-    <chat-text-area ref="chatTextArea"
+    <chat-text-area
+      ref="chatTextArea"
       :channelName="channelName"
       :content="content"
       class="mt-2"
@@ -14,7 +15,7 @@
 </template>
 <script>
 import { ref } from 'vue'
-import { CreateMessage, UpdateMessage } from '../../apis/message.api.js'
+import { CreateMessage } from '../../apis/message.api.js'
 export default({
   props: ['channelId', 'channelName', 'content', 'isCancel', 'isUpdate', 'messageId'],
   setup(props, context) {

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SignInController;
 use App\Http\Controllers\Api\ChannelController;
+use App\Http\Controllers\Api\ChannelUserController;
 use App\Http\Controllers\Api\MessageController;
 
 /*
@@ -28,7 +29,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // チャンネル
     Route::post('/channels', [ChannelController::class, 'create']);
     Route::get('/channels', [ChannelController::class, 'fetch']);
+    Route::put('/channels', [ChannelController::class, 'update']);
     Route::get('/channels/user_count', [ChannelController::class, 'countChannelUser']);
+
+    // チャンネルに関連するユーザー情報
+    Route::get('/channel_users', [ChannelUserController::class, 'fetch']);
 
     // メッセージ
     Route::post('/messages', [MessageController::class, 'create']);

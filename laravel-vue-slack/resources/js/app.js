@@ -153,11 +153,13 @@ import AddMemberSuccessModal  from './components/organisms/AddMemberSuccessModal
 import AddChannelModal  from './components/organisms/AddChannelModal.vue'
 import AddChannelSuccessModal  from './components/organisms/AddChannelSuccessModal.vue'
 import ChannelDetailModal  from './components/organisms/ChannelDetailModal.vue'
+import ChannelDescriptionEditModal  from './components/organisms/ChannelDescriptionEditModal.vue'
 app.component('add-member-modal', AddMemberModal)
 app.component('add-member-success-modal', AddMemberSuccessModal)
 app.component('add-channel-modal', AddChannelModal)
 app.component('add-channel-success-modal', AddChannelSuccessModal)
 app.component('channel-detail-modal', ChannelDetailModal)
+app.component('channel-description-edit-modal', ChannelDescriptionEditModal)
 
 // page
 import AccountCreate  from './components/pages/AccountCreate.vue'

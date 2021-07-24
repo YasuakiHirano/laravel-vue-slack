@@ -45,6 +45,26 @@ class ChannelController extends Controller
         return response()->json($channels, Response::HTTP_OK);
     }
 
+    public function update(Request $request) {
+        $request->validate([
+            'id' => 'required'
+        ]);
+
+        $channel = Channel::find($request->id);
+
+        $name = isset($request->name) ? $request->name : $channel->name;
+        $description = isset($request->description) ? $request->description : $channel->description;
+        $isPublic = isset($request->is_public) ? $request->is_public : $channel->is_public;
+
+        $channel->update([
+            'name' => $name,
+            'description' => $description,
+            'is_public' => $isPublic,
+        ]);
+
+        return response()->json('Channel update completed.', Response::HTTP_OK);
+    }
+
     public function countChannelUser(Request $request) {
         $count = ChannelUser::whereChannelId($request->channel_id)->count();
         return response()->json($count, Response::HTTP_OK);

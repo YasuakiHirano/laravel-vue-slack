@@ -13,7 +13,7 @@
       </div>
       <div class="ml-2 w-full">
         <div><chat-user-name>{{ postUserName }}</chat-user-name><chat-user-date>{{ postTime }}</chat-user-date></div>
-        <div class="content" v-show="!isEditMode">{{ content }}</div>
+        <div class="whitespace-pre-wrap break-all" v-show="!isEditMode">{{ content }}</div>
         <chat-input-area
           v-show="isEditMode"
           :messageId="messageId"
@@ -65,8 +65,3 @@ export default({
   }
 })
 </script>
-<style>
-.content {
-  white-space:pre-wrap;
-}
-</style>

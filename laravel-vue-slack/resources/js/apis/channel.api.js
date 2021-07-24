@@ -1,19 +1,18 @@
 import axios from 'axios'
 
 export const CreateChannel = async (name, description, isPrivate) => {
-    let created = false
-    await axios.post('/api/channels', {
-      'name': name,
-      'description': description,
-      'is_private': isPrivate
-    }).then((result) => {
-      if (result.status === 200) {
-        created = true
-      }
-    })
-    return created
-  }
-
+  let created = false
+  await axios.post('/api/channels', {
+    'name': name,
+    'description': description,
+    'is_private': isPrivate
+  }).then((result) => {
+    if (result.status === 200) {
+      created = true
+    }
+  })
+  return created
+}
 
 export const FetchChannel = async () => {
   let channels = null
@@ -21,6 +20,21 @@ export const FetchChannel = async () => {
     channels = result
   })
   return channels.data
+}
+
+export const UpdateChannel = async (id, name, description, isPublic) => {
+  let updated = false
+  await axios.put('/api/channels', {
+    'id': id,
+    'name': name,
+    'description': description,
+    'is_public': isPublic
+  }).then((result) => {
+    if (result.status === 200) {
+      updated = true
+    }
+  })
+  return updated
 }
 
 export const CountChannelUsers = async (channelId) => {

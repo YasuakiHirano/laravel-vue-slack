@@ -18,16 +18,16 @@
     <template v-slot:app-content>
       <div class="bg-white">
         <nav class="flex">
-          <button :class="channelTabClass" @click="selectChannelTab = true;selectChannel()">
+          <button :class="channelTabClass" @click="isChannelTab = true;selectChannel(isChannelTab)">
             チャンネル情報
           </button>
-          <button :class="memberTabClass" @click="selectChannelTab = false;selectChannel()">
+          <button :class="memberTabClass" @click="isChannelTab = false;selectChannel(isChannelTab)">
             メンバー
           </button>
         </nav>
-        <div class="flex mt-2" v-if="selectChannelTab">
+        <div class="flex mt-2" v-if="isChannelTab">
           <div class="w-full rounded shadow ring-2 ring-blue-400">
-            <div class="relative group p-3 border-b-2 border-blue-400 hover:bg-blue-200 cursor-pointer" @click="$emit('event:editChannelDescription')">
+            <div class="relative group p-3 border-b-2 border-blue-400 hover:bg-blue-200 cursor-pointer whitespace-pre-wrap break-all" @click="$emit('event:editChannelDescription')">
               <div class="opacity-0 group-hover:opacity-100 font-bold absolute text-xs text-blue-800 top-3 right-3">編集</div>
               <div class="text-sm font-semibold">説明</div>
               {{ description }}
@@ -38,8 +38,15 @@
             </div>
           </div>
         </div>
-        <div class="flex mt-2" v-else>
-          メンバー情報...
+        <div class="mt-2 border-2 border-b-0 border-blue-400 rounded" v-else>
+          <div class="w-full flex p-3 border-b-2 border-blue-400" v-for="channelUser in channelUsers" :key="channelUser.id">
+              <div class="w-12">
+                <chat-user-image :image="channelUser.imagePath" />
+              </div>
+              <div class="p-3">
+                {{ channelUser.name }}
+              </div>
+          </div>
         </div>
       </div>
     </template>
@@ -48,30 +55,33 @@
 <script>
 import { ref } from 'vue'
 export default {
-  props: ['showModal', 'channelName', 'description', 'createUser', 'isChannelPublic'],
-  setup() {
-    const selectChannelTab = ref(true)
+  props: ['showModal', 'isChannelTab', 'channelName', 'channelUsers', 'description', 'createUser', 'isChannelPublic'],
+  setup(props, context) {
     const channelTabClass = ref('')
     const memberTabClass = ref('')
 
-    const selectChannel = () => {
-      if (selectChannelTab.value) {
+    const selectChannel = (isChannelTab) => {
+      if (isChannelTab) {
         memberTabClass.value = 'text-gray-600 py-4 w-1/2 block hover:text-blue-500 focus:outline-none'
         channelTabClass.value = 'text-gray-600 py-4 w-1/2 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500'
       } else {
         memberTabClass.value = 'text-gray-600 py-4 w-1/2 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500'
         channelTabClass.value = 'text-gray-600 py-4 w-1/2 block hover:text-blue-500 focus:outline-none'
       }
+
+      context.emit('event:isChannelUpdate', isChannelTab)
     }
 
-    selectChannel()
+    selectChannel(props.isChannelTab)
 
     return {
-      selectChannelTab,
       channelTabClass,
       memberTabClass,
       selectChannel
     }
+  },
+  watch: {
+    isChannelTab: 'selectChannel'
   }
 }
 </script>
