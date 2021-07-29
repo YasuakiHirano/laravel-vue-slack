@@ -9,6 +9,7 @@
     <text-area-icons
       class="icon-area"
       :isCancel="isCancel"
+      @event:clickReactionBorderIcon="$emit('event:clickReactionIcon')"
       @event:clickCancelIcon="$emit('event:clickCancelIcon')"
       @event:clickMessageIcon="sendMessage" />
   </div>

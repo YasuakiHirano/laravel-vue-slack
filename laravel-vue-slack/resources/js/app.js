@@ -165,5 +165,8 @@ app.component('channel-description-edit-modal', ChannelDescriptionEditModal)
 import AccountCreate  from './components/pages/AccountCreate.vue'
 app.component('account-create', AccountCreate)
 
+import EmojiPicker from "./components/organisms/EmojiPicker.vue"
+app.component('emoji-picker', EmojiPicker)
+
 // id="app"にマウント
 app.mount('#app')
