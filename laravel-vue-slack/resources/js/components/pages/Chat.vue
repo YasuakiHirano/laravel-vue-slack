@@ -38,7 +38,12 @@
               </div>
             </transition-group>
           </div>
-          <chat-input-area :channelId="selectChannel" :channelName="channelName" class="mt-2" />
+          <chat-input-area
+            ref="chatInputArea"
+            @event:clickReactionIcon="isShowEmojiPicker = true"
+            :channelId="selectChannel"
+            :channelName="channelName"
+            class="mt-2" />
         </div>
         <!--モーダル実装-->
         <!----メンバー招待---->
@@ -79,6 +84,8 @@
           @event:modalAction="updateChannelDescription"
           @event:updateDescription="updateDescription"
           @event:modalClose="showEditChannelDescription = false" />
+        <div class="absolute w-full h-full" @click="isShowEmojiPicker = false" v-show="isShowEmojiPicker"></div>
+        <emoji-picker class="absolute bottom-20 right-4" @event:selectEmoji="inputEmoji" :isShow="isShowEmojiPicker" />
     </div>
 </template>
 
@@ -91,7 +98,7 @@ import { CreateChannel, UpdateChannel } from '../../apis/channel.api.js'
 import { FetchChannelUsers } from '../../apis/channelUser.api.js'
 
 export default {
-  setup() {
+  setup(props, context) {
     const userName = ref('')
     const email = ref('')
     const channelName = ref('')
@@ -114,6 +121,8 @@ export default {
     const addChannelName = ref('')
     const addChannelDescription = ref('')
     const addChannelIsPrivate = ref(false)
+    const isShowEmojiPicker = ref(false)
+    const chatInputArea = ref(null)
     let listenChannels = []
 
     const updateEmail = (text) => {
@@ -204,6 +213,10 @@ export default {
       isChannelTab.value = value
     }
 
+    const inputEmoji = (emoji) => {
+      chatInputArea.value.chatTextArea.text += emoji.native
+    }
+
     const initLoading = async() => {
       // ユーザー取得
       const user = await FindUser()
@@ -284,6 +297,9 @@ export default {
       addChannelDescription,
       addChannelIsPrivate,
       openMembersModal,
+      isShowEmojiPicker,
+      inputEmoji,
+      chatInputArea
     }
   },
 }
