@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\SignInController;
 use App\Http\Controllers\Api\ChannelController;
 use App\Http\Controllers\Api\ChannelUserController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\ReactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // 招待メール送信
     Route::post('/mail/invitation', [MailController::class, 'sendInvitation']);
+
+    // リアクション
+    Route::post('/reaction', [ReactionController::class, 'updateOrCreate']);
 });
 
 // ユーザー登録
