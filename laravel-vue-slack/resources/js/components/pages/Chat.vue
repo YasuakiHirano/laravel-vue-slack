@@ -109,9 +109,11 @@ import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages } from '../../apis/message.api.js'
 import { CreateChannel, UpdateChannel } from '../../apis/channel.api.js'
 import { FetchChannelUsers } from '../../apis/channelUser.api.js'
+import { CreateOrUpdateReaction } from '../../apis/reaction.api.js'
 
 export default {
   setup(props, context) {
+    const userId = ref(0)
     const userName = ref('')
     const email = ref('')
     const channelName = ref('')
@@ -136,6 +138,7 @@ export default {
     const addChannelIsPrivate = ref(false)
     const isShowEmojiPicker = ref(false)
     const isShowCenterEmojiPicker = ref(false)
+    const selectMessageId = ref(0)
     const chatInputArea = ref(null)
     let listenChannels = []
 
@@ -235,14 +238,15 @@ export default {
       chatInputArea.value.chatTextArea.text += emoji.native
     }
 
-    const reactionEmoji = (emoji) => {
-      console.log(emoji)
+    const reactionEmoji = async (emoji) => {
+      await CreateOrUpdateReaction(selectMessageId.value, userId.value, emoji.id, emoji.native)
       isShowCenterEmojiPicker.value = false
     }
 
     const initLoading = async() => {
       // ユーザー取得
       const user = await FindUser()
+      userId.value = user.id
       userName.value = user.name
 
       channelUsers.value = await FetchChannelUsers(selectChannel.value);
@@ -282,6 +286,7 @@ export default {
 
     const reactionMessage = (messageId) => {
       isShowCenterEmojiPicker.value = true
+      selectMessageId.value = messageId
     }
 
     onMounted(async () => {

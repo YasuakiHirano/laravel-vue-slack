@@ -18,6 +18,7 @@ class CreateReactionsTable extends Migration
             $table->bigInteger('message_id');
             $table->bigInteger('reaction_user_id');
             $table->string('icon');
+            $table->string('icon_code');
             $table->integer('number')->nullable()->default(0);
             $table->timestamps();
             $table->softDeletes();

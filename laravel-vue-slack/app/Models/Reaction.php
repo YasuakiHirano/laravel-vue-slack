@@ -11,5 +11,5 @@ class Reaction extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['message_id', 'reaction_user_id', 'icon', 'number'];
+    protected $fillable = ['message_id', 'reaction_user_id', 'icon_code', 'icon', 'number'];
 }
