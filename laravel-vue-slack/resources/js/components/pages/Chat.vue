@@ -33,8 +33,10 @@
                  :imagePath="message.imagePath"
                  :postUserName="message.postUserName"
                  :postTime="message.postTime"
-                 :mentions="message.mentions"
-                 :content="message.content" />
+                 :reactions="message.reactions"
+                 :content="message.content"
+                 :isMyMessage="userName === message.postUserName"
+                 @event:reactionMessage="reactionMessage" />
               </div>
             </transition-group>
           </div>
@@ -84,8 +86,19 @@
           @event:modalAction="updateChannelDescription"
           @event:updateDescription="updateDescription"
           @event:modalClose="showEditChannelDescription = false" />
-        <div class="absolute w-full h-full" @click="isShowEmojiPicker = false" v-show="isShowEmojiPicker"></div>
-        <emoji-picker class="absolute bottom-20 right-4" @event:selectEmoji="inputEmoji" :isShow="isShowEmojiPicker" />
+        <emoji-picker
+          class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+          @event:selectEmoji="reactionEmoji"
+          :isShow="isShowCenterEmojiPicker" />
+        <div
+          class="absolute w-full h-full"
+          @click="isShowEmojiPicker = false"
+          v-show="isShowEmojiPicker">
+        </div>
+        <emoji-picker
+          class="absolute bottom-20 right-4"
+          @event:selectEmoji="inputEmoji"
+          :isShow="isShowEmojiPicker" />
     </div>
 </template>
 
@@ -122,6 +135,7 @@ export default {
     const addChannelDescription = ref('')
     const addChannelIsPrivate = ref(false)
     const isShowEmojiPicker = ref(false)
+    const isShowCenterEmojiPicker = ref(false)
     const chatInputArea = ref(null)
     let listenChannels = []
 
@@ -214,7 +228,16 @@ export default {
     }
 
     const inputEmoji = (emoji) => {
+      if (chatInputArea.value.chatTextArea.text === undefined || chatInputArea.value.chatTextArea.text === null) {
+        chatInputArea.value.chatTextArea.text = ''
+      }
+
       chatInputArea.value.chatTextArea.text += emoji.native
+    }
+
+    const reactionEmoji = (emoji) => {
+      console.log(emoji)
+      isShowCenterEmojiPicker.value = false
     }
 
     const initLoading = async() => {
@@ -257,6 +280,10 @@ export default {
       })
     }
 
+    const reactionMessage = (messageId) => {
+      isShowCenterEmojiPicker.value = true
+    }
+
     onMounted(async () => {
       await initLoading()
     });
@@ -287,6 +314,7 @@ export default {
       selectChannel,
       messageListArea,
       deleteMessage,
+      reactionMessage,
       changeChannel,
       updateAddChannelName,
       updateAddChannelDescription,
@@ -298,7 +326,9 @@ export default {
       addChannelIsPrivate,
       openMembersModal,
       isShowEmojiPicker,
+      isShowCenterEmojiPicker,
       inputEmoji,
+      reactionEmoji,
       chatInputArea
     }
   },

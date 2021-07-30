@@ -5,6 +5,8 @@
       <message-area-icons
         :messageId="messageId"
         :channelId="channelId"
+        :isMyMessage="isMyMessage"
+        @event:reactionMessage="reactionMessage"
         @event:deleteMessage="deleteMessage"
         @event:editMessage="editMessage"
       />
@@ -23,8 +25,8 @@
           @event:updateMessage="updateMessage"
           :isCancel="true" />
         <div class="flex">
-          <div v-for="mention in mentions" :key="mention.id" class="flex mt-1">
-            <reaction-circle :number="mention.number" :icon="mention.icon" class="mr-1" />
+          <div v-for="reaction in reactions" :key="reaction.id" class="flex mt-1">
+            <reaction-circle :number="reaction.number" :icon="reaction.icon" class="mr-1" />
           </div>
         </div>
       </div>
@@ -37,9 +39,13 @@ import { UpdateMessage } from '../../apis/message.api.js'
 import { DeleteMessage } from '../../apis/message.api'
 
 export default({
-  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'mentions'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'isMyMessage'],
   setup(props, context) {
     const isEditMode = ref(false)
+
+    const reactionMessage = async (messageId) => {
+      context.emit('event:reactionMessage', messageId)
+    }
 
     const deleteMessage = async (messageId, channelId) => {
       await DeleteMessage(messageId, channelId)
@@ -57,6 +63,7 @@ export default({
     }
 
     return {
+      reactionMessage,
       deleteMessage,
       editMessage,
       isEditMode,
