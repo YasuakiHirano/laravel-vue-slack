@@ -198,10 +198,6 @@ export default {
       isChannelPublic.value = channel.is_public ? true : false
     }
 
-    const updateReaction = (reaction) => {
-
-    }
-
     const updateChannelDescription = async () => {
       // チャンネルの説明を更新
       await UpdateChannel(selectChannel.value, null, channelDescription.value, null)
@@ -259,25 +255,42 @@ export default {
       nextTick(() => {
         scrollMessageListArea()
       })
-    });
+    })
 
     window.Echo.channel("delete-message").listen('.MessageEvent', result => {
       const messageId = result.messageId
+
       messages.value = messages.value.filter(function (message) { return message.id != messageId } )
-    });
+    })
 
     window.Echo.channel("update-message").listen('.MessageEvent', result => {
-        const content = result.message
-        const messageId = result.messageId
-        messages.value.forEach(message => {
-            if (message.id == messageId) {
-            message.content = content
-            }
-        })
-    });
+      const content = result.message
+      const messageId = result.messageId
+
+      messages.value.forEach(message => {
+        if (message.id == messageId) {
+          message.content = content
+        }
+      })
+    })
+
+    window.Echo.channel("create-channel").listen('.ChannelEvent', result => {
+      channelList.value.push(result.channelObject)
+    })
+
+    window.Echo.channel("update-channel").listen('.ChannelEvent', result => {
+      const channel = result.channelObject
+
+      channelList.value.filter(targetChannel => {
+        if (targetChannel.id == channel.id) {
+          targetChannel.description = channel.description
+        }
+      })
+    })
 
     window.Echo.channel("update-reaction").listen('.ReactionEvent', result => {
       const reaction = result.reaction
+
       messages.value.filter(function (message) {
         // 更新したリアクションのメッセージIDと同じメッセージ
         if (message.id == reaction.message_id) {
@@ -294,7 +307,7 @@ export default {
           }
         }
       })
-    });
+    })
 
     const reactionMessage = (messageId) => {
       isShowCenterEmojiPicker.value = true

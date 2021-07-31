@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ChannelEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Channel;
 use App\Models\ChannelUser;
@@ -32,6 +33,7 @@ class ChannelController extends Controller
             'channel_id' => $channel->id
         ]);
 
+        broadcast(new ChannelEvent('create-channel', $channel));
         return response()->json('Channel registration completed.', Response::HTTP_OK);
     }
 
@@ -62,6 +64,7 @@ class ChannelController extends Controller
             'is_public' => $isPublic,
         ]);
 
+        broadcast(new ChannelEvent('update-channel', $channel));
         return response()->json('Channel update completed.', Response::HTTP_OK);
     }
 

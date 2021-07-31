@@ -38,8 +38,9 @@
             </div>
           </div>
         </div>
-        <div class="mt-2 border-2 border-b-0 border-blue-400 rounded" v-else>
-          <div class="w-full flex p-3 border-b-2 border-blue-400" v-for="channelUser in channelUsers" :key="channelUser.id">
+        <div class="mt-2" v-else>
+          <form-action-button class="mt-2 mb-3"><happy-icon class="w-5 h-5 mr-2" />チャンネルにメンバーを追加する</form-action-button>
+          <div class="w-full flex p-3 border-b-2 border-gray-300" v-for="channelUser in channelUsers" :key="channelUser.id">
               <div class="w-12">
                 <chat-user-image :image="channelUser.imagePath" />
               </div>
