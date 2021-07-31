@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ReactionEvent;
 use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class ReactionController extends Controller
         $reaction = Reaction::whereMessageId($request->message_id)
                     ->whereIconCode($request->icon_code)->first();
 
-        $retReaction = Reaction::updateOrCreate(
+        $reactionResult = Reaction::updateOrCreate(
             [
                 'message_id' => $request->message_id,
                 'icon_code' => $request->icon_code
@@ -35,6 +36,7 @@ class ReactionController extends Controller
             ]
         );
 
+        broadcast(new ReactionEvent('update-reaction', $reactionResult));
         return response()->json('Channel registration completed.', Response::HTTP_OK);
     }
 }

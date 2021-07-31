@@ -140,7 +140,6 @@ export default {
     const isShowCenterEmojiPicker = ref(false)
     const selectMessageId = ref(0)
     const chatInputArea = ref(null)
-    let listenChannels = []
 
     const updateEmail = (text) => {
       email.value = text.value
@@ -199,16 +198,8 @@ export default {
       isChannelPublic.value = channel.is_public ? true : false
     }
 
-    const deleteMessage = (messageId) => {
-      messages.value = messages.value.filter(function (message) { return message.id != messageId } )
-    }
+    const updateReaction = (reaction) => {
 
-    const updateMessage = (content, messageId) => {
-      messages.value.forEach(message => {
-        if (message.id == messageId) {
-          message.content = content
-        }
-      })
     }
 
     const updateChannelDescription = async () => {
@@ -257,32 +248,53 @@ export default {
       // ダイアログを非表示
       showLoading.value = false
 
-      const messageChannelKey = selectChannel.value
-      if (listenChannels.indexOf(messageChannelKey) === -1) {
-
-        window.Echo.channel(messageChannelKey + "-create-message").listen('.MessageEvent', result => {
-          messages.value.push(result.message)
-
-          nextTick(() => {
-            scrollMessageListArea()
-          })
-        });
-
-        window.Echo.channel(messageChannelKey + "-delete-message").listen('.MessageEvent', result => {
-          deleteMessage(result.messageId)
-        });
-
-        window.Echo.channel(messageChannelKey + "-update-message").listen('.MessageEvent', result => {
-          updateMessage(result.message, result.messageId)
-        });
-
-        listenChannels.push(messageChannelKey)
-      }
-
       nextTick(() => {
         scrollMessageListArea()
       })
     }
+
+    window.Echo.channel("create-message").listen('.MessageEvent', result => {
+      messages.value.push(result.message)
+
+      nextTick(() => {
+        scrollMessageListArea()
+      })
+    });
+
+    window.Echo.channel("delete-message").listen('.MessageEvent', result => {
+      const messageId = result.messageId
+      messages.value = messages.value.filter(function (message) { return message.id != messageId } )
+    });
+
+    window.Echo.channel("update-message").listen('.MessageEvent', result => {
+        const content = result.message
+        const messageId = result.messageId
+        messages.value.forEach(message => {
+            if (message.id == messageId) {
+            message.content = content
+            }
+        })
+    });
+
+    window.Echo.channel("update-reaction").listen('.ReactionEvent', result => {
+      const reaction = result.reaction
+      messages.value.filter(function (message) {
+        // 更新したリアクションのメッセージIDと同じメッセージ
+        if (message.id == reaction.message_id) {
+          // リアクション一覧を追加または更新する
+          let isUpdate = false
+          message.reactions.filter(function (targetReaction) {
+            if (targetReaction.id == reaction.id) {
+              targetReaction.number += 1
+              isUpdate = true
+            }
+          })
+          if (isUpdate === false) {
+            message.reactions.push(reaction)
+          }
+        }
+      })
+    });
 
     const reactionMessage = (messageId) => {
       isShowCenterEmojiPicker.value = true
@@ -318,7 +330,6 @@ export default {
       isChannelUpdate,
       selectChannel,
       messageListArea,
-      deleteMessage,
       reactionMessage,
       changeChannel,
       updateAddChannelName,

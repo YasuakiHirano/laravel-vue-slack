@@ -37,7 +37,7 @@ class MessageController extends Controller
             }
         }
 
-        broadcast(new MessageEvent($request->channel_id . '-create-message', $selectMessage->toArray(), null));
+        broadcast(new MessageEvent('create-message', $selectMessage->toArray(), null));
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
 
@@ -73,7 +73,7 @@ class MessageController extends Controller
             'content' => $request->content
         ]);
 
-        broadcast(new MessageEvent($request->channel_id . '-update-message', $request->content, $message->id));
+        broadcast(new MessageEvent('update-message', $request->content, $message->id));
         return response()->json('Message update completed.', Response::HTTP_OK);
     }
 
@@ -89,7 +89,7 @@ class MessageController extends Controller
         }
         $message->delete();
 
-        broadcast(new MessageEvent($request->channel_id . '-delete-message', null, $message->id));
+        broadcast(new MessageEvent('delete-message', null, $message->id));
         return response()->json('Message delete completed.', Response::HTTP_OK);
     }
 }
