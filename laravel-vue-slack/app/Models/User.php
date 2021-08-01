@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\ChannelUser;
 
 class User extends Authenticatable
 {
@@ -41,4 +42,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function fetchNotChannelUsers($channelId)
+    {
+        $channelUsers = ChannelUser::select(['user_id'])->whereChannelId($channelId)->get();
+        return $this::select([
+                    'users.id',
+                    'users.name',
+                    DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as imagePath"),
+                ])
+                ->from('users')
+                ->join('user_information', function($join) {
+                    $join->on('users.id', '=', 'user_information.user_id');
+                })
+                ->whereNotIn('users.id', $channelUsers->pluck('user_id'))
+                ->get();
+    }
 }

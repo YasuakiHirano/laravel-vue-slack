@@ -12,6 +12,7 @@
         <div class="message-area">
           <show-channel-name
             :channelId="selectChannel"
+            :count="userCount"
             @event:clickCountChannel="isChannelTab = false;showChannelDetail = true;"
             @event:openChannelDetail="isChannelTab = true;showChannelDetail = true;"
             @event:isChannelUpdate="isChannelUpdate"
@@ -79,6 +80,7 @@
           :isChannelPublic="isChannelPublic"
           :channelName="channelName"
           @event:editChannelDescription="showEditChannelDescription = true"
+          @event:addChannelMember="showAddChannelMember = true"
           @event:modalAction="showChannelDetail = false" />
         <channel-description-edit-modal
           :showModal="showEditChannelDescription"
@@ -86,6 +88,11 @@
           @event:modalAction="updateChannelDescription"
           @event:updateDescription="updateDescription"
           @event:modalClose="showEditChannelDescription = false" />
+        <channel-add-member-modal
+          :showModal="showAddChannelMember"
+          :notChannelUsers="notChannelUsers"
+          @event:addUsers="channelAddUsers"
+          @event:modalClose="showAddChannelMember = false" />
         <emoji-picker
           class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
           @event:selectEmoji="reactionEmoji"
@@ -108,19 +115,21 @@ import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages } from '../../apis/message.api.js'
 import { CreateChannel, UpdateChannel } from '../../apis/channel.api.js'
-import { FetchChannelUsers } from '../../apis/channelUser.api.js'
+import { CreateChannelUsers, FetchChannelUsers, FetchNotChannelUsers } from '../../apis/channelUser.api.js'
 import { CreateOrUpdateReaction } from '../../apis/reaction.api.js'
 
 export default {
   setup(props, context) {
     const userId = ref(0)
     const userName = ref('')
+    const userCount = ref(0)
     const email = ref('')
     const channelName = ref('')
     const channelDescription = ref('')
     const channelCreateUser = ref('')
     const channelList = ref('')
     const channelUsers = ref([])
+    const notChannelUsers = ref([])
     const isChannelTab = ref(true)
     const isChannelPublic = ref(false)
     const selectChannel = ref(1)
@@ -130,6 +139,7 @@ export default {
     const showAddMemberSuccess = ref(false)
     const showChannelDetail = ref(false)
     const showEditChannelDescription = ref(false)
+    const showAddChannelMember = ref(false)
     const messageListArea = ref(null)
     const showAddChannel = ref(false)
     const showAddChannelSuccess = ref(false)
@@ -230,13 +240,23 @@ export default {
       isShowCenterEmojiPicker.value = false
     }
 
+    const channelAddUsers = async (addUsers) => {
+      await CreateChannelUsers(selectChannel.value, addUsers)
+      showAddChannelMember.value = false
+    }
+
     const initLoading = async() => {
       // ユーザー取得
       const user = await FindUser()
       userId.value = user.id
       userName.value = user.name
 
+      // チャンネルのユーザー取得
       channelUsers.value = await FetchChannelUsers(selectChannel.value);
+      userCount.value = channelUsers.value.length
+
+      // チャンネルに属していないユーザー取得
+      notChannelUsers.value = await FetchNotChannelUsers(selectChannel.value);
 
       // 選択中のチャンネルメッセージ取得
       messages.value = await FetchMessages(selectChannel.value)
@@ -321,6 +341,7 @@ export default {
     return {
       userName,
       email,
+      userCount,
       showLoading,
       showAddMember,
       showAddMemberSuccess,
@@ -328,6 +349,7 @@ export default {
       showAddChannelSuccess,
       showChannelDetail,
       showEditChannelDescription,
+      showAddChannelMember,
       sendInvitationMail,
       updateEmail,
       addChannel,
@@ -338,6 +360,8 @@ export default {
       channelDescription,
       channelCreateUser,
       channelUsers,
+      channelAddUsers,
+      notChannelUsers,
       isChannelTab,
       isChannelPublic,
       isChannelUpdate,

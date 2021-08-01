@@ -7,21 +7,7 @@
   </div>
 </template>
 <script>
-import { ref, onMounted } from 'vue'
-import { CountChannelUsers } from '../../apis/channel.api.js'
-
 export default {
-  props:['channelId'],
-  setup(props) {
-    const count = ref(0)
-
-    onMounted(async () => {
-      count.value = await CountChannelUsers(props.channelId)
-    });
-
-    return {
-      count
-    }
-  }
+  props:['channelId', 'count']
 }
 </script>

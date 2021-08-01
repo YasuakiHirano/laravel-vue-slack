@@ -154,17 +154,20 @@ import AddChannelModal  from './components/organisms/AddChannelModal.vue'
 import AddChannelSuccessModal  from './components/organisms/AddChannelSuccessModal.vue'
 import ChannelDetailModal  from './components/organisms/ChannelDetailModal.vue'
 import ChannelDescriptionEditModal  from './components/organisms/ChannelDescriptionEditModal.vue'
+import ChannelAddMemberModal  from './components/organisms/ChannelAddMemberModal.vue'
 app.component('add-member-modal', AddMemberModal)
 app.component('add-member-success-modal', AddMemberSuccessModal)
 app.component('add-channel-modal', AddChannelModal)
 app.component('add-channel-success-modal', AddChannelSuccessModal)
 app.component('channel-detail-modal', ChannelDetailModal)
 app.component('channel-description-edit-modal', ChannelDescriptionEditModal)
+app.component('channel-add-member-modal', ChannelAddMemberModal)
 
 // page
 import AccountCreate  from './components/pages/AccountCreate.vue'
 app.component('account-create', AccountCreate)
 
+// library
 import EmojiPicker from "./components/organisms/EmojiPicker.vue"
 app.component('emoji-picker', EmojiPicker)
 
