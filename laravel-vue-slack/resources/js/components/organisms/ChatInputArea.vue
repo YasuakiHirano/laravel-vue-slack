@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center relative">
     <chat-text-area
       ref="chatTextArea"
       :channelName="channelName"
@@ -44,7 +44,7 @@ export default({
   text-align: right;
   position: absolute;
   height: 40px;
-  bottom: 18px;
-  right: 20px;
+  bottom: 12px;
+  right: 18px;
 }
 </style>

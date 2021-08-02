@@ -37,6 +37,21 @@ class ReactionController extends Controller
         );
 
         broadcast(new ReactionEvent('update-reaction', $reactionResult));
-        return response()->json('Channel registration completed.', Response::HTTP_OK);
+        return response()->json('Reaction update or create completed.', Response::HTTP_OK);
+    }
+
+    public function updateReactionNumber(Request $request) {
+        $request->validate([
+            'reaction_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        $reaction = Reaction::find($request->reaction_id);
+        $reaction->number += 1;
+        $reaction->reaction_user_id = $request->user_id;
+        $reaction->save();
+
+        broadcast(new ReactionEvent('update-reaction', $reaction));
+        return response()->json('Reaction update completed.', Response::HTTP_OK);
     }
 }

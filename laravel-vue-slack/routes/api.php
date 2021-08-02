@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // リアクション
     Route::post('/reaction', [ReactionController::class, 'updateOrCreate']);
+    Route::get('/reaction/plus', [ReactionController::class, 'updateReactionNumber']);
 });
 
 // ユーザー登録

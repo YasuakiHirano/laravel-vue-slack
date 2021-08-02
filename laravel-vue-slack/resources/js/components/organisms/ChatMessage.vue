@@ -26,7 +26,7 @@
           :isCancel="true" />
         <div class="flex">
           <div v-for="reaction in reactions" :key="reaction.id" class="flex mt-1">
-            <reaction-circle :number="reaction.number" :icon="reaction.icon" class="mr-1" />
+            <reaction-circle :number="reaction.number" :icon="reaction.icon" class="mr-1 cursor-pointer" @click="updateReaction(reaction.id)" />
           </div>
         </div>
       </div>
@@ -37,9 +37,10 @@
 import { ref } from 'vue'
 import { UpdateMessage } from '../../apis/message.api.js'
 import { DeleteMessage } from '../../apis/message.api'
+import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 
 export default({
-  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'isMyMessage'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'isMyMessage', 'userId'],
   setup(props, context) {
     const isEditMode = ref(false)
 
@@ -62,12 +63,17 @@ export default({
       }
     }
 
+    const updateReaction = async (reactionId) => {
+      await UpdateReactionNumber(reactionId, props.userId)
+    }
+
     return {
+      isEditMode,
       reactionMessage,
       deleteMessage,
       editMessage,
-      isEditMode,
-      updateMessage
+      updateMessage,
+      updateReaction
     }
   }
 })

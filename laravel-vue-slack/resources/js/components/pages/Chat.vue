@@ -37,6 +37,7 @@
                  :reactions="message.reactions"
                  :content="message.content"
                  :isMyMessage="userName === message.postUserName"
+                 :userId="userId"
                  @event:reactionMessage="reactionMessage" />
               </div>
             </transition-group>
@@ -246,6 +247,9 @@ export default {
     }
 
     const initLoading = async() => {
+      // ローディングを表示する
+      showLoading.value = true
+
       // ユーザー取得
       const user = await FindUser()
       userId.value = user.id
@@ -261,7 +265,7 @@ export default {
       // 選択中のチャンネルメッセージ取得
       messages.value = await FetchMessages(selectChannel.value)
 
-      // ダイアログを非表示
+      // ローディングを非表示にする
       showLoading.value = false
 
       nextTick(() => {
@@ -339,6 +343,7 @@ export default {
     });
 
     return {
+      userId,
       userName,
       email,
       userCount,
