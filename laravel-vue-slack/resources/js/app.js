@@ -63,6 +63,7 @@ import SpeakerIcon from './components/atoms/SpeakerIcon.vue'
 import ServiceTitle from './components/atoms/ServiceTitle.vue'
 import ThreadIcon from './components/atoms/ThreadIcon.vue'
 import MentionIcon from './components/atoms/MentionIcon.vue'
+import ArrowLeftIcon from './components/atoms/ArrowLeftIcon.vue'
 import ArrowRightIcon from './components/atoms/ArrowRightIcon.vue'
 import ArrowBottomIcon from './components/atoms/ArrowBottomIcon.vue'
 import PlusIcon from './components/atoms/PlusIcon.vue'
@@ -99,6 +100,7 @@ app.component('speaker-icon', SpeakerIcon)
 app.component('service-title', ServiceTitle)
 app.component('thread-icon', ThreadIcon)
 app.component('mention-icon', MentionIcon)
+app.component('arrow-left-icon', ArrowLeftIcon)
 app.component('arrow-right-icon', ArrowRightIcon)
 app.component('arrow-bottom-icon', ArrowBottomIcon)
 app.component('plus-icon', PlusIcon)
