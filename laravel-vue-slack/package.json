@@ -30,6 +30,7 @@
     "dependencies": {
         "emoji-mart-vue-fast": "^10.0.1",
         "laravel-echo": "^1.11.0",
+        "push.js": "^1.0.12",
         "pusher-js": "^7.0.3",
         "vue-router": "^4.0.8"
     }

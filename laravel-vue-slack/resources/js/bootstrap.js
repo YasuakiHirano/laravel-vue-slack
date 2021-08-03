@@ -41,3 +41,5 @@ window.Echo = new Echo({
     forceTLS: false,
     disableStats: true,
 });
+
+window.Push = require('push.js');

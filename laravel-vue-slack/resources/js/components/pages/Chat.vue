@@ -44,7 +44,9 @@
           </div>
           <chat-input-area
             ref="chatInputArea"
+            @event:clickMentionIcon="isShowMentionMember = true"
             @event:clickReactionIcon="isShowEmojiPicker = true"
+            @evnet:deleteMentionUser="deleteMentionUser"
             :channelId="selectChannel"
             :channelName="channelName"
             class="mt-2" />
@@ -107,6 +109,13 @@
           class="absolute bottom-20 right-4"
           @event:selectEmoji="inputEmoji"
           :isShow="isShowEmojiPicker" />
+        <mention-member-modal
+          ref="mentionMemberModal"
+          :showModal="isShowMentionMember"
+          :channelUsers="channelUsers"
+          @event:modalClose="isShowMentionMember = false"
+          @event:mentionUsers="selectMentionUsers"
+        />
     </div>
 </template>
 
@@ -149,8 +158,10 @@ export default {
     const addChannelIsPrivate = ref(false)
     const isShowEmojiPicker = ref(false)
     const isShowCenterEmojiPicker = ref(false)
+    const isShowMentionMember = ref(false)
     const selectMessageId = ref(0)
     const chatInputArea = ref(null)
+    const mentionMemberModal = ref(null)
 
     const updateEmail = (text) => {
       email.value = text.value
@@ -244,6 +255,16 @@ export default {
     const channelAddUsers = async (addUsers) => {
       await CreateChannelUsers(selectChannel.value, addUsers)
       showAddChannelMember.value = false
+    }
+
+    const selectMentionUsers = (mentionUsers) => {
+      chatInputArea.value.mentionUserArea.mentionUsers = mentionUsers
+      isShowMentionMember.value = false
+    }
+
+    const deleteMentionUser = (mentionUser) => {
+      chatInputArea.value.mentionUserArea.mentionUsers = chatInputArea.value.mentionUserArea.mentionUsers.filter((user) => { return user !== mentionUser })
+      mentionMemberModal.value.selectUsers = mentionMemberModal.value.selectUsers.filter((user) => { return user !== mentionUser })
     }
 
     const initLoading = async() => {
@@ -340,6 +361,9 @@ export default {
 
     onMounted(async () => {
       await initLoading()
+      if (Push.Permission.has() == false) {
+        Push.create('laravel-vue-slackへようこそ')
+      }
     });
 
     return {
@@ -385,6 +409,10 @@ export default {
       openMembersModal,
       isShowEmojiPicker,
       isShowCenterEmojiPicker,
+      isShowMentionMember,
+      selectMentionUsers,
+      mentionMemberModal,
+      deleteMentionUser,
       inputEmoji,
       reactionEmoji,
       chatInputArea

@@ -72,6 +72,7 @@ import LockIcon from './components/atoms/LockIcon.vue'
 import HashIcon from './components/atoms/HashIcon.vue'
 import EditIcon from './components/atoms/EditIcon.vue'
 import DeleteIcon from './components/atoms/DeleteIcon.vue'
+import CancelIcon from './components/atoms/CancelIcon.vue'
 import UserInformation from './components/atoms/UserInformation.vue'
 import Loading from './components/atoms/Loading.vue'
 
@@ -107,6 +108,7 @@ app.component('lock-icon', LockIcon)
 app.component('hash-icon', HashIcon)
 app.component('edit-icon', EditIcon)
 app.component('delete-icon', DeleteIcon)
+app.component('cancel-icon', CancelIcon)
 app.component('user-information', UserInformation)
 app.component('loading', Loading)
 
@@ -140,12 +142,14 @@ import SideMenu  from './components/organisms/SideMenu.vue'
 import ShowChannelName  from './components/organisms/ShowChannelName.vue'
 import ChatInputArea  from './components/organisms/ChatInputArea.vue'
 import ChatMessage  from './components/organisms/ChatMessage.vue'
+import MentionUserArea  from './components/organisms/MentionUserArea.vue'
 import AppModal  from './components/organisms/AppModal.vue'
 app.component('side-menu', SideMenu)
 app.component('show-channel-name', ShowChannelName)
 app.component('chat-input-area', ChatInputArea)
 app.component('chat-message', ChatMessage)
 app.component('app-modal', AppModal)
+app.component('mention-user-area', MentionUserArea)
 
 // - modal
 import AddMemberModal  from './components/organisms/AddMemberModal.vue'
@@ -155,6 +159,7 @@ import AddChannelSuccessModal  from './components/organisms/AddChannelSuccessMod
 import ChannelDetailModal  from './components/organisms/ChannelDetailModal.vue'
 import ChannelDescriptionEditModal  from './components/organisms/ChannelDescriptionEditModal.vue'
 import ChannelAddMemberModal  from './components/organisms/ChannelAddMemberModal.vue'
+import MentionMemberModal  from './components/organisms/MentionMemberModal.vue'
 app.component('add-member-modal', AddMemberModal)
 app.component('add-member-success-modal', AddMemberSuccessModal)
 app.component('add-channel-modal', AddChannelModal)
@@ -162,6 +167,7 @@ app.component('add-channel-success-modal', AddChannelSuccessModal)
 app.component('channel-detail-modal', ChannelDetailModal)
 app.component('channel-description-edit-modal', ChannelDescriptionEditModal)
 app.component('channel-add-member-modal', ChannelAddMemberModal)
+app.component('mention-member-modal', MentionMemberModal)
 
 // page
 import AccountCreate  from './components/pages/AccountCreate.vue'
