@@ -15,6 +15,7 @@ class CreateMentionsTable extends Migration
     {
         Schema::create('mentions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('message_id');
             $table->bigInteger('user_id');
             $table->bigInteger('create_user_id');
             $table->timestamps();

@@ -1,10 +1,12 @@
 import axios from 'axios'
 
-export const CreateMessage = async (channelId, content) => {
+export const CreateMessage = async (channelId, content, userId, mentionUsers) => {
   let created = false
   await axios.post('/api/messages', {
     'channel_id': channelId,
-    'content': content
+    'content': content,
+    'create_user_id': userId,
+    'mention_users': mentionUsers
   }).then((result) => {
     if (result.status === 200) {
       created = true

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Events\MessageEvent;
+use App\Models\Mention;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +25,18 @@ class MessageController extends Controller
             'channel_id' => $request->channel_id,
             'content' => $request->content
         ]);
+
+        if (isset($request->mention_users)) {
+            $users = User::whereIn('name', $request->mention_users)->get();
+
+            foreach ($users as $user) {
+                Mention::create([
+                    'message_id' => $message->id,
+                    'user_id' => $user->id,
+                    'create_user_id' => isset($request->create_user_id) ? $request->create_user_id : 0,
+                ]);
+            }
+        }
 
         $messageModel = new Message();
         $messageQuery = $messageModel->createMessageQuery($request->channel_id);
@@ -48,6 +62,8 @@ class MessageController extends Controller
                         ->orderBy('messages.created_at')
                         ->get();
 
+        $users = User::select(['id', 'name'])->get()->pluck('name', 'id');
+
         // 同じ日付のメッセージだった場合は日付を空にする
         $beforeDate = '';
         foreach ($messages as $key => $message) {
@@ -55,6 +71,10 @@ class MessageController extends Controller
                 $beforeDate = $message->date;
             } else {
                 $messages[$key]->date = '';
+            }
+
+            foreach ($message->mentions as $mentionKey => $mention) {
+                $messages[$key]->mentions[$mentionKey]->user_name = $users[$mention->user_id];
             }
         }
 

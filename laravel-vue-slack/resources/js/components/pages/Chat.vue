@@ -35,6 +35,7 @@
                  :postUserName="message.postUserName"
                  :postTime="message.postTime"
                  :reactions="message.reactions"
+                 :mentions="message.mentions"
                  :content="message.content"
                  :isMyMessage="userName === message.postUserName"
                  :userId="userId"
@@ -47,6 +48,7 @@
             @event:clickMentionIcon="isShowMentionMember = true"
             @event:clickReactionIcon="isShowEmojiPicker = true"
             @evnet:deleteMentionUser="deleteMentionUser"
+            :userId="userId"
             :channelId="selectChannel"
             :channelName="channelName"
             class="mt-2" />

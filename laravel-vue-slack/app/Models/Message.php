@@ -19,6 +19,10 @@ class Message extends Model
         return $this->hasMany(Reaction::class);
     }
 
+    public function mentions() {
+        return $this->hasMany(Mention::class);
+    }
+
     public function createMessageQuery($channelId) {
         return $this::select([
             'messages.id',
@@ -36,7 +40,8 @@ class Message extends Model
            $join->on('users.id', '=', 'user_information.user_id');
        })
        ->whereChannelId($channelId)
-       ->with('reactions');
+       ->with('reactions')
+       ->with('mentions');
     }
 
     public function countTodayMessage() {

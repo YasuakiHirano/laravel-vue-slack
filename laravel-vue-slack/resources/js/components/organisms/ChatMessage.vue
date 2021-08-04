@@ -15,6 +15,11 @@
       </div>
       <div class="ml-2 w-full">
         <div><chat-user-name>{{ postUserName }}</chat-user-name><chat-user-date>{{ postTime }}</chat-user-date></div>
+        <div class="flex" v-if="mentions.length !== 0">
+          <div v-for="mention in mentions" :key="mention.id" class="flex mb-2">
+            <div class="mr-1 text-sm p-1 px-2 bg-green-500 rounded">@{{ mention.user_name }}</div>
+          </div>
+        </div>
         <div class="whitespace-pre-wrap break-all" v-show="!isEditMode">{{ content }}</div>
         <chat-input-area
           v-show="isEditMode"
@@ -40,8 +45,9 @@ import { DeleteMessage } from '../../apis/message.api'
 import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 
 export default({
-  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'isMyMessage', 'userId'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId'],
   setup(props, context) {
+    console.log(props.mentions)
     const isEditMode = ref(false)
 
     const reactionMessage = async (messageId) => {

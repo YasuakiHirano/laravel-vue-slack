@@ -11,5 +11,5 @@ class Mention extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'create_user_id'];
+    protected $fillable = ['message_id', 'user_id', 'create_user_id'];
 }
