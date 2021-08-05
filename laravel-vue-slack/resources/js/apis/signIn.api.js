@@ -16,6 +16,5 @@ export const UserSignIn = async (email, password) => {
 
 export const FetchUsers = () => {
   axios.get('/api/user').then((result) => {
-    console.log(result);
   })
 }

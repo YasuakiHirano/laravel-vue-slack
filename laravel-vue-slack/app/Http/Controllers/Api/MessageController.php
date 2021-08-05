@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MentionEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
@@ -26,15 +27,20 @@ class MessageController extends Controller
             'content' => $request->content
         ]);
 
+        $createMentions = [];
+        $allUsers = User::select(['id', 'name'])->get()->pluck('name', 'id');
         if (isset($request->mention_users)) {
             $users = User::whereIn('name', $request->mention_users)->get();
 
             foreach ($users as $user) {
-                Mention::create([
+                $createMention = Mention::create([
                     'message_id' => $message->id,
                     'user_id' => $user->id,
                     'create_user_id' => isset($request->create_user_id) ? $request->create_user_id : 0,
                 ]);
+
+                $createMention->user_name = $allUsers[$createMention->user_id];
+                array_push($createMentions, $createMention);
             }
         }
 
@@ -44,6 +50,11 @@ class MessageController extends Controller
         $selectMessage = $messageQuery
                             ->where('messages.id', '=', $message->id)
                             ->first();
+
+        foreach ($createMentions as $key => $mention) {
+            $selectMessage->mentions[$key] = $mention;
+            broadcast(new MentionEvent('create-mention', $request->content, $mention->user_id, $selectMessage->imagePath));
+        }
 
         if ($messageModel->countTodayMessage() != 0) {
             if (isset($selectMessage->date)) {

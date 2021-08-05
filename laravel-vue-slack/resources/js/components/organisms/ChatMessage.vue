@@ -47,7 +47,6 @@ import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 export default({
   props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId'],
   setup(props, context) {
-    console.log(props.mentions)
     const isEditMode = ref(false)
 
     const reactionMessage = async (messageId) => {

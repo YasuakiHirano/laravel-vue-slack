@@ -20,7 +20,6 @@ export default {
   setup() {
 
     const signIn = async () => {
-      console.log(email.value, password.value)
       const isSignIn = await UserSignIn(email.value, password.value)
       if (isSignIn) {
         router.push({ path: 'chat' })

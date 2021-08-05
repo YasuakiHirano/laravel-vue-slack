@@ -356,6 +356,12 @@ export default {
       })
     })
 
+    window.Echo.channel("create-mention").listen('.MentionEvent', result => {
+      if (Push.Permission.has() && result.userId == userId.value) {
+        Push.create('メッセージが届きました。', { body: result.message, icon: result.speakerImagePath })
+      }
+    })
+
     const reactionMessage = (messageId) => {
       isShowCenterEmojiPicker.value = true
       selectMessageId.value = messageId
