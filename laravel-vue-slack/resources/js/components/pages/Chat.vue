@@ -121,6 +121,11 @@
         />
         <thread-modal
           :showModal="isShowThread"
+          :message="threadMessageParam"
+          :channelId="selectChannel"
+          :channelUsers="channelUsers"
+          :userId="userId"
+          :userName="userName"
           @event:modalClose="isShowThread = false"
         />
     </div>
@@ -166,6 +171,7 @@ export default {
     const isShowEmojiPicker = ref(false)
     const isShowCenterEmojiPicker = ref(false)
     const isShowMentionMember = ref(false)
+    const threadMessageParam = ref([])
     const isShowThread = ref(false)
     const selectMessageId = ref(0)
     const chatInputArea = ref(null)
@@ -374,6 +380,8 @@ export default {
     }
 
     const threadMessage = (messageId) => {
+      const message = messages.value.filter(function (message) { return message.id == messageId } )
+      threadMessageParam.value = message[0]
       isShowThread.value = true
     }
 
@@ -435,7 +443,8 @@ export default {
       deleteMentionUser,
       inputEmoji,
       reactionEmoji,
-      chatInputArea
+      chatInputArea,
+      threadMessageParam
     }
   },
 }

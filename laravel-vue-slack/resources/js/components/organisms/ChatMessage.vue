@@ -1,8 +1,9 @@
 <template>
-  <div class="border border-b-0">
+  <div :class="{'': messageOnly, 'border border-b-0' : !messageOnly }">
     <show-date v-if="date !== ''">{{ date }}</show-date>
-    <div class="group p-5 pr-0 pt-0 flex hover:bg-gray-100 pt-1 pb-1 mt-1 relative">
+    <div :class="['group', 'p-5', 'pr-0', 'pt-0', 'flex', 'pt-1', 'pb-1', 'mt-1', 'relative', {'hover:bg-gray-100': !messageOnly}]">
       <message-area-icons
+        :show="!messageOnly"
         :messageId="messageId"
         :channelId="channelId"
         :isMyMessage="isMyMessage"
@@ -16,7 +17,7 @@
       </div>
       <div class="ml-2 w-full">
         <div><chat-user-name>{{ postUserName }}</chat-user-name><chat-user-date>{{ postTime }}</chat-user-date></div>
-        <div class="flex" v-if="mentions.length !== 0">
+        <div class="flex" v-if="(mentions != null || mentions != undefined) && mentions.length !== 0">
           <div v-for="mention in mentions" :key="mention.id" class="flex mb-2">
             <div class="mr-1 text-sm p-1 px-2 bg-green-500 rounded">@{{ mention.user_name }}</div>
           </div>
@@ -46,7 +47,7 @@ import { DeleteMessage } from '../../apis/message.api'
 import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 
 export default({
-  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId', 'messageOnly'],
   setup(props, context) {
     const isEditMode = ref(false)
 

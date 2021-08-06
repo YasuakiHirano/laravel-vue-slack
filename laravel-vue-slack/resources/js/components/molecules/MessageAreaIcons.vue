@@ -1,5 +1,8 @@
 <template>
-  <div class="opacity-0 group-hover:opacity-100 bg-white border-2 border-gray-300 shadow-lg rounded-md border flex pt-1 pb-1 justify-end message-tool-area pr-3 pl-3">
+  <div
+    v-if="show"
+    class="opacity-0 group-hover:opacity-100 bg-white border-2 border-gray-300 shadow-lg rounded-md border flex pt-1 pb-1 justify-end message-tool-area pr-3 pl-3"
+    >
     <div class="mr-1 p-1 hover:bg-gray-200 rounded-md">
       <happy-icon @click="reactionMessage" class="h-6 w-6" />
     </div>
@@ -17,7 +20,7 @@
 
 <script>
 export default {
-  props: ['messageId', 'channelId', 'isMyMessage'],
+  props: ['messageId', 'channelId', 'isMyMessage', 'show'],
   setup(props, context) {
     const reactionMessage = async () => {
       context.emit('event:reactionMessage', props.messageId)
