@@ -4,7 +4,7 @@
       <happy-icon @click="reactionMessage" class="h-6 w-6" />
     </div>
     <div class="p-1 hover:bg-gray-200 rounded-md">
-      <thread-icon class="h-6 w-6" />
+      <thread-icon @click="threadMessage" class="h-6 w-6" />
     </div>
     <div class="p-1 hover:bg-gray-200 rounded-md" v-show="isMyMessage">
       <edit-icon @click="editMessage" class="h-6 w-6" />
@@ -23,6 +23,10 @@ export default {
       context.emit('event:reactionMessage', props.messageId)
     }
 
+    const threadMessage = async () => {
+      context.emit('event:threadMessage', props.messageId)
+    }
+
     const deleteMessage = async () => {
       context.emit('event:deleteMessage', props.messageId, props.channelId)
     }
@@ -33,6 +37,7 @@ export default {
 
     return {
       reactionMessage,
+      threadMessage,
       deleteMessage,
       editMessage
     }

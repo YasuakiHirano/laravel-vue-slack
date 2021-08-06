@@ -7,6 +7,7 @@
         :channelId="channelId"
         :isMyMessage="isMyMessage"
         @event:reactionMessage="reactionMessage"
+        @event:threadMessage="threadMessage"
         @event:deleteMessage="deleteMessage"
         @event:editMessage="editMessage"
       />
@@ -29,8 +30,8 @@
           @event:clickCancelIcon="isEditMode = false"
           @event:updateMessage="updateMessage"
           :isCancel="true" />
-        <div class="flex">
-          <div v-for="reaction in reactions" :key="reaction.id" class="flex mt-1">
+        <div class="flex flex-wrap w-full mt-1">
+          <div v-for="reaction in reactions" :key="reaction.id" class="mt-1">
             <reaction-circle :number="reaction.number" :icon="reaction.icon" class="mr-1 cursor-pointer" @click="updateReaction(reaction.id)" />
           </div>
         </div>
@@ -51,6 +52,10 @@ export default({
 
     const reactionMessage = async (messageId) => {
       context.emit('event:reactionMessage', messageId)
+    }
+
+    const threadMessage = async (messageId) => {
+      context.emit('event:threadMessage', messageId)
     }
 
     const deleteMessage = async (messageId, channelId) => {
@@ -75,6 +80,7 @@ export default({
     return {
       isEditMode,
       reactionMessage,
+      threadMessage,
       deleteMessage,
       editMessage,
       updateMessage,

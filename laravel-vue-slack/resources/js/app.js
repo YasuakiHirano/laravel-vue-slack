@@ -162,6 +162,7 @@ import ChannelDetailModal  from './components/organisms/ChannelDetailModal.vue'
 import ChannelDescriptionEditModal  from './components/organisms/ChannelDescriptionEditModal.vue'
 import ChannelAddMemberModal  from './components/organisms/ChannelAddMemberModal.vue'
 import MentionMemberModal  from './components/organisms/MentionMemberModal.vue'
+import ThreadModal  from './components/organisms/ThreadModal.vue'
 app.component('add-member-modal', AddMemberModal)
 app.component('add-member-success-modal', AddMemberSuccessModal)
 app.component('add-channel-modal', AddChannelModal)
@@ -170,6 +171,7 @@ app.component('channel-detail-modal', ChannelDetailModal)
 app.component('channel-description-edit-modal', ChannelDescriptionEditModal)
 app.component('channel-add-member-modal', ChannelAddMemberModal)
 app.component('mention-member-modal', MentionMemberModal)
+app.component('thread-modal', ThreadModal)
 
 // page
 import AccountCreate  from './components/pages/AccountCreate.vue'

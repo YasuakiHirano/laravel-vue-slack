@@ -39,7 +39,8 @@
                  :content="message.content"
                  :isMyMessage="userName === message.postUserName"
                  :userId="userId"
-                 @event:reactionMessage="reactionMessage" />
+                 @event:reactionMessage="reactionMessage"
+                 @event:threadMessage="threadMessage" />
               </div>
             </transition-group>
           </div>
@@ -118,6 +119,10 @@
           @event:modalClose="isShowMentionMember = false"
           @event:mentionUsers="selectMentionUsers"
         />
+        <thread-modal
+          :showModal="isShowThread"
+          @event:modalClose="isShowThread = false"
+        />
     </div>
 </template>
 
@@ -161,6 +166,7 @@ export default {
     const isShowEmojiPicker = ref(false)
     const isShowCenterEmojiPicker = ref(false)
     const isShowMentionMember = ref(false)
+    const isShowThread = ref(false)
     const selectMessageId = ref(0)
     const chatInputArea = ref(null)
     const mentionMemberModal = ref(null)
@@ -367,6 +373,10 @@ export default {
       selectMessageId.value = messageId
     }
 
+    const threadMessage = (messageId) => {
+      isShowThread.value = true
+    }
+
     onMounted(async () => {
       await initLoading()
       if (Push.Permission.has() == false) {
@@ -405,6 +415,7 @@ export default {
       selectChannel,
       messageListArea,
       reactionMessage,
+      threadMessage,
       changeChannel,
       updateAddChannelName,
       updateAddChannelDescription,
@@ -418,6 +429,7 @@ export default {
       isShowEmojiPicker,
       isShowCenterEmojiPicker,
       isShowMentionMember,
+      isShowThread,
       selectMentionUsers,
       mentionMemberModal,
       deleteMentionUser,
