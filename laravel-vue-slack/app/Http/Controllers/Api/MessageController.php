@@ -6,6 +6,7 @@ use App\Events\MentionEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Models\Thread;
 use App\Events\MessageEvent;
 use App\Models\Mention;
 use App\Models\User;
@@ -21,10 +22,13 @@ class MessageController extends Controller
             'content' => 'required',
         ]);
 
+        $isThreadMessage = isset($request->parent_message_id) ? true : false;
+
         $message = Message::create([
             'user_id' => Auth::id(),
             'channel_id' => $request->channel_id,
-            'content' => $request->content
+            'content' => $request->content,
+            'is_thread_message' => $isThreadMessage
         ]);
 
         $createMentions = [];
@@ -42,6 +46,13 @@ class MessageController extends Controller
                 $createMention->user_name = $allUsers[$createMention->user_id];
                 array_push($createMentions, $createMention);
             }
+        }
+
+        if ($isThreadMessage) {
+            Thread::create([
+                'message_id' => $message->id,
+                'parent_message_id' => $request->parent_message_id,
+            ]);
         }
 
         $messageModel = new Message();
@@ -72,6 +83,34 @@ class MessageController extends Controller
         $messages = $messageQuery
                         ->orderBy('messages.created_at')
                         ->get();
+
+        $users = User::select(['id', 'name'])->get()->pluck('name', 'id');
+
+        // 同じ日付のメッセージだった場合は日付を空にする
+        $beforeDate = '';
+        foreach ($messages as $key => $message) {
+            if ($beforeDate != $message->date) {
+                $beforeDate = $message->date;
+            } else {
+                $messages[$key]->date = '';
+            }
+
+            foreach ($message->mentions as $mentionKey => $mention) {
+                $messages[$key]->mentions[$mentionKey]->user_name = $users[$mention->user_id];
+            }
+        }
+
+        return  response()->json($messages, Response::HTTP_OK);
+    }
+
+    public function fetchThreadMessage($parentMessageId) {
+        $threads = Thread::whereParentMessageId($parentMessageId)->get();
+
+        $messageQuery = (new Message())->createMessageQuery(null, $threads->pluck('message_id'));
+
+        $messages = $messageQuery
+        ->orderBy('messages.created_at')
+        ->get();
 
         $users = User::select(['id', 'name'])->get()->pluck('name', 'id');
 

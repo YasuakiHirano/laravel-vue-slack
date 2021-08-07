@@ -13,7 +13,7 @@ class Message extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'channel_id', 'content'];
+    protected $fillable = ['user_id', 'channel_id', 'content', 'is_thread_message'];
 
     public function reactions() {
         return $this->hasMany(Reaction::class);
@@ -23,8 +23,8 @@ class Message extends Model
         return $this->hasMany(Mention::class);
     }
 
-    public function createMessageQuery($channelId) {
-        return $this::select([
+    public function createMessageQuery($channelId, $messageIds = null) {
+        $query = $this::select([
             'messages.id',
             DB::raw("DATE_FORMAT(messages.created_at, '%Y年%m月%d日') as date"),
             DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as imagePath"),
@@ -38,10 +38,20 @@ class Message extends Model
        })
        ->join('user_information', function($join) {
            $join->on('users.id', '=', 'user_information.user_id');
-       })
-       ->whereChannelId($channelId)
-       ->with('reactions')
+       });
+
+       if ($messageIds) {
+           $query = $query->whereIn('messages.id', $messageIds)
+                        ->whereIsThreadMessage(true);
+       } else {
+           $query = $query->whereChannelId($channelId)
+                        ->whereIsThreadMessage(false);
+       }
+
+       $query = $query->with('reactions')
        ->with('mentions');
+
+        return $query;
     }
 
     public function countTodayMessage() {

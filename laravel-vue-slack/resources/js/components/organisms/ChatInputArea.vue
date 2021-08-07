@@ -24,7 +24,7 @@
 import { ref } from 'vue'
 import { CreateMessage } from '../../apis/message.api.js'
 export default({
-  props: ['channelId', 'channelName', 'content', 'isCancel', 'isUpdate', 'userId', 'messageId', 'mentionUsers'],
+  props: ['channelId', 'channelName', 'content', 'isCancel', 'isUpdate', 'userId', 'messageId', 'mentionUsers', 'parentMessageId'],
   setup(props, context) {
     const chatTextArea = ref(null)
     const mentionUserArea = ref(null)
@@ -33,7 +33,7 @@ export default({
       if (props.isUpdate) {
         context.emit('event:updateMessage', props.messageId, chatTextArea.value.text)
       } else {
-        await CreateMessage(props.channelId, chatTextArea.value.text,  props.userId, mentionUserArea.value.mentionUsers)
+        await CreateMessage(props.channelId, chatTextArea.value.text, props.userId, mentionUserArea.value.mentionUsers, props.parentMessageId)
         chatTextArea.value.text = ''
         mentionUserArea.value.mentionUsers = []
       }

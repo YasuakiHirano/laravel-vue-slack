@@ -120,6 +120,7 @@
           @event:mentionUsers="selectMentionUsers"
         />
         <thread-modal
+          ref="threadModal"
           :showModal="isShowThread"
           :message="threadMessageParam"
           :channelId="selectChannel"
@@ -135,7 +136,7 @@
 import { onMounted, ref, nextTick } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
-import { FetchMessages } from '../../apis/message.api.js'
+import { FetchMessages, FetchThreadMessages } from '../../apis/message.api.js'
 import { CreateChannel, UpdateChannel } from '../../apis/channel.api.js'
 import { CreateChannelUsers, FetchChannelUsers, FetchNotChannelUsers } from '../../apis/channelUser.api.js'
 import { CreateOrUpdateReaction } from '../../apis/reaction.api.js'
@@ -176,6 +177,7 @@ export default {
     const selectMessageId = ref(0)
     const chatInputArea = ref(null)
     const mentionMemberModal = ref(null)
+    const threadModal = ref(null)
 
     const updateEmail = (text) => {
       email.value = text.value
@@ -259,6 +261,7 @@ export default {
       }
 
       chatInputArea.value.chatTextArea.text += emoji.native
+      isShowEmojiPicker.value = false
     }
 
     const reactionEmoji = async (emoji) => {
@@ -379,10 +382,13 @@ export default {
       selectMessageId.value = messageId
     }
 
-    const threadMessage = (messageId) => {
+    const threadMessage = async (messageId) => {
       const message = messages.value.filter(function (message) { return message.id == messageId } )
       threadMessageParam.value = message[0]
       isShowThread.value = true
+
+      const threadMessages = await FetchThreadMessages(message[0].id)
+      threadModal.value.threadMessages = threadMessages
     }
 
     onMounted(async () => {
@@ -444,7 +450,8 @@ export default {
       inputEmoji,
       reactionEmoji,
       chatInputArea,
-      threadMessageParam
+      threadMessageParam,
+      threadModal
     }
   },
 }

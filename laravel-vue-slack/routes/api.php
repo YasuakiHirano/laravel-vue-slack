@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // メッセージ
     Route::post('/messages', [MessageController::class, 'create']);
     Route::get('/messages', [MessageController::class, 'fetch']);
+    Route::get('/messages/{parent_message_id}', [MessageController::class, 'fetchThreadMessage']);
     Route::put('/messages', [MessageController::class, 'update']);
     Route::delete('/messages', [MessageController::class, 'delete']);
 

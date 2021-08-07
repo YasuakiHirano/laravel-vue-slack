@@ -19,16 +19,20 @@
       </div>
       <div
         v-else
-        :class="'w-full flex p-3 border-b-2 border-gray-300 cursor-pointer hover:bg-gray-100 ' + selectUserStatus(channelUser.name)"
-        v-for="channelUser in channelUsers"
-        :key="channelUser.id"
-        @click="clickUser(channelUser.name)">
-          <div class="w-12">
-            <chat-user-image class="bg-white" :image="channelUser.imagePath" />
-          </div>
-          <div class="p-3">
-            {{ channelUser.name }}
-          </div>
+        class="overflow-y-scroll max-h-72"
+      >
+        <div
+          :class="'w-full flex p-3 border-b-2 border-gray-300 cursor-pointer hover:bg-gray-100 ' + selectUserStatus(channelUser.name)"
+          v-for="channelUser in channelUsers"
+          :key="channelUser.id"
+          @click="clickUser(channelUser.name)">
+            <div class="w-12">
+              <chat-user-image class="bg-white" :image="channelUser.imagePath" />
+            </div>
+            <div class="p-3">
+              {{ channelUser.name }}
+            </div>
+        </div>
       </div>
     </template>
   </app-modal>
