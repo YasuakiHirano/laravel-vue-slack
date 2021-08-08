@@ -28,24 +28,25 @@
             :messageOnly="true"
           />
         </div>
-        <div class="max-h-60 mb-2 overflow-y-scroll">
+        <div class="max-h-60 pt-5 mb-3 border border-t-0 border-l-0 border-r-0 overflow-y-scroll" ref="messageListArea">
             <transition-group name="list" tag="div">
               <div v-for="message in threadMessages" :key="message.id">
                  <chat-message
-                 class="mt-5 w-full"
-                 :channelId="selectChannel"
-                 :messageId="message.id"
-                 :date="message.date"
-                 :imagePath="message.imagePath"
-                 :postUserName="message.postUserName"
-                 :postTime="message.postTime"
-                 :reactions="message.reactions"
-                 :mentions="message.mentions"
-                 :content="message.content"
-                 :isMyMessage="userName === message.postUserName"
-                 :userId="userId"
-                 @event:reactionMessage="reactionMessage"
-                 @event:threadMessage="threadMessage" />
+                   class="w-full"
+                   :channelId="selectChannel"
+                   :messageId="message.id"
+                   :date="message.date"
+                   :imagePath="message.imagePath"
+                   :postUserName="message.postUserName"
+                   :postTime="message.postTime"
+                   :reactions="message.reactions"
+                   :mentions="message.mentions"
+                   :content="message.content"
+                   :isMyMessage="userName === message.postUserName"
+                   :userId="userId"
+                   :showThreadIcon="false"
+                   @event:reactionMessage="reactionMessage"
+                   @event:threadMessage="threadMessage" />
               </div>
             </transition-group>
         </div>
@@ -86,6 +87,12 @@ export default {
     const isShowMentionMember = ref(false)
     const isShowEmojiPicker = ref(false)
     const threadMessages = ref([])
+    const parentMessageId = ref(0)
+    const messageListArea = ref(null)
+
+    const scrollMessageListArea = () => {
+      messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
+    }
 
     const selectMentionUsers = (mentionUsers) => {
       threadChatInputArea.value.mentionUserArea.mentionUsers = mentionUsers
@@ -107,7 +114,10 @@ export default {
       isShowMentionMember,
       isShowEmojiPicker,
       selectMentionUsers,
-      inputEmoji
+      inputEmoji,
+      messageListArea,
+      parentMessageId,
+      scrollMessageListArea
     }
   },
 }

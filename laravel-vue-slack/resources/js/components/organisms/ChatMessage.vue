@@ -7,6 +7,7 @@
         :messageId="messageId"
         :channelId="channelId"
         :isMyMessage="isMyMessage"
+        :showThreadIcon="showThreadIcon"
         @event:reactionMessage="reactionMessage"
         @event:threadMessage="threadMessage"
         @event:deleteMessage="deleteMessage"
@@ -47,7 +48,7 @@ import { DeleteMessage } from '../../apis/message.api'
 import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 
 export default({
-  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId', 'messageOnly'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId', 'messageOnly', 'showThreadIcon'],
   setup(props, context) {
     const isEditMode = ref(false)
 

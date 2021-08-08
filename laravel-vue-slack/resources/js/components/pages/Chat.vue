@@ -27,20 +27,21 @@
             <transition-group name="list" tag="div">
               <div v-for="message in messages" :key="message.id">
                  <chat-message
-                 class="mt-5 w-full"
-                 :channelId="selectChannel"
-                 :messageId="message.id"
-                 :date="message.date"
-                 :imagePath="message.imagePath"
-                 :postUserName="message.postUserName"
-                 :postTime="message.postTime"
-                 :reactions="message.reactions"
-                 :mentions="message.mentions"
-                 :content="message.content"
-                 :isMyMessage="userName === message.postUserName"
-                 :userId="userId"
-                 @event:reactionMessage="reactionMessage"
-                 @event:threadMessage="threadMessage" />
+                   class="mt-5 w-full"
+                   :channelId="selectChannel"
+                   :messageId="message.id"
+                   :date="message.date"
+                   :imagePath="message.imagePath"
+                   :postUserName="message.postUserName"
+                   :postTime="message.postTime"
+                   :reactions="message.reactions"
+                   :mentions="message.mentions"
+                   :content="message.content"
+                   :isMyMessage="userName === message.postUserName"
+                   :userId="userId"
+                   :showThreadIcon="true"
+                   @event:reactionMessage="reactionMessage"
+                   @event:threadMessage="threadMessage" />
               </div>
             </transition-group>
           </div>
@@ -377,18 +378,36 @@ export default {
       }
     })
 
+    window.Echo.channel("create-thread").listen('.ThreadEvent', result => {
+      if (isShowThread.value && threadModal.value.parentMessageId == result.parentMessageId) {
+        threadModal.value.threadMessages.push(result.threadMessage)
+
+        nextTick(() => {
+          threadModal.value.scrollMessageListArea()
+        })
+      }
+    })
+
     const reactionMessage = (messageId) => {
       isShowCenterEmojiPicker.value = true
       selectMessageId.value = messageId
     }
 
     const threadMessage = async (messageId) => {
+      showLoading.value = true
+
       const message = messages.value.filter(function (message) { return message.id == messageId } )
       threadMessageParam.value = message[0]
       isShowThread.value = true
 
       const threadMessages = await FetchThreadMessages(message[0].id)
       threadModal.value.threadMessages = threadMessages
+      threadModal.value.parentMessageId = message[0].id
+
+      nextTick(() => {
+        threadModal.value.scrollMessageListArea()
+        showLoading.value = false
+      })
     }
 
     onMounted(async () => {

@@ -6,7 +6,7 @@
     <div class="mr-1 p-1 hover:bg-gray-200 rounded-md">
       <happy-icon @click="reactionMessage" class="h-6 w-6" />
     </div>
-    <div class="p-1 hover:bg-gray-200 rounded-md">
+    <div class="p-1 hover:bg-gray-200 rounded-md" v-show="showThreadIcon">
       <thread-icon @click="threadMessage" class="h-6 w-6" />
     </div>
     <div class="p-1 hover:bg-gray-200 rounded-md" v-show="isMyMessage">
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  props: ['messageId', 'channelId', 'isMyMessage', 'show'],
+  props: ['messageId', 'channelId', 'isMyMessage', 'show', 'showThreadIcon'],
   setup(props, context) {
     const reactionMessage = async () => {
       context.emit('event:reactionMessage', props.messageId)
