@@ -33,7 +33,7 @@
               <div v-for="message in threadMessages" :key="message.id">
                  <chat-message
                    class="w-full"
-                   :channelId="selectChannel"
+                   :channelId="channelId"
                    :messageId="message.id"
                    :date="message.date"
                    :imagePath="message.imagePath"
@@ -53,6 +53,7 @@
           ref="threadChatInputArea"
           @event:clickMentionIcon="isShowMentionMember = true"
           @event:clickReactionIcon="isShowEmojiPicker = true"
+          @evnet:deleteMentionUser="deleteMentionUser"
           :userId="userId"
           :channelId="channelId"
           :channelName="channelName"
@@ -88,6 +89,7 @@ export default {
     const threadMessages = ref([])
     const parentMessageId = ref(0)
     const messageListArea = ref(null)
+    const threadMentionMemberModal = ref(null)
 
     const scrollMessageListArea = () => {
       messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
@@ -111,6 +113,11 @@ export default {
       isShowEmojiPicker.value = false
     }
 
+    const deleteMentionUser = (mentionUser) => {
+      threadChatInputArea.value.mentionUserArea.mentionUsers = threadChatInputArea.value.mentionUserArea.mentionUsers.filter((user) => { return user !== mentionUser })
+      threadMentionMemberModal.value.selectUsers = threadMentionMemberModal.value.selectUsers.filter((user) => { return user !== mentionUser })
+    }
+
     return {
       threadMessages,
       threadChatInputArea,
@@ -121,7 +128,9 @@ export default {
       inputEmoji,
       messageListArea,
       parentMessageId,
-      scrollMessageListArea
+      scrollMessageListArea,
+      deleteMentionUser,
+      threadMentionMemberModal
     }
   },
 }

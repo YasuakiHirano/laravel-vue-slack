@@ -314,28 +314,49 @@ export default {
     }
 
     window.Echo.channel("create-message").listen('.MessageEvent', result => {
-      messages.value.push(result.message)
+      if (result.isThreadMessage) {
+        threadModal.value.threadMessages.push(result.message)
 
-      nextTick(() => {
-        scrollMessageListArea()
-      })
+        nextTick(() => {
+          threadModal.value.scrollMessageListArea()
+        })
+      } else {
+        messages.value.push(result.message)
+
+        nextTick(() => {
+          scrollMessageListArea()
+        })
+      }
     })
 
     window.Echo.channel("delete-message").listen('.MessageEvent', result => {
       const messageId = result.messageId
 
-      messages.value = messages.value.filter(function (message) { return message.id != messageId } )
+      if (result.isThreadMessage) {
+        threadModal.value.threadMessages = threadModal.value.threadMessages.filter(function (message) { return message.id != messageId } )
+      } else {
+        messages.value = messages.value.filter(function (message) { return message.id != messageId } )
+      }
     })
 
     window.Echo.channel("update-message").listen('.MessageEvent', result => {
       const content = result.message
       const messageId = result.messageId
 
-      messages.value.forEach(message => {
-        if (message.id == messageId) {
-          message.content = content
-        }
-      })
+
+      if (result.isThreadMessage) {
+        threadModal.value.threadMessages.filter((message) => {
+          if (message.id == messageId) {
+            message.content = content
+          }
+        })
+      } else {
+        messages.value.filter((message) => {
+          if (message.id == messageId) {
+            message.content = content
+          }
+        })
+      }
     })
 
     window.Echo.channel("create-channel").listen('.ChannelEvent', result => {
@@ -384,16 +405,6 @@ export default {
     window.Echo.channel("create-mention").listen('.MentionEvent', result => {
       if (Push.Permission.has() && result.userId == userId.value) {
         Push.create('メッセージが届きました。', { body: result.message, icon: result.speakerImagePath })
-      }
-    })
-
-    window.Echo.channel("create-thread").listen('.ThreadEvent', result => {
-      if (isShowThread.value && threadModal.value.parentMessageId == result.parentMessageId) {
-        threadModal.value.threadMessages.push(result.threadMessage)
-
-        nextTick(() => {
-          threadModal.value.scrollMessageListArea()
-        })
       }
     })
 

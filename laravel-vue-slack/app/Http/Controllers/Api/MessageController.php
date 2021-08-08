@@ -8,7 +8,6 @@ use App\Models\Message;
 use App\Models\Thread;
 use App\Events\MessageEvent;
 use App\Events\MentionEvent;
-use App\Events\ThreadEvent;
 use App\Models\Mention;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -48,49 +47,35 @@ class MessageController extends Controller
             }
         }
 
+        $messageModel = new Message();
         if ($isThreadMessage) {
             Thread::create([
                 'message_id' => $message->id,
                 'parent_message_id' => $request->parent_message_id,
             ]);
 
-            $messageModel = new Message();
             $messageQuery = $messageModel->createMessageQuery(null, [$message->id]);
-            $threadMessage = $messageQuery->first();
-
-            if ($messageModel->countTodayMessage() != 0) {
-                if (isset($threadMessage->date)) {
-                    $threadMessage->date = '';
-                }
-            }
-
-            foreach ($createMentions as $key => $mention) {
-                $threadMessage->mentions[$key] = $mention;
-                broadcast(new MentionEvent('create-mention', $request->content, $mention->user_id, $threadMessage->imagePath));
-            }
-
-            broadcast(new ThreadEvent('create-thread', $threadMessage->toArray(), $request->parent_message_id));
+            $selectMessage = $messageQuery->first();
         } else {
-            $messageModel = new Message();
             $messageQuery = $messageModel->createMessageQuery($request->channel_id);
-
             $selectMessage = $messageQuery
                                 ->where('messages.id', '=', $message->id)
                                 ->first();
-
-            foreach ($createMentions as $key => $mention) {
-                $selectMessage->mentions[$key] = $mention;
-                broadcast(new MentionEvent('create-mention', $request->content, $mention->user_id, $selectMessage->imagePath));
-            }
-
-            if ($messageModel->countTodayMessage() != 0) {
-                if (isset($selectMessage->date)) {
-                    $selectMessage->date = '';
-                }
-            }
-
-            broadcast(new MessageEvent('create-message', $selectMessage->toArray(), null));
         }
+
+        foreach ($createMentions as $key => $mention) {
+            $selectMessage->mentions[$key] = $mention;
+            broadcast(new MentionEvent('create-mention', $request->content, $mention->user_id, $selectMessage->imagePath));
+        }
+
+        if ($messageModel->countTodayMessage() != 0) {
+            if (isset($selectMessage->date)) {
+                $selectMessage->date = '';
+            }
+        }
+
+        logger()->info($selectMessage);
+        broadcast(new MessageEvent('create-message', $selectMessage->toArray(), null, $message->is_thread_message));
 
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
@@ -161,7 +146,7 @@ class MessageController extends Controller
             'content' => $request->content
         ]);
 
-        broadcast(new MessageEvent('update-message', $request->content, $message->id));
+        broadcast(new MessageEvent('update-message', $request->content, $message->id, $message->is_thread_message));
         return response()->json('Message update completed.', Response::HTTP_OK);
     }
 
@@ -177,7 +162,7 @@ class MessageController extends Controller
         }
         $message->delete();
 
-        broadcast(new MessageEvent('delete-message', null, $message->id));
+        broadcast(new MessageEvent('delete-message', null, $message->id, $message->is_thread_message));
         return response()->json('Message delete completed.', Response::HTTP_OK);
     }
 }
