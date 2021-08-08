@@ -16,15 +16,18 @@ class ReactionEvent implements ShouldBroadcast
 
     public $reaction;
 
+    public $isThreadMessage;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($channel, $reaction)
+    public function __construct($channel, $reaction, $isThreadMessage)
     {
         $this->channel = $channel;
         $this->reaction = $reaction;
+        $this->isThreadMessage = $isThreadMessage;
     }
 
     /**

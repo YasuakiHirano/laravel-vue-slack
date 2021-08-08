@@ -128,6 +128,7 @@
           :channelUsers="channelUsers"
           :userId="userId"
           :userName="userName"
+          @event:reactionMessage="reactionMessage"
           @event:modalClose="isShowThread = false"
         />
     </div>
@@ -351,10 +352,8 @@ export default {
       })
     })
 
-    window.Echo.channel("update-reaction").listen('.ReactionEvent', result => {
-      const reaction = result.reaction
-
-      messages.value.filter(function (message) {
+    const reactionUpdate = (messages, reaction) => {
+      messages.filter(function (message) {
         // 更新したリアクションのメッセージIDと同じメッセージ
         if (message.id == reaction.message_id) {
           // リアクション一覧を追加または更新する
@@ -370,6 +369,16 @@ export default {
           }
         }
       })
+    }
+
+    window.Echo.channel("update-reaction").listen('.ReactionEvent', result => {
+      const reaction = result.reaction
+
+      if (result.isThreadMessage) {
+        reactionUpdate(threadModal.value.threadMessages, reaction)
+      } else {
+        reactionUpdate(messages.value, reaction)
+      }
     })
 
     window.Echo.channel("create-mention").listen('.MentionEvent', result => {

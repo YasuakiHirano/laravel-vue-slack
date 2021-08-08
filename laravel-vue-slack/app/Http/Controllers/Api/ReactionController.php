@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Reaction;
+use App\Models\Message;
 use \Symfony\Component\HttpFoundation\Response;
 
 class ReactionController extends Controller
@@ -36,7 +37,8 @@ class ReactionController extends Controller
             ]
         );
 
-        broadcast(new ReactionEvent('update-reaction', $reactionResult));
+        $message = Message::find($request->message_id);
+        broadcast(new ReactionEvent('update-reaction', $reactionResult, $message->is_thread_message));
         return response()->json('Reaction update or create completed.', Response::HTTP_OK);
     }
 
@@ -51,7 +53,8 @@ class ReactionController extends Controller
         $reaction->reaction_user_id = $request->user_id;
         $reaction->save();
 
-        broadcast(new ReactionEvent('update-reaction', $reaction));
+        $message = Message::find($reaction->message_id);
+        broadcast(new ReactionEvent('update-reaction', $reaction, $message->is_thread_message));
         return response()->json('Reaction update completed.', Response::HTTP_OK);
     }
 }

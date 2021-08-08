@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 w-full h-full overflow-y-scroll bg-black bg-opacity-60 z-50 flex items-center justify-center" v-show="showModal">
+  <div class="fixed inset-0 w-full h-full overflow-y-scroll bg-black bg-opacity-60 z-20 flex items-center justify-center" v-show="showModal">
     <div class="inline-block bg-white rounded-lg w-full max-w-3xl">
       <div class="flex justify-between border-t-0 border-l-0 border-r-0 border w-full p-2">
           <div class="flex p-1">
@@ -45,8 +45,7 @@
                    :isMyMessage="userName === message.postUserName"
                    :userId="userId"
                    :showThreadIcon="false"
-                   @event:reactionMessage="reactionMessage"
-                   @event:threadMessage="threadMessage" />
+                   @event:reactionMessage="reactionMessage" />
               </div>
             </transition-group>
         </div>
@@ -99,6 +98,10 @@ export default {
       isShowMentionMember.value = false
     }
 
+    const reactionMessage = (messageId) => {
+      context.emit('event:reactionMessage', messageId)
+    }
+
     const inputEmoji = (emoji) => {
       if (threadChatInputArea.value.chatTextArea.text === undefined || threadChatInputArea.value.chatTextArea.text === null) {
         threadChatInputArea.value.chatTextArea.text = ''
@@ -113,6 +116,7 @@ export default {
       threadChatInputArea,
       isShowMentionMember,
       isShowEmojiPicker,
+      reactionMessage,
       selectMentionUsers,
       inputEmoji,
       messageListArea,
