@@ -30,7 +30,8 @@ class Message extends Model
             DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as imagePath"),
             "users.name as postUserName",
             DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') as postTime"),
-            "messages.content"
+            "messages.content",
+            DB::raw("(SELECT count(*) FROM threads WHERE parent_message_id = messages.id) as isThreadCount"),
         ])
        ->from('messages')
        ->join('users', function($join) {

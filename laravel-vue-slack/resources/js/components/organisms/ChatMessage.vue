@@ -40,6 +40,9 @@
             <reaction-circle :number="reaction.number" :icon="reaction.icon" class="mr-1 cursor-pointer" @click="updateReaction(reaction.id)" />
           </div>
         </div>
+        <div v-show="isThreadCount" class="text-xs mt-2 mb-2 text-blue-500 cursor-pointer">
+            <div @click="threadMessage(messageId)">スレッドの返信をチェック</div>
+        </div>
       </div>
     </div>
   </div>
@@ -51,7 +54,7 @@ import { DeleteMessage } from '../../apis/message.api'
 import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 
 export default({
-  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId', 'messageOnly', 'showThreadIcon'],
+  props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'isThreadCount', 'userId', 'messageOnly', 'showThreadIcon'],
   setup(props, context) {
     const chatInputArea = ref(null)
     const isEditMode = ref(false)

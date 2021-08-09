@@ -39,6 +39,7 @@
                    :content="message.content"
                    :isMyMessage="userName === message.postUserName"
                    :userId="userId"
+                   :isThreadCount="message.isThreadCount"
                    :showThreadIcon="true"
                    @event:reactionMessage="reactionMessage"
                    @event:threadMessage="threadMessage"
@@ -182,19 +183,18 @@ export default {
     const chatInputArea = ref(null)
     const mentionMemberModal = ref(null)
     const threadModal = ref(null)
+    const chatMessageItems = ref([])
 
-    let chatMessageItems = []
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
 
     onBeforeUpdate(() => {
-      chatMessageItems = []
+      chatMessageItems.value = []
     })
 
     const chatMessages = (el) => {
       if (el) {
-        console.log(el)
-        chatMessageItems.push(el)
+        chatMessageItems.value.push(el)
       }
     }
 
@@ -291,9 +291,8 @@ export default {
 
     const reactionEmoji = async (emoji) => {
       if (isUpdateEditReaction) {
-        console.log(chatMessageItems)
-        chatMessageItems[selectChatMessageKey].querySelector("textarea").value += emoji.native
-        chatMessageItems[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
+        chatMessageItems.value[selectChatMessageKey].querySelector("textarea").value += emoji.native
+        chatMessageItems.value[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
 
         isUpdateEditReaction = false
         isShowCenterEmojiPicker.value = false

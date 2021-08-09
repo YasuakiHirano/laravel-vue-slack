@@ -28,7 +28,7 @@
             :messageOnly="true"
           />
         </div>
-        <div class="max-h-60 pt-5 mb-3 border border-t-0 border-l-0 border-r-0 overflow-y-scroll" ref="messageListArea">
+        <div class="max-h-60 pt-5 mb-3 border border-t-0 border-l-0 border-r-0 overflow-y-scroll" v-show="threadMessages.length != 0" ref="messageListArea">
             <transition-group name="list" tag="div">
               <div v-for="(threadMessage, index) in threadMessages" :key="threadMessage.id" :ref="chatMessages">
                  <chat-message
@@ -93,18 +93,17 @@ export default {
     const messageListArea = ref(null)
     const threadMentionMemberModal = ref(null)
     const chatMessage = ref(null)
-
-    let chatMessageItems = []
+    const chatMessageItems = ref([])
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
 
     onBeforeUpdate(() => {
-      chatMessageItems = []
+      chatMessageItems.value = []
     })
 
     const chatMessages = (el) => {
       if (el) {
-        chatMessageItems.push(el)
+        chatMessageItems.value.push(el)
       }
     }
 
@@ -129,8 +128,8 @@ export default {
 
     const inputEmoji = (emoji) => {
       if (isUpdateEditReaction) {
-        chatMessageItems[selectChatMessageKey].querySelector("textarea").value += emoji.native
-        chatMessageItems[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
+        chatMessageItems.value[selectChatMessageKey].querySelector("textarea").value += emoji.native
+        chatMessageItems.value[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
 
         isUpdateEditReaction = false
         isShowEmojiPicker.value = false
@@ -170,3 +169,13 @@ export default {
   },
 }
 </script>
+<style>
+.list-enter-active,
+.list-leave-active {
+  transition: opacity 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+</style>
