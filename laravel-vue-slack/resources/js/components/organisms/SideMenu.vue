@@ -1,8 +1,6 @@
 <template>
   <div>
       <service-title />
-      <thread-menu />
-      <mention-reaction-menu />
       <add-member @click="$emit('event:AddMember')" />
       <channel-menu
         class="pl-3"

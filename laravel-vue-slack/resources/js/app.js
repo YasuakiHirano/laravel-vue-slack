@@ -119,8 +119,6 @@ import AppTitle from './components/molecules/AppTitle.vue'
 import ReactionCircle  from './components/molecules/ReactionCircle.vue'
 import TextAreaIcons  from './components/molecules/TextAreaIcons.vue'
 import MessageAreaIcons  from './components/molecules/MessageAreaIcons.vue'
-import MentionReactionMenu  from './components/molecules/MentionReactionMenu.vue'
-import ThreadMenu  from './components/molecules/ThreadMenu.vue'
 import ChannelMenu  from './components/molecules/ChannelMenu.vue'
 import UserEntryCount  from './components/molecules/UserEntryCount.vue'
 import ChatHeader  from './components/molecules/ChatHeader.vue'
@@ -131,8 +129,6 @@ app.component('app-title', AppTitle)
 app.component('reaction-circle', ReactionCircle)
 app.component('text-area-icons', TextAreaIcons)
 app.component('message-area-icons', MessageAreaIcons)
-app.component('mention-reaction-menu', MentionReactionMenu)
-app.component('thread-menu', ThreadMenu)
 app.component('channel-menu', ChannelMenu)
 app.component('user-entry-count', UserEntryCount)
 app.component('chat-header', ChatHeader)
