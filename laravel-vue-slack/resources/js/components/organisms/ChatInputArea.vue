@@ -14,6 +14,7 @@
     <text-area-icons
       class="icon-area"
       :isCancel="isCancel"
+      :isMention="isMention"
       @event:clickMentionIcon="$emit('event:clickMentionIcon')"
       @event:clickReactionIcon="$emit('event:clickReactionIcon')"
       @event:clickCancelIcon="$emit('event:clickCancelIcon')"
@@ -24,7 +25,7 @@
 import { ref } from 'vue'
 import { CreateMessage } from '../../apis/message.api.js'
 export default({
-  props: ['channelId', 'channelName', 'content', 'isCancel', 'isUpdate', 'userId', 'messageId', 'mentionUsers', 'parentMessageId'],
+  props: ['channelId', 'channelName', 'content', 'isCancel', 'isUpdate', 'userId', 'messageId', 'mentionUsers', 'parentMessageId', 'isMention'],
   setup(props, context) {
     const chatTextArea = ref(null)
     const mentionUserArea = ref(null)

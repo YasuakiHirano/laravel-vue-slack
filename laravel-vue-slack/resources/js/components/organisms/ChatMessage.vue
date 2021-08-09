@@ -25,12 +25,15 @@
         </div>
         <div class="whitespace-pre-wrap break-all" v-show="!isEditMode">{{ content }}</div>
         <chat-input-area
+          ref="chatInputArea"
           v-show="isEditMode"
           :messageId="messageId"
           :content="content"
           :isUpdate="true"
+          :isMention="false"
           @event:clickCancelIcon="isEditMode = false"
           @event:updateMessage="updateMessage"
+          @event:clickReactionIcon="$emit('event:updateAreaReaction')"
           :isCancel="true" />
         <div class="flex flex-wrap w-full mt-1">
           <div v-for="reaction in reactions" :key="reaction.id" class="mt-1">
@@ -50,6 +53,7 @@ import { UpdateReactionNumber } from '../../apis/reaction.api.js'
 export default({
   props: ['channelId', 'messageId', 'date', 'imagePath', 'postUserName', 'postTime', 'content', 'reactions', 'mentions', 'isMyMessage', 'userId', 'messageOnly', 'showThreadIcon'],
   setup(props, context) {
+    const chatInputArea = ref(null)
     const isEditMode = ref(false)
 
     const reactionMessage = async (messageId) => {
@@ -86,7 +90,8 @@ export default({
       deleteMessage,
       editMessage,
       updateMessage,
-      updateReaction
+      updateReaction,
+      chatInputArea
     }
   }
 })

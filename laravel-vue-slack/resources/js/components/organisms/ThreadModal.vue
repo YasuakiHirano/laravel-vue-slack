@@ -30,21 +30,22 @@
         </div>
         <div class="max-h-60 pt-5 mb-3 border border-t-0 border-l-0 border-r-0 overflow-y-scroll" ref="messageListArea">
             <transition-group name="list" tag="div">
-              <div v-for="message in threadMessages" :key="message.id">
+              <div v-for="(threadMessage, index) in threadMessages" :key="threadMessage.id" :ref="chatMessages">
                  <chat-message
                    class="w-full"
                    :channelId="channelId"
-                   :messageId="message.id"
-                   :date="message.date"
-                   :imagePath="message.imagePath"
-                   :postUserName="message.postUserName"
-                   :postTime="message.postTime"
-                   :reactions="message.reactions"
-                   :mentions="message.mentions"
-                   :content="message.content"
-                   :isMyMessage="userName === message.postUserName"
+                   :messageId="threadMessage.id"
+                   :date="threadMessage.date"
+                   :imagePath="threadMessage.imagePath"
+                   :postUserName="threadMessage.postUserName"
+                   :postTime="threadMessage.postTime"
+                   :reactions="threadMessage.reactions"
+                   :mentions="threadMessage.mentions"
+                   :content="threadMessage.content"
+                   :isMyMessage="userName === threadMessage.postUserName"
                    :userId="userId"
                    :showThreadIcon="false"
+                   @event:updateAreaReaction="updateAreaReaction(index)"
                    @event:reactionMessage="reactionMessage" />
               </div>
             </transition-group>
@@ -57,6 +58,7 @@
           :userId="userId"
           :channelId="channelId"
           :channelName="channelName"
+          :isMention="true"
           :parentMessageId="message.id" />
         <div
           class="fixed inset-0 w-full h-full overflow-y-scroll bg-black bg-opacity-60 z-50 flex items-center justify-center"
@@ -77,7 +79,7 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, onBeforeUpdate } from 'vue'
 import SpeakerIcon from '../atoms/SpeakerIcon.vue'
 export default {
   components: { SpeakerIcon },
@@ -90,6 +92,21 @@ export default {
     const parentMessageId = ref(0)
     const messageListArea = ref(null)
     const threadMentionMemberModal = ref(null)
+    const chatMessage = ref(null)
+
+    let chatMessageItems = []
+    let isUpdateEditReaction = false
+    let selectChatMessageKey = 0
+
+    onBeforeUpdate(() => {
+      chatMessageItems = []
+    })
+
+    const chatMessages = (el) => {
+      if (el) {
+        chatMessageItems.push(el)
+      }
+    }
 
     const scrollMessageListArea = () => {
       messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
@@ -104,13 +121,28 @@ export default {
       context.emit('event:reactionMessage', messageId)
     }
 
-    const inputEmoji = (emoji) => {
-      if (threadChatInputArea.value.chatTextArea.text === undefined || threadChatInputArea.value.chatTextArea.text === null) {
-        threadChatInputArea.value.chatTextArea.text = ''
-      }
+    const updateAreaReaction = (index) => {
+      selectChatMessageKey = index
+      isUpdateEditReaction = true
+      isShowEmojiPicker.value = true
+    }
 
-      threadChatInputArea.value.chatTextArea.text += emoji.native
-      isShowEmojiPicker.value = false
+    const inputEmoji = (emoji) => {
+      if (isUpdateEditReaction) {
+        chatMessageItems[selectChatMessageKey].querySelector("textarea").value += emoji.native
+        chatMessageItems[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
+
+        isUpdateEditReaction = false
+        isShowEmojiPicker.value = false
+        selectChatMessageKey = 0;
+      } else {
+        if (threadChatInputArea.value.chatTextArea.text === undefined || threadChatInputArea.value.chatTextArea.text === null) {
+          threadChatInputArea.value.chatTextArea.text = ''
+        }
+
+        threadChatInputArea.value.chatTextArea.text += emoji.native
+        isShowEmojiPicker.value = false
+      }
     }
 
     const deleteMentionUser = (mentionUser) => {
@@ -130,7 +162,10 @@ export default {
       parentMessageId,
       scrollMessageListArea,
       deleteMentionUser,
-      threadMentionMemberModal
+      threadMentionMemberModal,
+      updateAreaReaction,
+      chatMessages,
+      chatMessage
     }
   },
 }

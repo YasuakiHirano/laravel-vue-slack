@@ -25,7 +25,7 @@
           </show-channel-name>
           <div class="w-full overflow-y-scroll" ref="messageListArea">
             <transition-group name="list" tag="div">
-              <div v-for="message in messages" :key="message.id">
+              <div v-for="(message, index) in messages" :key="message.id" :ref="chatMessages">
                  <chat-message
                    class="mt-5 w-full"
                    :channelId="selectChannel"
@@ -41,7 +41,8 @@
                    :userId="userId"
                    :showThreadIcon="true"
                    @event:reactionMessage="reactionMessage"
-                   @event:threadMessage="threadMessage" />
+                   @event:threadMessage="threadMessage"
+                   @event:updateAreaReaction="updateAreaReaction(index)" />
               </div>
             </transition-group>
           </div>
@@ -53,6 +54,7 @@
             :userId="userId"
             :channelId="selectChannel"
             :channelName="channelName"
+            :isMention="true"
             class="mt-2" />
         </div>
         <!--モーダル実装-->
@@ -135,7 +137,7 @@
 </template>
 
 <script>
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, onBeforeUpdate, ref, nextTick } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages, FetchThreadMessages } from '../../apis/message.api.js'
@@ -180,6 +182,21 @@ export default {
     const chatInputArea = ref(null)
     const mentionMemberModal = ref(null)
     const threadModal = ref(null)
+
+    let chatMessageItems = []
+    let isUpdateEditReaction = false
+    let selectChatMessageKey = 0
+
+    onBeforeUpdate(() => {
+      chatMessageItems = []
+    })
+
+    const chatMessages = (el) => {
+      if (el) {
+        console.log(el)
+        chatMessageItems.push(el)
+      }
+    }
 
     const updateEmail = (text) => {
       email.value = text.value
@@ -266,9 +283,24 @@ export default {
       isShowEmojiPicker.value = false
     }
 
+    const updateAreaReaction = (index) => {
+      selectChatMessageKey = index
+      isUpdateEditReaction = true
+      isShowCenterEmojiPicker.value = true
+    }
+
     const reactionEmoji = async (emoji) => {
-      await CreateOrUpdateReaction(selectMessageId.value, userId.value, emoji.id, emoji.native)
-      isShowCenterEmojiPicker.value = false
+      if (isUpdateEditReaction) {
+        console.log(chatMessageItems)
+        chatMessageItems[selectChatMessageKey].querySelector("textarea").value += emoji.native
+        chatMessageItems[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
+
+        isUpdateEditReaction = false
+        isShowCenterEmojiPicker.value = false
+      } else {
+        await CreateOrUpdateReaction(selectMessageId.value, userId.value, emoji.id, emoji.native)
+        isShowCenterEmojiPicker.value = false
+      }
     }
 
     const channelAddUsers = async (addUsers) => {
@@ -490,7 +522,9 @@ export default {
       reactionEmoji,
       chatInputArea,
       threadMessageParam,
-      threadModal
+      threadModal,
+      chatMessages,
+      updateAreaReaction
     }
   },
 }
