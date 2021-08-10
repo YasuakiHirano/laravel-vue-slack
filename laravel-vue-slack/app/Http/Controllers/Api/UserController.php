@@ -14,6 +14,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    /**
+     * ユーザーを作成する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request) {
         /** @var Illuminate\Validation\Validator $validator */
         $validator = Validator::make($request->all(), [
@@ -59,6 +65,11 @@ class UserController extends Controller
         return response()->json('User registration completed.', Response::HTTP_OK);
     }
 
+    /**
+     * ログインしているユーザーを返す
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function find () {
         $user = Auth::user();
         return response()->json($user, Response::HTTP_OK);

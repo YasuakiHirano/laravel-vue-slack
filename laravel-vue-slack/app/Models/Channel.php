@@ -13,6 +13,12 @@ class Channel extends Model
 
     protected $fillable = ['name', 'description', 'make_user_id', 'is_public'];
 
+    /**
+     * 指定されたチャンネルID(複数)からチャンネル情報を取得する
+     *
+     * @param array $channelIds
+     * @return void
+     */
     public function fetchChannelList($channelIds) {
         return $this::select([
             'channels.id',

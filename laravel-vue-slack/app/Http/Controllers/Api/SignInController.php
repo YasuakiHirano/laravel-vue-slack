@@ -11,6 +11,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class SignInController extends Controller
 {
+    /**
+     * ユーザーのサインイン処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function signIn(Request $request) {
         $credentials = $request->validate([
             'email' => 'required|email',

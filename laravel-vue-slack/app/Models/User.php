@@ -43,6 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * 指定したチャンネルに関連付かないユーザー一覧取得
+     *
+     * @param int $channelId
+     * @return void
+     */
     public function fetchNotChannelUsers($channelId)
     {
         $channelUsers = ChannelUser::select(['user_id'])->whereChannelId($channelId)->get();

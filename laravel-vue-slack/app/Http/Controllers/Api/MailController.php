@@ -18,6 +18,12 @@ class MailController extends Controller
     /** @var int $randomImageMax ログイン時の画像をランダム決定用(最大値) */
     private $randomImageMax = 7;
 
+    /**
+     * 招待メールを送信する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function sendInvitation(Request $request) {
         $request->validate([
             'email' => 'required'

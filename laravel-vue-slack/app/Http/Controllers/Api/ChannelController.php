@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
+    /**
+     * チャンネルを作成する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request) {
         $request->validate([
             'name' => 'required',
@@ -37,6 +43,12 @@ class ChannelController extends Controller
         return response()->json('Channel registration completed.', Response::HTTP_OK);
     }
 
+    /**
+     * ログインユーザーに関連するチャンネル一覧取得
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fetch() {
         $userId = Auth::id();
         $channelUsers = ChannelUser::whereUserId($userId)->get();
@@ -47,6 +59,12 @@ class ChannelController extends Controller
         return response()->json($channels, Response::HTTP_OK);
     }
 
+    /**
+     * チャンネル(名前・説明・公開/非公開)を更新する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request) {
         $request->validate([
             'id' => 'required'
@@ -68,6 +86,13 @@ class ChannelController extends Controller
         return response()->json('Channel update completed.', Response::HTTP_OK);
     }
 
+
+    /**
+     * チャンネルに関連するユーザーの数を取得する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function countChannelUser(Request $request) {
         $count = ChannelUser::whereChannelId($request->channel_id)->count();
         return response()->json($count, Response::HTTP_OK);

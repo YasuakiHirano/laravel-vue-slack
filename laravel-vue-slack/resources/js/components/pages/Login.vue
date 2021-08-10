@@ -2,7 +2,7 @@
   <div class="w-10/12 m-auto text-center">
     <app-title class="pt-8 pb-8 pr-10" />
     <sign-in-text>Sign in to laravel-vue-slack.</sign-in-text>
-    <div class="w-96 m-auto text-left pt-8">
+    <div class="w-96 m-auto text-left pt-8 pr-3">
       <form-label class="mb-2" forText="email" showText="Email address" />
       <form-text  class="mb-2" type="text" v-model="emailAddress" name="email" id="email" placeholder="name@example.com" :class="{ 'ring-2' : v$.emailAddress.$error,  'ring-red-500' : v$.emailAddress.$error, }" />
       <div v-for="(error, index) in v$.emailAddress.$errors" :key="index" class="text-xs text-red-500 mb-2">
@@ -57,5 +57,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>

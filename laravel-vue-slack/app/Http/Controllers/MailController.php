@@ -9,6 +9,12 @@ use Exception;
 
 class MailController extends Controller
 {
+    /**
+     * 招待メールからアカウント作成画面を表示する
+     *
+     * @param Request $request
+     * @return Illuminate\View\View
+     */
     public function invitationCallback(Request $request) {
         try {
             $userInformationId = decrypt($request->param);
@@ -23,8 +29,7 @@ class MailController extends Controller
                 'userInformationId' => encrypt($userInformation->id),
             ]);
         } catch (\Throwable $e){
-            logger()->info($e);
-
+            logger()->error($e);
             return view('404');
         }
 

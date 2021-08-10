@@ -12,6 +12,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class ReactionController extends Controller
 {
+    /**
+     * リアクションを更新・作成する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateOrCreate(Request $request) {
         $request->validate([
             'message_id' => 'required',
@@ -42,6 +48,12 @@ class ReactionController extends Controller
         return response()->json('Reaction update or create completed.', Response::HTTP_OK);
     }
 
+    /**
+     * リアクションの回数を+1する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateReactionNumber(Request $request) {
         $request->validate([
             'reaction_id' => 'required',

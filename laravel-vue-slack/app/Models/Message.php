@@ -15,14 +15,31 @@ class Message extends Model
 
     protected $fillable = ['user_id', 'channel_id', 'content', 'is_thread_message'];
 
+    /**
+     * メッセージにリアクションを関連付ける
+     *
+     * @return void
+     */
     public function reactions() {
         return $this->hasMany(Reaction::class);
     }
 
+    /**
+     * メッセージにメンションを関連付ける
+     *
+     * @return void
+     */
     public function mentions() {
         return $this->hasMany(Mention::class);
     }
 
+    /**
+     *　チャンネルに関連するメッセージ一覧を取得するクエリーを返す
+     *
+     * @param int $channelId
+     * @param null|array $messageIds
+     * @return Illuminate\Database\Query\Builder
+     */
     public function createMessageQuery($channelId, $messageIds = null) {
         $query = $this::select([
             'messages.id',
@@ -55,6 +72,11 @@ class Message extends Model
         return $query;
     }
 
+    /**
+     * 今日のメッセージがいくつあるかカウントする
+     *
+     * @return void
+     */
     public function countTodayMessage() {
         return $this::where(DB::raw("DATE_FORMAT(messages.created_at, '%Y-%m-%d')"), '=', Carbon::now()->format('Y-m-d'))->count();
     }

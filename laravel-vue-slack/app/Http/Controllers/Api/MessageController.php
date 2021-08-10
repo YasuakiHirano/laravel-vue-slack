@@ -15,6 +15,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
+    /**
+     * メッセージを作成する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request) {
         $request->validate([
             'channel_id' => 'required',
@@ -80,6 +86,12 @@ class MessageController extends Controller
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
 
+    /**
+     * メッセージ一覧を取得する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fetch(Request $request) {
         $messageQuery = (new Message())->createMessageQuery($request->channel_id);
 
@@ -106,6 +118,12 @@ class MessageController extends Controller
         return  response()->json($messages, Response::HTTP_OK);
     }
 
+    /**
+     * スレッドのメッセージ一覧を取得する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fetchThreadMessage($parentMessageId) {
         $threads = Thread::whereParentMessageId($parentMessageId)->get();
 
@@ -134,6 +152,12 @@ class MessageController extends Controller
         return  response()->json($messages, Response::HTTP_OK);
     }
 
+    /**
+     * メッセージを更新する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request) {
         $request->validate([
             'message_id' => 'required',
@@ -150,6 +174,12 @@ class MessageController extends Controller
         return response()->json('Message update completed.', Response::HTTP_OK);
     }
 
+    /**
+     * メッセージを削除する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request) {
         $request->validate([
             'message_id' => 'required',

@@ -10,6 +10,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class ChannelUserController extends Controller
 {
+    /**
+     * チャンネルを作成する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request) {
         $request->validate([
             'channel_id' => 'required',
@@ -26,6 +32,12 @@ class ChannelUserController extends Controller
         return response()->json('ChannelUser created completed.', Response::HTTP_OK);
     }
 
+    /**
+     * チャンネルIDに関連するユーザー一覧取得
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fetch(Request $request) {
         $request->validate([
             'channel_id' => 'required'
@@ -36,6 +48,12 @@ class ChannelUserController extends Controller
         return response()->json($channelUsers, Response::HTTP_OK);
     }
 
+    /**
+     * チャンネルIDに関連しないユーザー一覧取得
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fetchNotChannelUsers(Request $request) {
         $request->validate([
             'channel_id' => 'required'

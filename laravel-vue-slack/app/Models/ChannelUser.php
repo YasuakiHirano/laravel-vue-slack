@@ -14,6 +14,12 @@ class ChannelUser extends Model
 
     protected $fillable = ['channel_id', 'user_id'];
 
+    /**
+     * チャンネルに関連するユーザー一覧を取得する
+     *
+     * @param int $channelId
+     * @return void
+     */
     public function fetchChannelUsers($channelId)
     {
         return $this::select([
