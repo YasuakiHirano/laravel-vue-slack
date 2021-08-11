@@ -3,8 +3,8 @@ import * as VueRouter from 'vue-router';
 const routes = [
   {
     path: '/',
-    name: 'Login',
-    component: require('../components/pages/Login.vue').default
+    name: 'SignIn',
+    component: require('../components/pages/SignIn.vue').default
   },
   {
     path: '/chat',

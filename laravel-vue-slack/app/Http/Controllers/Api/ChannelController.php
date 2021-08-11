@@ -44,7 +44,7 @@ class ChannelController extends Controller
     }
 
     /**
-     * ログインユーザーに関連するチャンネル一覧取得
+     * サインインユーザーに関連するチャンネル一覧取得
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

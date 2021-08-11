@@ -24,7 +24,7 @@ use App\Http\Controllers\Api\ReactionController;
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    // ログインユーザー取得
+    // サインインユーザー取得
     Route::get('/users', [UserController::class, 'find']);
 
     // チャンネル

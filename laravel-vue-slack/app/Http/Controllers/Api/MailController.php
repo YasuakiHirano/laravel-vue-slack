@@ -12,10 +12,10 @@ use SendGrid\Mail\Mail;
 
 class MailController extends Controller
 {
-    /** @var int $randomImageMin ログイン時の画像をランダム決定用(最小値) */
+    /** @var int $randomImageMin サインイン時の画像をランダム決定用(最小値) */
     private $randomImageMin = 1;
 
-    /** @var int $randomImageMax ログイン時の画像をランダム決定用(最大値) */
+    /** @var int $randomImageMax サインイン時の画像をランダム決定用(最大値) */
     private $randomImageMax = 7;
 
     /**

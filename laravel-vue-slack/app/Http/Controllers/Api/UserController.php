@@ -56,7 +56,7 @@ class UserController extends Controller
             'status' => config('const.user_status.registered')
         ]);
 
-        // ログイン処理
+        // サインイン処理
         Auth::attempt([
             'email' => $request->email,
             'password' => $request->password
@@ -66,7 +66,7 @@ class UserController extends Controller
     }
 
     /**
-     * ログインしているユーザーを返す
+     * サインインしているユーザーを返す
      *
      * @return \Illuminate\Http\JsonResponse
      */
