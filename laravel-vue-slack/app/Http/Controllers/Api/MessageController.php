@@ -27,8 +27,8 @@ class MessageController extends Controller
             'content' => 'required',
         ]);
 
+        // メッセージを作成する
         $isThreadMessage = isset($request->parent_message_id) ? true : false;
-
         $message = Message::create([
             'user_id' => Auth::id(),
             'channel_id' => $request->channel_id,
@@ -36,6 +36,7 @@ class MessageController extends Controller
             'is_thread_message' => $isThreadMessage
         ]);
 
+        // メッセージに付加しているメンションを作成する
         $createMentions = [];
         $allUsers = User::select(['id', 'name'])->get()->pluck('name', 'id');
         if (isset($request->mention_users)) {
@@ -55,6 +56,7 @@ class MessageController extends Controller
 
         $messageModel = new Message();
         if ($isThreadMessage) {
+            // スレッドの場合は、スレッドのメッセージとして関連付ける
             Thread::create([
                 'message_id' => $message->id,
                 'parent_message_id' => $request->parent_message_id,
@@ -69,18 +71,20 @@ class MessageController extends Controller
                                 ->first();
         }
 
+        // メンションをブロードキャストで送信する
         foreach ($createMentions as $key => $mention) {
             $selectMessage->mentions[$key] = $mention;
             broadcast(new MentionEvent('create-mention', $request->content, $mention->user_id, $selectMessage->imagePath));
         }
 
+        // 同じ日のデータが既にあったら日付を空にする
         if ($messageModel->countTodayMessage() != 0) {
             if (isset($selectMessage->date)) {
                 $selectMessage->date = '';
             }
         }
 
-        logger()->info($selectMessage);
+        // 作成したメッセージをブロードキャストで送信する
         broadcast(new MessageEvent('create-message', $selectMessage->toArray(), null, $message->is_thread_message));
 
         return response()->json('Message registration completed.', Response::HTTP_OK);
@@ -99,21 +103,7 @@ class MessageController extends Controller
                         ->orderBy('messages.created_at')
                         ->get();
 
-        $users = User::select(['id', 'name'])->get()->pluck('name', 'id');
-
-        // 同じ日付のメッセージだった場合は日付を空にする
-        $beforeDate = '';
-        foreach ($messages as $key => $message) {
-            if ($beforeDate != $message->date) {
-                $beforeDate = $message->date;
-            } else {
-                $messages[$key]->date = '';
-            }
-
-            foreach ($message->mentions as $mentionKey => $mention) {
-                $messages[$key]->mentions[$mentionKey]->user_name = $users[$mention->user_id];
-            }
-        }
+        $messages = $this->editMessageProperty($messages);
 
         return  response()->json($messages, Response::HTTP_OK);
     }
@@ -133,23 +123,30 @@ class MessageController extends Controller
         ->orderBy('messages.created_at')
         ->get();
 
+        $messages = $this->editMessageProperty($messages);
+
+        return  response()->json($messages, Response::HTTP_OK);
+    }
+
+    private function editMessageProperty($messages) {
+        // 全ユーザーのIDをキーに名前の配列を作成する
         $users = User::select(['id', 'name'])->get()->pluck('name', 'id');
 
-        // 同じ日付のメッセージだった場合は日付を空にする
         $beforeDate = '';
         foreach ($messages as $key => $message) {
+            // 同じ日付のメッセージだった場合は日付を空にする
             if ($beforeDate != $message->date) {
                 $beforeDate = $message->date;
             } else {
                 $messages[$key]->date = '';
             }
 
+            // メンションのユーザー名を設定する
             foreach ($message->mentions as $mentionKey => $mention) {
                 $messages[$key]->mentions[$mentionKey]->user_name = $users[$mention->user_id];
             }
         }
-
-        return  response()->json($messages, Response::HTTP_OK);
+        return $messages;
     }
 
     /**
