@@ -2,14 +2,22 @@
   <div class="w-10/12 m-auto text-center">
     <app-title class="pt-8 pb-8 pr-10" />
     <sign-in-text>Join laravel-vue-slack.</sign-in-text>
-    <div class="w-96 m-auto text-left pt-8">
+    <div class="w-96 m-auto text-left pt-8 pr-3">
       <div>Email address</div>
       <div class="mb-5">{{ sendEmail }}</div>
       <form-label class="mb-2" forText="name" showText="User Name" />
-      <form-text  class="mb-5" type="text" v-model="inputName" name="user_name" id="user_name" placeholder="User name" />
+      <form-text  class="mb-2" type="text" v-model="inputName" name="user_name" id="user_name" placeholder="User name" :class="{ 'ring-2' : v$.inputName.$error, 'ring-red-500' : v$.inputName.$error }" />
+      <div v-for="(error, index) in v$.inputName.$errors" :key="index" class="text-xs text-red-500 mb-2">
+        <div v-if="error.$validator == 'required'">ユーザー名は必須です。</div>
+        <div v-if="error.$validator == 'maxLength'">ユーザー名は25文字以下で入力してください。</div>
+      </div>
       <form-label class="mb-2" forText="password" showText="Password" />
-      <form-text  class="mb-5" type="password" v-model="inputPassword" name="password" id="password" placeholder="Your password" />
-      <account-create-button @event:AccountCreate="accountCreate" />
+      <form-text  class="mb-2" type="password" v-model="inputPassword" name="password" id="password" placeholder="Your password" :class="{ 'ring-2' : v$.inputPassword.$error, 'ring-red-500' : v$.inputPassword.$error }" />
+      <div v-for="(error, index) in v$.inputPassword.$errors" :key="index" class="text-xs text-red-500 mb-2">
+        <div v-if="error.$validator == 'required'">パスワードは必須です。</div>
+        <div v-if="error.$validator == 'maxLength'">パスワードは50文字以下で入力してください。</div>
+      </div>
+      <account-create-button class="mt-5" @event:AccountCreate="accountCreate" />
     </div>
   </div>
 </template>
@@ -17,23 +25,40 @@
 <script>
 import { ref } from 'vue'
 import { CreateUser } from '../../apis/user.api.js'
+import { useVuelidate } from '@vuelidate/core'
+import { required, maxLength } from '@vuelidate/validators'
+
 export default {
   props: ['sendEmail'],
   setup(props) {
     let inputName = ref('')
     let inputPassword = ref('')
 
+    /**
+     *
+     */
     const accountCreate = async () => {
-        const created = await CreateUser(props.sendEmail, inputName.value, inputPassword.value)
-        if (created) {
-            location.href = location.protocol + "//" +location.host + "/#/chat"
-        }
+      const isFormCorrect = await v$.value.$validate()
+      if (!isFormCorrect) return
+
+      const created = await CreateUser(props.sendEmail, inputName.value, inputPassword.value)
+      if (created) {
+          location.href = location.protocol + "//" +location.host + "/#/chat"
+      }
     }
+
+    const rules = {
+      inputName: { required, maxLength: maxLength(25) },
+      inputPassword: { required, maxLength: maxLength(50)  }
+    }
+
+    const v$ = useVuelidate(rules, { inputName, inputPassword })
 
     return {
       accountCreate,
       inputName,
-      inputPassword
+      inputPassword,
+      v$
     }
   }
 }
