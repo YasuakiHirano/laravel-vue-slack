@@ -33,6 +33,10 @@ export default {
     const emailAddress = ref('')
     const password = ref('')
 
+
+    /**
+     * サインインする
+     */
     const signIn = async () => {
       const isFormCorrect = await v$.value.$validate()
       if (!isFormCorrect) return

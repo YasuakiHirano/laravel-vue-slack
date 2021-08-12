@@ -11,7 +11,7 @@ use \Symfony\Component\HttpFoundation\Response;
 class ChannelUserController extends Controller
 {
     /**
-     * チャンネルを作成する
+     * チャンネルに関連するユーザーを作成する
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

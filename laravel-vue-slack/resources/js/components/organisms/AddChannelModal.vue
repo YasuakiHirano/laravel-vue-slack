@@ -13,6 +13,7 @@
     <template v-slot:app-content>
       <form-label class="mb-2" forText="channel_name" showText="名前" />
       <form-text
+        ref="channelName"
         class="mb-2"
         type="text"
         @event:updateText="updateAddChannelName"
@@ -22,6 +23,7 @@
       />
       <form-label class="mb-2" forText="description" showText="説明" />
       <form-text
+        ref="channelDescription"
         class="mb-2"
         type="description"
         @event:updateText="updateAddChannelDescription"
@@ -31,6 +33,7 @@
       />
       <span>プライベート設定</span>
       <form-checkbox
+        ref="channelIsPrivate"
         label="プライベートチャンネルにする"
         @event:updateCheck="updateAddChannelIsPrivate"
       />
@@ -38,9 +41,14 @@
   </app-modal>
 </template>
 <script>
+import { ref } from 'vue'
 export default {
   props: ["showModal"],
   setup(props, context) {
+    const channelName = ref('')
+    const channelDescription = ref('')
+    const channelIsPrivate = ref(false)
+
     const updateAddChannelName = (text) => {
       context.emit("event:updateAddChannelName", text);
     }
@@ -57,6 +65,9 @@ export default {
       updateAddChannelName,
       updateAddChannelDescription,
       updateAddChannelIsPrivate,
+      channelName,
+      channelDescription,
+      channelIsPrivate
     }
   },
 }

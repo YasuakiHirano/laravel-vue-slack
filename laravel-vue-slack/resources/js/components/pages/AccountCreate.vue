@@ -35,7 +35,7 @@ export default {
     let inputPassword = ref('')
 
     /**
-     *
+     * 入力値からアカウントを作成する
      */
     const accountCreate = async () => {
       const isFormCorrect = await v$.value.$validate()

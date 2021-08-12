@@ -70,6 +70,7 @@
           @event:modalAction="showAddMemberSuccess = false" />
         <!----チャンネル追加---->
         <add-channel-modal
+          ref="addChannelModal"
           :showModal="showAddChannel"
           @event:modalClose="showAddChannel = false"
           @event:modalAction="addChannel"
@@ -184,6 +185,7 @@ export default {
     const mentionMemberModal = ref(null)
     const threadModal = ref(null)
     const chatMessageItems = ref([])
+    const addChannelModal = ref(null)
 
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
@@ -192,28 +194,51 @@ export default {
       chatMessageItems.value = []
     })
 
+    /**
+     * メッセージ一覧のテキストエリアを配列に設定する
+     * @param {HTMLElement} el
+     */
     const chatMessages = (el) => {
       if (el) {
         chatMessageItems.value.push(el)
       }
     }
 
+    /**
+     * メンバー招待モーダルで入力されたテキストをemail変数に反映する
+     * @param {string} text
+     */
     const updateEmail = (text) => {
       email.value = text.value
     }
 
+    /**
+     * チャンネル追加モーダルの名前を変数に反映する
+     * @param {string} text
+     */
     const updateAddChannelName = (text) => {
       addChannelName.value = text.value
     }
 
+    /**
+     * チャンネル追加モーダルの説明を変数に反映する
+     * @param {string} text
+     */
     const updateAddChannelDescription = (text) => {
       addChannelDescription.value = text.value
     }
 
+    /**
+     * チャンネル追加モーダルのプライベート設定を変数に反映する
+     * @param {boolean} text
+     */
     const updateAddChannelIsPrivate = (value) => {
       addChannelIsPrivate.value = value
     }
 
+    /**
+     * メンバー招待モーダルからのメール送信処理
+     */
     const sendInvitationMail = async () => {
       showAddMember.value = false
       showLoading.value = true
@@ -222,21 +247,42 @@ export default {
       showAddMemberSuccess.value = true
     }
 
+    /**
+     * チャンネル追加モーダルからのチャンネル作成処理
+     */
     const addChannel = async () => {
       showAddChannel.value = false
       showLoading.value = true
+
+      // チャンネルを作成する
       await CreateChannel(addChannelName.value, addChannelDescription.value, addChannelIsPrivate.value)
+
+      // 入力した内容のクリア
+      addChannelModal.value.channelName.text = ''
+      addChannelModal.value.channelDescription.text = ''
+      addChannelModal.value.channelIsPrivate.check = ''
+
       showLoading.value = false
       showAddChannelSuccess.value = true
     }
 
+    /**
+     * メッセージエリアを一番下までスクロールする
+     */
     const scrollMessageListArea = () => {
       messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
     }
 
+    /**
+     * チャンネルを選択したときの処理
+     */
     const changeChannel = async (channelId) => {
       selectChannel.value = channelId
+
+      // 初期ローディングを動かす
       await initLoading()
+
+      // チャンネル情報を設置する
       findChannelName()
     }
 
@@ -523,7 +569,8 @@ export default {
       threadMessageParam,
       threadModal,
       chatMessages,
-      updateAreaReaction
+      updateAreaReaction,
+      addChannelModal
     }
   },
 }
