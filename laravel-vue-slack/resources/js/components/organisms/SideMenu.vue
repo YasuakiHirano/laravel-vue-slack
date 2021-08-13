@@ -11,7 +11,7 @@
           <div :class="'w-full flex p-1 cursor-pointer ' + (channel.id === channelId ? 'bg-indigo-900 rounded-lg' : '')" @click="selectChannel(channel.id)">
             <div v-if="channel.is_public"><hash-icon class="mt-1 mr-2 w-4 h-4" /></div>
             <div v-else><lock-icon class="mt-1 mr-2 w-4 h-4" /></div>
-            {{ channel.name }}
+            <div class="w-13 truncate">{{ channel.name }}</div>
           </div>
         </div>
       </div>
