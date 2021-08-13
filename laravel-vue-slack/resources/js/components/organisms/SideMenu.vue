@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted } from 'vue'
 import { FetchChannel } from '../../apis/channel.api.js'
 export default {
   props: ['channelId'],

@@ -40,8 +40,8 @@
             <reaction-circle :number="reaction.number" :icon="reaction.icon" class="mr-1 cursor-pointer" @click="updateReaction(reaction.id)" />
           </div>
         </div>
-        <div v-show="isThreadCount" class="text-xs mt-2 mb-2 text-blue-500 cursor-pointer">
-            <div @click="threadMessage(messageId)">スレッドの返信をチェック</div>
+        <div v-show="isThreadCount" class="text-sm mt-2 mb-2 text-blue-500 cursor-pointer">
+            <div @click="threadMessage(messageId)">{{ isThreadCount }}件の返信</div>
         </div>
       </div>
     </div>

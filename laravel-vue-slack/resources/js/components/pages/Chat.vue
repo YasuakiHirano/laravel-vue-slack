@@ -393,6 +393,11 @@ export default {
     window.Echo.channel("create-message").listen('.MessageEvent', result => {
       if (result.isThreadMessage) {
         threadModal.value.threadMessages.push(result.message)
+        messages.value.filter(function (message) {
+          if (message.id == threadMessageParam.value.id) {
+            message.isThreadCount = threadModal.value.threadMessages.length
+          }
+        })
 
         nextTick(() => {
           threadModal.value.scrollMessageListArea()
