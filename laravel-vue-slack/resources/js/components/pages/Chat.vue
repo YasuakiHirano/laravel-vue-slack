@@ -221,6 +221,17 @@ export default {
     }
 
     /**
+     * メンバー招待モーダルからのメール送信処理
+     */
+    const sendInvitationMail = async () => {
+      showAddMember.value = false
+      showLoading.value = true
+      await SendInvitationMail(email.value)
+      showLoading.value = false
+      showAddMemberSuccess.value = true
+    }
+
+    /**
      * チャンネル追加モーダルの名前を変数に反映する
      * @param {string} text
      */
@@ -244,21 +255,14 @@ export default {
       addChannelIsPrivate.value = value
     }
 
-    /**
-     * メンバー招待モーダルからのメール送信処理
-     */
-    const sendInvitationMail = async () => {
-      showAddMember.value = false
-      showLoading.value = true
-      await SendInvitationMail(email.value)
-      showLoading.value = false
-      showAddMemberSuccess.value = true
-    }
 
     /**
      * チャンネル追加モーダルからのチャンネル作成処理
      */
     const addChannel = async () => {
+      const error = await addChannelModal.value.modalValidateError()
+      if (error) return
+
       showAddChannel.value = false
       showLoading.value = true
 
@@ -269,6 +273,9 @@ export default {
       addChannelModal.value.channelName.text = ''
       addChannelModal.value.channelDescription.text = ''
       addChannelModal.value.channelIsPrivate.check = ''
+      addChannelModal.value.checkChannelName = ''
+      addChannelModal.value.checkChannelDescription = ''
+      addChannelModal.value.v$.$reset()
 
       showLoading.value = false
       showAddChannelSuccess.value = true
@@ -317,25 +324,32 @@ export default {
       isChannelPublic.value = channel.is_public ? true : false
     }
 
+    /**
+     * チャンネルの説明箇所を更新する
+     */
     const updateChannelDescription = async () => {
       // チャンネルの説明を更新
       await UpdateChannel(selectChannel.value, null, channelDescription.value, null)
       showEditChannelDescription.value = false
     }
 
+    /**
+     * チャンネルの説明変数を更新する
+     */
     const updateDescription = (text) => {
       channelDescription.value = text
     }
 
-    const openMembersModal = () => {
-      isChannelTab.value = false
-      showChannelDetail.value = true
-    }
-
+    /**
+     * チャンネル詳細モーダルのタブを切り替えたとき
+     */
     const isChannelUpdate = (value) => {
       isChannelTab.value = value
     }
 
+    /**
+     * テキストエリアの絵文字ピッカーで絵文字の選択時処理
+     */
     const inputEmoji = (emoji) => {
       if (chatInputArea.value.chatTextArea.text === undefined || chatInputArea.value.chatTextArea.text === null) {
         chatInputArea.value.chatTextArea.text = ''
@@ -345,20 +359,28 @@ export default {
       isShowEmojiPicker.value = false
     }
 
+    /**
+     * メッセージ一覧のメッセージ編集でリアクションがクリックされた時
+     */
     const updateAreaReaction = (index) => {
       selectChatMessageKey = index
       isUpdateEditReaction = true
       isShowCenterEmojiPicker.value = true
     }
 
+    /**
+     * リアクション用絵文字ピッカーで絵文字が選択された時
+     */
     const reactionEmoji = async (emoji) => {
       if (isUpdateEditReaction) {
+        // メッセージ編集の場合は編集モードのテキストエリアに表示
         chatMessageItems.value[selectChatMessageKey].querySelector("textarea").value += emoji.native
         chatMessageItems.value[selectChatMessageKey].querySelector("textarea").dispatchEvent(new Event('input'))
 
         isUpdateEditReaction = false
         isShowCenterEmojiPicker.value = false
       } else {
+        // メッセージに対してのリアクションの場合は追加または更新する
         await CreateOrUpdateReaction(selectMessageId.value, userId.value, emoji.id, emoji.native)
         isShowCenterEmojiPicker.value = false
       }
@@ -377,16 +399,25 @@ export default {
       showAddChannelMember.value = false
     }
 
+    /**
+     * メンションするユーザーを選択された時の処理
+     */
     const selectMentionUsers = (mentionUsers) => {
       chatInputArea.value.mentionUserArea.mentionUsers = mentionUsers
       isShowMentionMember.value = false
     }
 
+    /**
+     * メンションの削除ボタンが押された時の処理
+     */
     const deleteMentionUser = (mentionUser) => {
       chatInputArea.value.mentionUserArea.mentionUsers = chatInputArea.value.mentionUserArea.mentionUsers.filter((user) => { return user !== mentionUser })
       mentionMemberModal.value.selectUsers = mentionMemberModal.value.selectUsers.filter((user) => { return user !== mentionUser })
     }
 
+    /**
+     * 画面表示時のローディング処理
+     */
     const initLoading = async() => {
       // ローディングを表示する
       showLoading.value = true
@@ -611,7 +642,6 @@ export default {
       addChannelName,
       addChannelDescription,
       addChannelIsPrivate,
-      openMembersModal,
       isShowEmojiPicker,
       isShowCenterEmojiPicker,
       isShowMentionMember,

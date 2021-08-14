@@ -31,8 +31,8 @@ import { required, maxLength } from '@vuelidate/validators'
 export default {
   props: ['sendEmail'],
   setup(props) {
-    let inputName = ref('')
-    let inputPassword = ref('')
+    const inputName = ref('')
+    const inputPassword = ref('')
 
     /**
      * 入力値からアカウントを作成する
