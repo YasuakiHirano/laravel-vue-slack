@@ -61,6 +61,7 @@
         <!--モーダル実装-->
         <!----メンバー招待---->
         <add-member-modal
+          ref="addMemberModal"
           :showModal="showAddMember"
           @event:modalAction="sendInvitationMail"
           @event:modalClose="showAddMember = false"
@@ -193,6 +194,7 @@ export default {
     const threadModal = ref(null)
     const chatMessageItems = ref([])
     const addChannelModal = ref(null)
+    const addMemberModal = ref(null)
     const channelAddMemberModal = ref(null)
 
     let isUpdateEditReaction = false
@@ -200,6 +202,13 @@ export default {
 
     onBeforeUpdate(() => {
       chatMessageItems.value = []
+    })
+
+    onMounted(async () => {
+      await initLoading()
+      if (Push.Permission.has() == false) {
+        Push.create('laravel-vue-slackへようこそ')
+      }
     })
 
     /**
@@ -224,9 +233,20 @@ export default {
      * メンバー招待モーダルからのメール送信処理
      */
     const sendInvitationMail = async () => {
+      const error = await addMemberModal.value.modalValidateError()
+      if (error) return
+
       showAddMember.value = false
       showLoading.value = true
+
+      // 招待メールの送信
       await SendInvitationMail(email.value)
+
+      // 入力値のクリア
+      addMemberModal.value.checkEmailAddress = ''
+      addMemberModal.value.emailAddress.text = ''
+      addMemberModal.value.v$.$reset()
+
       showLoading.value = false
       showAddMemberSuccess.value = true
     }
@@ -445,6 +465,39 @@ export default {
       })
     }
 
+    /**
+     * リアクションボタンを押された時の処理
+     * @param {int} messageId リアクションをつけるメッセージID
+     */
+    const reactionMessage = (messageId) => {
+      isShowCenterEmojiPicker.value = true
+      selectMessageId.value = messageId
+    }
+
+    /**
+     * スレッドボタンを押された時の処理
+     * @param {int} messageId スレッドを開くメッセージID
+     */
+    const threadMessage = async (messageId) => {
+      showLoading.value = true
+
+      const message = messages.value.filter(function (message) { return message.id == messageId } )
+      threadMessageParam.value = message[0]
+      isShowThread.value = true
+
+      const threadMessages = await FetchThreadMessages(message[0].id)
+      threadModal.value.threadMessages = threadMessages
+      threadModal.value.parentMessageId = message[0].id
+
+      nextTick(() => {
+        threadModal.value.scrollMessageListArea()
+        showLoading.value = false
+      })
+    }
+
+    /**
+     * メッセージを作成した時のブロードキャスト受信
+     */
     window.Echo.channel("create-message").listen('.MessageEvent', result => {
       if (result.isThreadMessage) {
         threadModal.value.threadMessages.push(result.message)
@@ -466,6 +519,9 @@ export default {
       }
     })
 
+    /**
+     * メッセージを削除した時のブロードキャスト受信
+     */
     window.Echo.channel("delete-message").listen('.MessageEvent', result => {
       const messageId = result.messageId
 
@@ -476,6 +532,9 @@ export default {
       }
     })
 
+    /**
+     * メッセージを更新した時のブロードキャスト受信
+     */
     window.Echo.channel("update-message").listen('.MessageEvent', result => {
       const content = result.message
       const messageId = result.messageId
@@ -495,12 +554,18 @@ export default {
       }
     })
 
+    /**
+     * チャンネルを追加した時のブロードキャスト受信
+     */
     window.Echo.channel("create-channel").listen('.ChannelEvent', result => {
       if (result.makeUserId === userId.value) {
         channelList.value.push(result.channelObject[0])
       }
     })
 
+    /**
+     * チャンネルにユーザーを追加した時のブロードキャスト受信
+     */
     window.Echo.channel("create-channel-user").listen('.ChannelUserEvent', result => {
       // メンバーが追加されたときに、追加したユーザーだった場合
       if (selectChannel.value == result.channelId) {
@@ -527,6 +592,9 @@ export default {
       }
     })
 
+    /**
+     * チャンネルを更新した時のブロードキャスト受信
+     */
     window.Echo.channel("update-channel").listen('.ChannelEvent', result => {
       const channel = result.channelObject
 
@@ -537,6 +605,11 @@ export default {
       })
     })
 
+    /**
+     * リアクションの更新処理
+     * @param {array} messages メッセージ一覧
+     * @param {object} reaction リアクション
+     */
     const reactionUpdate = (messages, reaction) => {
       messages.filter(function (message) {
         // 更新したリアクションのメッセージIDと同じメッセージ
@@ -556,6 +629,9 @@ export default {
       })
     }
 
+    /**
+     * リアクションを更新した時のブロードキャスト受信
+     */
     window.Echo.channel("update-reaction").listen('.ReactionEvent', result => {
       const reaction = result.reaction
 
@@ -566,40 +642,14 @@ export default {
       }
     })
 
+    /**
+     * メンションを作成した時のブロードキャスト受信
+     */
     window.Echo.channel("create-mention").listen('.MentionEvent', result => {
       if (Push.Permission.has() && result.userId == userId.value) {
         Push.create('メッセージが届きました。', { body: result.message, icon: result.speakerImagePath })
       }
     })
-
-    const reactionMessage = (messageId) => {
-      isShowCenterEmojiPicker.value = true
-      selectMessageId.value = messageId
-    }
-
-    const threadMessage = async (messageId) => {
-      showLoading.value = true
-
-      const message = messages.value.filter(function (message) { return message.id == messageId } )
-      threadMessageParam.value = message[0]
-      isShowThread.value = true
-
-      const threadMessages = await FetchThreadMessages(message[0].id)
-      threadModal.value.threadMessages = threadMessages
-      threadModal.value.parentMessageId = message[0].id
-
-      nextTick(() => {
-        threadModal.value.scrollMessageListArea()
-        showLoading.value = false
-      })
-    }
-
-    onMounted(async () => {
-      await initLoading()
-      if (Push.Permission.has() == false) {
-        Push.create('laravel-vue-slackへようこそ')
-      }
-    });
 
     return {
       userId,
@@ -657,6 +707,7 @@ export default {
       chatMessages,
       updateAreaReaction,
       addChannelModal,
+      addMemberModal,
       channelAddMemberModal
     }
   },

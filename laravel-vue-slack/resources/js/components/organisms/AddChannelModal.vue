@@ -15,6 +15,7 @@
       <form-text
         ref="channelName"
         class="mb-2"
+        :class="{ 'ring-2' : v$.checkChannelName.$error, 'ring-red-500' : v$.checkChannelName.$error }"
         type="text"
         v-model="checkChannelName"
         @event:updateText="updateAddChannelName"
@@ -30,6 +31,7 @@
       <form-text
         ref="channelDescription"
         class="mb-2"
+        :class="{ 'ring-2' : v$.checkChannelDescription.$error, 'ring-red-500' : v$.checkChannelDescription.$error }"
         type="description"
         v-model="checkChannelDescription"
         @event:updateText="updateAddChannelDescription"
@@ -73,7 +75,7 @@ export default {
     }
 
     /**
-     * 説明を更新するためのemitする
+     * 説明を更新するためにemitする
      * @param {string} text チャンネル名
      */
     const updateAddChannelDescription = (text) => {
