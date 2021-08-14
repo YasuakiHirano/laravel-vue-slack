@@ -39,7 +39,9 @@ class ChannelController extends Controller
             'channel_id' => $channel->id
         ]);
 
-        broadcast(new ChannelEvent('create-channel', $channel));
+        /** @var Collection|null */
+        $fetchChannel = (new Channel())->fetchChannelList([$channel->id]);
+        broadcast(new ChannelEvent('create-channel', $fetchChannel->toArray(), $userId));
         return response()->json('Channel registration completed.', Response::HTTP_OK);
     }
 

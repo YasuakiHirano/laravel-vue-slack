@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ChannelUser;
 use App\Models\User;
+use App\Models\Channel;
+use App\Events\ChannelUserEvent;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +29,14 @@ class ChannelUserController extends Controller
                 'channel_id' => $request->channel_id,
                 'user_id' => $userId,
             ]);
+        }
+
+        /** @var Collection|null */
+        $channelUsers = (new ChannelUser())->fetchChannelUsers($request->channel_id);
+        if ($channelUsers) {
+          /** @var Collection|null */
+          $channelObject = (new Channel())->fetchChannelList([$request->channel_id]);
+          broadcast(new ChannelUserEvent('create-channel-user', $request->channel_id, $channelUsers->toArray(), $channelObject->toArray()));
         }
 
         return response()->json('ChannelUser created completed.', Response::HTTP_OK);

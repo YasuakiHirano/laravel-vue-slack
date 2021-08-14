@@ -80,7 +80,7 @@
         <add-channel-success-modal
           :showModal="showAddChannelSuccess"
           @event:modalAction="showAddChannelSuccess = false" />
-        <!----チャンネル情報表示-->
+        <!----チャンネル情報表示---->
         <channel-detail-modal
           :showModal="showChannelDetail"
           :isChannelTab="isChannelTab"
@@ -93,17 +93,21 @@
           @event:editChannelDescription="showEditChannelDescription = true"
           @event:addChannelMember="showAddChannelMember = true"
           @event:modalAction="showChannelDetail = false" />
+        <!----チャンネル説明編集---->
         <channel-description-edit-modal
           :showModal="showEditChannelDescription"
           :description="channelDescription"
           @event:modalAction="updateChannelDescription"
           @event:updateDescription="updateDescription"
           @event:modalClose="showEditChannelDescription = false" />
+        <!----チャンネルメンバー追加---->
         <channel-add-member-modal
+          ref="channelAddMemberModal"
           :showModal="showAddChannelMember"
           :notChannelUsers="notChannelUsers"
           @event:addUsers="channelAddUsers"
           @event:modalClose="showAddChannelMember = false" />
+        <!----リアクション用の絵文字ピッカー---->
         <emoji-picker
           class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
           @event:selectEmoji="reactionEmoji"
@@ -113,10 +117,12 @@
           @click="isShowEmojiPicker = false"
           v-show="isShowEmojiPicker">
         </div>
+        <!----絵文字入力用の絵文字ピッカー---->
         <emoji-picker
           class="absolute bottom-20 right-4"
           @event:selectEmoji="inputEmoji"
           :isShow="isShowEmojiPicker" />
+        <!----メンションユーザー選択---->
         <mention-member-modal
           ref="mentionMemberModal"
           :showModal="isShowMentionMember"
@@ -124,6 +130,7 @@
           @event:modalClose="isShowMentionMember = false"
           @event:mentionUsers="selectMentionUsers"
         />
+        <!----スレッド---->
         <thread-modal
           ref="threadModal"
           :showModal="isShowThread"
@@ -139,7 +146,7 @@
 </template>
 
 <script>
-import { onMounted, onBeforeUpdate, ref, nextTick } from 'vue'
+import { onMounted, onBeforeUpdate, ref, nextTick, callWithAsyncErrorHandling } from 'vue'
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages, FetchThreadMessages } from '../../apis/message.api.js'
@@ -186,6 +193,7 @@ export default {
     const threadModal = ref(null)
     const chatMessageItems = ref([])
     const addChannelModal = ref(null)
+    const channelAddMemberModal = ref(null)
 
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
@@ -282,17 +290,25 @@ export default {
       // 初期ローディングを動かす
       await initLoading()
 
-      // チャンネル情報を設置する
+      // チャンネル情報を設定する
       findChannelName()
     }
 
+    /**
+     * SideMenuからチャンネル一覧を受け取る
+     * @param {array} channels チャンネル一覧
+     */
     const fetchChannels = (channels) => {
       channelList.value = channels
+
+      // チャンネル情報を設定する
       findChannelName()
     }
 
+    /**
+     * チャンネル一覧からチャンネル情報を取得して設定する
+     */
     const findChannelName = () => {
-      // チャンネル情報から現在のチャンネル名取得
       const channel = channelList.value.find(channel => channel.id === selectChannel.value)
 
       channelName.value = channel.name
@@ -348,8 +364,16 @@ export default {
       }
     }
 
+    /**
+     * チャンネルにユーザーを追加する処理
+     * @param {array} addUsers チャンネルに追加するユーザーID配列
+     */
     const channelAddUsers = async (addUsers) => {
+      // チャンネルにユーザーを追加する
       await CreateChannelUsers(selectChannel.value, addUsers)
+
+      // 選択していた追加ユーザーのクリア
+      channelAddMemberModal.value.selectUsers = []
       showAddChannelMember.value = false
     }
 
@@ -425,7 +449,6 @@ export default {
       const content = result.message
       const messageId = result.messageId
 
-
       if (result.isThreadMessage) {
         threadModal.value.threadMessages.filter((message) => {
           if (message.id == messageId) {
@@ -442,7 +465,35 @@ export default {
     })
 
     window.Echo.channel("create-channel").listen('.ChannelEvent', result => {
-      channelList.value.push(result.channelObject)
+      if (result.makeUserId === userId.value) {
+        channelList.value.push(result.channelObject[0])
+      }
+    })
+
+    window.Echo.channel("create-channel-user").listen('.ChannelUserEvent', result => {
+      // メンバーが追加されたときに、追加したユーザーだった場合
+      if (selectChannel.value == result.channelId) {
+        channelUsers.value = result.channelUsers
+
+        // メンバー追加用ユーザーから追加したユーザーを消す
+        channelUsers.value.filter((channelUser) => {
+          notChannelUsers.value = notChannelUsers.value.filter((notChannelUser) => {
+            return channelUser.name != notChannelUser.name
+          })
+        })
+
+        userCount.value = channelUsers.value.length
+      } else {
+        let channelNames = []
+        channelList.value.filter((channel) => { channelNames.push(channel.name) })
+
+        channelUsers.value.filter((channelUser) => {
+          const channelObject = result.channelObject[0]
+          if(channelUser.name == userName.value && channelNames.indexOf(channelObject.name) == -1) {
+            channelList.value.push(channelObject)
+          }
+        })
+      }
     })
 
     window.Echo.channel("update-channel").listen('.ChannelEvent', result => {
@@ -575,7 +626,8 @@ export default {
       threadModal,
       chatMessages,
       updateAreaReaction,
-      addChannelModal
+      addChannelModal,
+      channelAddMemberModal
     }
   },
 }
