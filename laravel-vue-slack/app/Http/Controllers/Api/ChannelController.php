@@ -72,6 +72,7 @@ class ChannelController extends Controller
             'id' => 'required'
         ]);
 
+        /** @var Channel|null */
         $channel = Channel::find($request->id);
 
         $name = isset($request->name) ? $request->name : $channel->name;
@@ -84,10 +85,27 @@ class ChannelController extends Controller
             'is_public' => $isPublic,
         ]);
 
-        broadcast(new ChannelEvent('update-channel', $channel));
+        broadcast(new ChannelEvent('update-channel', $channel, null));
         return response()->json('Channel update completed.', Response::HTTP_OK);
     }
 
+    /**
+     * チャンネルを削除する
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function delete(Request $request) {
+        $request->validate([
+            'channel_id' => 'required'
+        ]);
+
+        $channel = Channel::find($request->channel_id);
+        $channel->delete();
+
+        broadcast(new ChannelEvent('delete-channel', $channel, null));
+        return response()->json('Channel update completed.', Response::HTTP_OK);
+    }
 
     /**
      * チャンネルに関連するユーザーの数を取得する

@@ -37,6 +37,18 @@ export const UpdateChannel = async (id, name, description, isPublic) => {
   return updated
 }
 
+export const DeleteChannel = async (channelId) => {
+    let deleted = false
+    await axios.delete('/api/channels', {
+      params: {
+        'channel_id': channelId,
+      }
+    }).then((result) => {
+      deleted = true
+    })
+    return deleted
+}
+
 export const CountChannelUsers = async (channelId) => {
   let count = null
   await axios.get('/api/channels/user_count', {

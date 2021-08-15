@@ -48,6 +48,7 @@ import FormText from './components/atoms/FormText.vue'
 import FormCheckbox from './components/atoms/FormCheckbox.vue'
 import FormActionButton from './components/atoms/FormActionButton.vue'
 import FormCancelButton from './components/atoms/FormCancelButton.vue'
+import FormDeleteButton from './components/atoms/FormDeleteButton.vue'
 import ChatUserImage from './components/atoms/ChatUserImage.vue'
 import ChatUserName from './components/atoms/ChatUserName.vue'
 import ChatUserDate from './components/atoms/ChatUserDate.vue'
@@ -85,6 +86,7 @@ app.component('form-text', FormText)
 app.component('form-checkbox', FormCheckbox)
 app.component('form-action-button', FormActionButton)
 app.component('form-cancel-button', FormCancelButton)
+app.component('form-delete-button', FormDeleteButton)
 app.component('chat-user-image', ChatUserImage)
 app.component('chat-user-name', ChatUserName)
 app.component('chat-user-date', ChatUserDate)

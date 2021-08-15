@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/channels', [ChannelController::class, 'create']);
     Route::get('/channels', [ChannelController::class, 'fetch']);
     Route::put('/channels', [ChannelController::class, 'update']);
+    Route::delete('/channels', [ChannelController::class, 'delete']);
     Route::get('/channels/user_count', [ChannelController::class, 'countChannelUser']);
 
     // チャンネルに関連するユーザー情報

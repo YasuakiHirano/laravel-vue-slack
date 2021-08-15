@@ -3,6 +3,7 @@
         <loading-display :isShow="showLoading" />
         <chat-header class="header" :userName="userName" />
         <side-menu
+          ref="sideMenu"
           class="side-menu"
           :channelId="selectChannel"
           @event:SelectChannel="changeChannel"
@@ -91,6 +92,7 @@
           :createUser="channelCreateUser"
           :isChannelPublic="isChannelPublic"
           :channelName="channelName"
+          @event:deleteChannel="deleteChannel"
           @event:editChannelDescription="showEditChannelDescription = true"
           @event:addChannelMember="showAddChannelMember = true"
           @event:modalAction="showChannelDetail = false" />
@@ -151,7 +153,7 @@ import { onMounted, onBeforeUpdate, ref, nextTick, callWithAsyncErrorHandling } 
 import { FindUser } from '../../apis/user.api.js'
 import { SendInvitationMail } from '../../apis/mail.api.js'
 import { FetchMessages, FetchThreadMessages } from '../../apis/message.api.js'
-import { CreateChannel, UpdateChannel } from '../../apis/channel.api.js'
+import { CreateChannel, UpdateChannel, DeleteChannel } from '../../apis/channel.api.js'
 import { CreateChannelUsers, FetchChannelUsers, FetchNotChannelUsers } from '../../apis/channelUser.api.js'
 import { CreateOrUpdateReaction } from '../../apis/reaction.api.js'
 
@@ -196,6 +198,7 @@ export default {
     const addChannelModal = ref(null)
     const addMemberModal = ref(null)
     const channelAddMemberModal = ref(null)
+    const sideMenu = ref(null)
 
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
@@ -275,7 +278,6 @@ export default {
       addChannelIsPrivate.value = value
     }
 
-
     /**
      * チャンネル追加モーダルからのチャンネル作成処理
      */
@@ -299,6 +301,22 @@ export default {
 
       showLoading.value = false
       showAddChannelSuccess.value = true
+    }
+
+    /**
+     * チャンネル詳細モーダルからのチャンネル削除
+     */
+    const deleteChannel = async () => {
+      showLoading.value = true
+
+      // チャンネルの削除
+      await DeleteChannel(selectChannel.value)
+
+      showLoading.value = false
+      showChannelDetail.value = false
+
+      // 表示するチャンネルの変更
+      await changeChannel(1)
     }
 
     /**
@@ -564,6 +582,18 @@ export default {
     })
 
     /**
+     * チャンネルを削除した時のブロードキャスト受信
+     */
+    window.Echo.channel("delete-channel").listen('.ChannelEvent', result => {
+      channelList.value = channelList.value.filter((channel) => {
+        return channel.id != result.channelObject.id
+      })
+      sideMenu.value.channels = sideMenu.value.channels.filter((channel) => {
+        return channel.id != result.channelObject.id
+      })
+    })
+
+    /**
      * チャンネルにユーザーを追加した時のブロードキャスト受信
      */
     window.Echo.channel("create-channel-user").listen('.ChannelUserEvent', result => {
@@ -708,7 +738,9 @@ export default {
       updateAreaReaction,
       addChannelModal,
       addMemberModal,
-      channelAddMemberModal
+      channelAddMemberModal,
+      deleteChannel,
+      sideMenu
     }
   },
 }
