@@ -9,12 +9,14 @@
       ref="chatTextArea"
       :channelName="channelName"
       :content="content"
+      @event:updateTextArea="isDisableSendMessage"
       class="mt-2"
     />
     <text-area-icons
       class="icon-area"
       :isCancel="isCancel"
       :isMention="isMention"
+      :isDiableSendMessageButton="isDiableSendMessageButton"
       @event:clickMentionIcon="$emit('event:clickMentionIcon')"
       @event:clickReactionIcon="$emit('event:clickReactionIcon')"
       @event:clickCancelIcon="$emit('event:clickCancelIcon')"
@@ -29,6 +31,10 @@ export default({
   setup(props, context) {
     const chatTextArea = ref(null)
     const mentionUserArea = ref(null)
+    const isDiableSendMessageButton = ref(true)
+    const isDisableSendMessage = () => {
+      isDiableSendMessageButton.value = (chatTextArea.value.text.length == 0)
+    }
 
     const sendMessage = async () => {
       if (props.isUpdate) {
@@ -37,6 +43,7 @@ export default({
         await CreateMessage(props.channelId, chatTextArea.value.text, props.userId, mentionUserArea.value.mentionUsers, props.parentMessageId)
         chatTextArea.value.text = ''
         mentionUserArea.value.mentionUsers = []
+        isDisableSendMessage()
       }
     }
 
@@ -48,7 +55,9 @@ export default({
       sendMessage,
       chatTextArea,
       mentionUserArea,
-      deleteMentionUser
+      deleteMentionUser,
+      isDisableSendMessage,
+      isDiableSendMessageButton
     }
   }
 })

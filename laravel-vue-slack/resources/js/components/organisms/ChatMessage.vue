@@ -73,6 +73,7 @@ export default({
 
     const editMessage = () => {
       isEditMode.value = true
+      chatInputArea.value.isDisableSendMessage()
     }
 
     const updateMessage = async (messageId, content) => {

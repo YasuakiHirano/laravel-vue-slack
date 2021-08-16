@@ -2,6 +2,7 @@
   <textarea
     class="resize-none border border-gray-800 rounded-md input-text p-3"
     v-model="text"
+    @keyup="$emit('event:updateTextArea')"
     :placeholder="channelName != undefined ? channelName + ' へのメッセージ' : ''"
   ></textarea>
 </template>
