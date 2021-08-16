@@ -93,15 +93,14 @@
           :isChannelPublic="isChannelPublic"
           :channelName="channelName"
           @event:deleteChannel="deleteChannel"
-          @event:editChannelDescription="showEditChannelDescription = true"
+          @event:editChannelDescription="openDescriptionEditModal"
           @event:addChannelMember="showAddChannelMember = true"
           @event:modalAction="showChannelDetail = false" />
         <!----チャンネル説明編集---->
         <channel-description-edit-modal
+          ref="channelDescriptionEditModal"
           :showModal="showEditChannelDescription"
-          :description="channelDescription"
           @event:modalAction="updateChannelDescription"
-          @event:updateDescription="updateDescription"
           @event:modalClose="showEditChannelDescription = false" />
         <!----チャンネルメンバー追加---->
         <channel-add-member-modal
@@ -198,6 +197,7 @@ export default {
     const addMemberModal = ref(null)
     const channelAddMemberModal = ref(null)
     const sideMenu = ref(null)
+    const channelDescriptionEditModal = ref(null)
 
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
@@ -361,19 +361,24 @@ export default {
     }
 
     /**
-     * チャンネルの説明箇所を更新する
+     * チャンネルの説明編集モーダルを開く
      */
-    const updateChannelDescription = async () => {
-      // チャンネルの説明を更新
-      await UpdateChannel(selectChannel.value, null, channelDescription.value, null)
-      showEditChannelDescription.value = false
+    const openDescriptionEditModal = () => {
+      channelDescriptionEditModal.value.description = channelDescription.value
+      showEditChannelDescription.value = true
     }
 
     /**
-     * チャンネルの説明変数を更新する
+     * チャンネルの説明箇所を更新する
      */
-    const updateDescription = (text) => {
-      channelDescription.value = text
+    const updateChannelDescription = async () => {
+      const error = await channelDescriptionEditModal.value.modalValidateError()
+      if (error) return
+
+      // チャンネルの説明を更新
+      await UpdateChannel(selectChannel.value, null, channelDescriptionEditModal.value.description, null)
+      channelDescription.value = channelDescriptionEditModal.value.description
+      showEditChannelDescription.value = false
     }
 
     /**
@@ -712,7 +717,6 @@ export default {
       updateAddChannelDescription,
       updateAddChannelIsPrivate,
       updateChannelDescription,
-      updateDescription,
       addChannelName,
       addChannelDescription,
       addChannelIsPrivate,
@@ -734,7 +738,9 @@ export default {
       addMemberModal,
       channelAddMemberModal,
       deleteChannel,
-      sideMenu
+      sideMenu,
+      channelDescriptionEditModal,
+      openDescriptionEditModal
     }
   },
 }
