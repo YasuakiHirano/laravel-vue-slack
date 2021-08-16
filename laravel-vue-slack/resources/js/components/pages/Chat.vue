@@ -166,7 +166,6 @@ export default {
     const channelName = ref('')
     const channelDescription = ref('')
     const channelCreateUser = ref('')
-    const channelList = ref('')
     const channelUsers = ref([])
     const notChannelUsers = ref([])
     const isChannelTab = ref(true)
@@ -344,7 +343,6 @@ export default {
      * @param {array} channels チャンネル一覧
      */
     const fetchChannels = (channels) => {
-      channelList.value = channels
 
       // チャンネル情報を設定する
       findChannelName()
@@ -354,7 +352,7 @@ export default {
      * チャンネル一覧からチャンネル情報を取得して設定する
      */
     const findChannelName = () => {
-      const channel = channelList.value.find(channel => channel.id === selectChannel.value)
+      const channel = sideMenu.value.channels.find(channel => channel.id === selectChannel.value)
 
       channelName.value = channel.name
       channelDescription.value = channel.description
@@ -577,7 +575,7 @@ export default {
      */
     window.Echo.channel("create-channel").listen('.ChannelEvent', result => {
       if (result.makeUserId === userId.value) {
-        channelList.value.push(result.channelObject[0])
+        sideMenu.value.channels.push(result.channelObject[0])
       }
     })
 
@@ -585,9 +583,6 @@ export default {
      * チャンネルを削除した時のブロードキャスト受信
      */
     window.Echo.channel("delete-channel").listen('.ChannelEvent', result => {
-      channelList.value = channelList.value.filter((channel) => {
-        return channel.id != result.channelObject.id
-      })
       sideMenu.value.channels = sideMenu.value.channels.filter((channel) => {
         return channel.id != result.channelObject.id
       })
@@ -611,12 +606,12 @@ export default {
         userCount.value = channelUsers.value.length
       } else {
         let channelNames = []
-        channelList.value.filter((channel) => { channelNames.push(channel.name) })
+        sideMenu.value.channels.filter((channel) => { channelNames.push(channel.name) })
 
         channelUsers.value.filter((channelUser) => {
           const channelObject = result.channelObject[0]
           if(channelUser.name == userName.value && channelNames.indexOf(channelObject.name) == -1) {
-            channelList.value.push(channelObject)
+            sideMenu.value.channels.push(channelObject)
           }
         })
       }
@@ -628,7 +623,7 @@ export default {
     window.Echo.channel("update-channel").listen('.ChannelEvent', result => {
       const channel = result.channelObject
 
-      channelList.value.filter(targetChannel => {
+      sideMenu.value.channels.filter(targetChannel => {
         if (targetChannel.id == channel.id) {
           targetChannel.description = channel.description
         }
@@ -699,7 +694,6 @@ export default {
       addChannel,
       fetchChannels,
       messages,
-      channelList,
       channelName,
       channelDescription,
       channelCreateUser,

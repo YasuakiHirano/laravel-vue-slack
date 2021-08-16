@@ -37,9 +37,9 @@
               {{ createUser }}
             </div>
           </div>
-          <div class="w-full text-cencter flex justify-center items-center mt-5 mb-2">
+          <div class="w-full text-cencter flex justify-center items-center mt-5 mb-2" v-if="channelName != 'general'">
             <form-delete-button @click="$emit('event:deleteChannel')">
-              <cancel-icon class="w-5 h-5 mr-2" />チャンネルを削除する
+              <cancel-icon class="w-5 h-5 mr-2" />チャンネルを削除
             </form-delete-button>
           </div>
         </div>
