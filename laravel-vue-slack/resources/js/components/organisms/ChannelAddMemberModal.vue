@@ -39,6 +39,11 @@ export default {
   props: ['notChannelUsers', 'showModal'],
   setup(props, context) {
     const selectUsers = ref([])
+
+    /**
+     * ユーザーの一覧をクリックした時の処理
+     * @param {int} id 追加するユーザーID
+     */
     const clickUser = (id) => {
       if (selectUsers.value.indexOf(id) !== -1) {
         let index = selectUsers.value.indexOf(id)
@@ -48,6 +53,11 @@ export default {
       }
     }
 
+    /**
+     * 選択したユーザー一覧の背景を変更する
+     * @param {int} id 追加するユーザーID
+     * @returns {string} 背景色のクラス
+     */
     const selectUserStatus = (id) => {
       if (selectUsers.value !== null && selectUsers.value !== undefined) {
         if (selectUsers.value.indexOf(id) !== -1) {
@@ -57,6 +67,9 @@ export default {
       return ''
     }
 
+    /**
+     * ユーザー追加ボタンを押したときにemitする
+     */
     const addUser = () => {
       context.emit('event:addUsers', selectUsers.value)
     }

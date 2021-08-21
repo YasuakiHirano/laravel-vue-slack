@@ -36,6 +36,9 @@ export default({
       isDiableSendMessageButton.value = (chatTextArea.value.text.length == 0)
     }
 
+    /**
+     * メッセージの送信ボタンを押した時の処理
+     */
     const sendMessage = async () => {
       if (props.isUpdate) {
         context.emit('event:updateMessage', props.messageId, chatTextArea.value.text)
@@ -47,6 +50,10 @@ export default({
       }
     }
 
+    /**
+     * メンションを削除したときにemitする
+     * @param {string} mentionUser 削除するユーザー名
+     */
     const deleteMentionUser = (mentionUser) => {
       context.emit('evnet:deleteMentionUser', mentionUser)
     }

@@ -68,6 +68,10 @@ export default {
     const channelTabClass = ref('')
     const memberTabClass = ref('')
 
+    /**
+     * タブを選択した時の処理
+     * @param {boolean} isChannelTab true(チャンネル)/false(メンバー)
+     */
     const selectChannel = (isChannelTab) => {
       if (isChannelTab) {
         memberTabClass.value = 'text-gray-600 py-4 w-1/2 block hover:text-blue-500 focus:outline-none'

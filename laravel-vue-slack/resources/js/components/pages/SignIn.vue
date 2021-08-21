@@ -33,7 +33,6 @@ export default {
     const emailAddress = ref('')
     const password = ref('')
 
-
     /**
      * サインインする
      */

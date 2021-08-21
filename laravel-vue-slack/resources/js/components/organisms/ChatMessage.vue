@@ -59,23 +59,44 @@ export default({
     const chatInputArea = ref(null)
     const isEditMode = ref(false)
 
+    /**
+     * メッセージのリアクションボタンを押したときにemitする
+     * @param {int} messageId メッセージID
+     */
     const reactionMessage = async (messageId) => {
       context.emit('event:reactionMessage', messageId)
     }
 
+    /**
+     * メッセージのスレッドボタンを押したときにemitする
+     * @param {int} messageId メッセージID
+     */
     const threadMessage = async (messageId) => {
       context.emit('event:threadMessage', messageId)
     }
 
-    const deleteMessage = async (messageId, channelId) => {
-      await DeleteMessage(messageId, channelId)
-    }
-
+    /**
+     * メッセージの編集ボタンを押したときの処理
+     */
     const editMessage = () => {
       isEditMode.value = true
       chatInputArea.value.isDisableSendMessage()
     }
 
+    /**
+     * メッセージの削除ボタンを押したときにemitする
+     * @param {int} messageId メッセージID
+     * @param {int} channelId チャンネルID
+     */
+    const deleteMessage = async (messageId, channelId) => {
+      await DeleteMessage(messageId, channelId)
+    }
+
+    /**
+     * メッセージの編集後に更新する処理
+     * @param {int} messageId メッセージID
+     * @param {string} content 編集内容
+     */
     const updateMessage = async (messageId, content) => {
       const updated = await UpdateMessage(messageId, content, props.channelId)
       if (updated) {
@@ -83,6 +104,10 @@ export default({
       }
     }
 
+    /**
+     * メッセージのリアクションがクリックされたとき
+     * @param {int} reactionId リアクションID
+     */
     const updateReaction = async (reactionId) => {
       await UpdateReactionNumber(reactionId, props.userId)
     }

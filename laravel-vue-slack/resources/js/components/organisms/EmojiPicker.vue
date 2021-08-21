@@ -18,6 +18,10 @@ export default({
     let emojiIndex = new EmojiIndex(data)
     let emojisOutput = ''
 
+    /**
+     * 絵文字の選択後にemitする
+     * @param {string} emoji 選択した絵文字
+     */
     const selectEmoji = (emoji) => {
       content.emit('event:selectEmoji', emoji)
     }
