@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import router from '../../router/index.js'
 import { ref, onMounted } from 'vue'
 import { FetchChannel } from '../../apis/channel.api.js'
 export default {
@@ -27,6 +28,10 @@ export default {
     const channels = ref([])
     const isShowList = ref(false)
 
+    /**
+     * チャンネル一覧の表示/非表示切り替え
+     * @param {boolean} toggle
+     */
     const toggleShowList = (toggle) => {
       isShowList.value = toggle
     }
@@ -36,9 +41,15 @@ export default {
     }
 
     onMounted(async () => {
-      const responseChannels = await FetchChannel()
-      channels.value = responseChannels
-      context.emit('event:FetchChannels', responseChannels)
+      try {
+        const responseChannels = await FetchChannel()
+        channels.value = responseChannels
+        context.emit('event:FetchChannels', responseChannels)
+      } catch (error) {
+        if (error.response.status === 401) {
+          router.push({ path: '/' })
+        }
+      }
     });
 
     return {
