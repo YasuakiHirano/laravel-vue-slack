@@ -33,7 +33,9 @@ export default({
     const mentionUserArea = ref(null)
     const isDiableSendMessageButton = ref(true)
     const isDisableSendMessage = () => {
-      isDiableSendMessageButton.value = (chatTextArea.value.text.length == 0)
+      if (chatTextArea.value.text !== undefined && chatTextArea.value.text !== '') {
+        isDiableSendMessageButton.value = (chatTextArea.value.text.length == 0)
+      }
     }
 
     /**
