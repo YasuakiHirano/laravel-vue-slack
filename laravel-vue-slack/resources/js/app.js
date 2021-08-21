@@ -126,6 +126,7 @@ import UserEntryCount  from './components/molecules/UserEntryCount.vue'
 import ChatHeader  from './components/molecules/ChatHeader.vue'
 import LoadingDisplay  from './components/molecules/LoadingDisplay.vue'
 import AddMember  from './components/molecules/AddMember.vue'
+import ErrorAlert  from './components/molecules/ErrorAlert.vue'
 
 app.component('app-title', AppTitle)
 app.component('reaction-circle', ReactionCircle)
@@ -136,6 +137,7 @@ app.component('user-entry-count', UserEntryCount)
 app.component('chat-header', ChatHeader)
 app.component('loading-display', LoadingDisplay)
 app.component('add-member', AddMember)
+app.component('error-alert', ErrorAlert)
 
 // organisms
 import SideMenu  from './components/organisms/SideMenu.vue'
