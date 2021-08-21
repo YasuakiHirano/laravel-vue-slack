@@ -26,7 +26,7 @@ class MailController extends Controller
      */
     public function sendInvitation(Request $request) {
         $request->validate([
-            'email' => 'required'
+            'email' => 'required|unique:users,email'
         ]);
 
         $imageNumber = mt_rand($this->randomImageMin, $this->randomImageMax);

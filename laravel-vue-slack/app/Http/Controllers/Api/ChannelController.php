@@ -20,7 +20,7 @@ class ChannelController extends Controller
      */
     public function create(Request $request) {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:channels,name',
             'description' => 'required',
             'is_private' => 'required',
         ]);

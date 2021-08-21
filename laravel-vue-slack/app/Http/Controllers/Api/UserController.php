@@ -23,7 +23,7 @@ class UserController extends Controller
     public function create(Request $request) {
         /** @var Illuminate\Validation\Validator $validator */
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:users,name',
             'email' => 'required|email|unique:users,email',
             'password' => 'required'
         ]);
