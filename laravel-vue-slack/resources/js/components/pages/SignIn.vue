@@ -18,6 +18,10 @@
       </div>
       <sign-in-button class="mt-5" @event:SignIn="signIn" />
     </div>
+    <error-alert
+      :isShow="isErrorAlertShow"
+      :message="errorMessage"
+      @event:errorMessageClose="isErrorAlertShow = false" />
   </div>
 </template>
 
@@ -27,11 +31,14 @@ import router from '../../router/index.js'
 import { UserSignIn } from '../../apis/signIn.api.js'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required, maxLength } from '@vuelidate/validators'
+import { findErrorMessage } from '../../util/ErrorUtil.js'
 
 export default {
   setup() {
     const emailAddress = ref('')
     const password = ref('')
+    const errorMessage = ref('')
+    const isErrorAlertShow = ref(false)
 
     /**
      * サインインする
@@ -40,9 +47,14 @@ export default {
       const isFormCorrect = await v$.value.$validate()
       if (!isFormCorrect) return
 
-      const isSignIn = await UserSignIn(emailAddress.value, password.value)
-      if (isSignIn) {
-        router.push({ path: 'chat' })
+      try {
+        const isSignIn = await UserSignIn(emailAddress.value, password.value)
+        if (isSignIn) {
+          router.push({ path: 'chat' })
+        }
+      } catch (error) {
+        errorMessage.value = findErrorMessage(error)
+        isErrorAlertShow.value = true;
       }
     }
 
@@ -57,7 +69,9 @@ export default {
       signIn,
       emailAddress,
       password,
-      v$
+      v$,
+      errorMessage,
+      isErrorAlertShow
     }
   }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
 use \Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +27,6 @@ class SignInController extends Controller
             return response()->json('OK.', Response::HTTP_OK);
         }
 
-        return response()->json('User Not Found.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        return response()->json(Lang::get('message.user_not_found'), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
