@@ -19,6 +19,10 @@
       </div>
       <account-create-button class="mt-5" @event:AccountCreate="accountCreate" />
     </div>
+    <error-alert
+      :isShow="isErrorAlertShow"
+      :message="errorMessage"
+      @event:errorMessageClose="isErrorAlertShow = false" />
   </div>
 </template>
 
@@ -27,12 +31,15 @@ import { ref } from 'vue'
 import { CreateUser } from '../../apis/user.api.js'
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
+import { findErrorMessage } from '../../util/ErrorUtil.js'
 
 export default {
   props: ['sendEmail'],
   setup(props) {
     const inputName = ref('')
     const inputPassword = ref('')
+    const errorMessage = ref('')
+    const isErrorAlertShow = ref(false)
 
     /**
      * 入力値からアカウントを作成する
@@ -41,9 +48,14 @@ export default {
       const isFormCorrect = await v$.value.$validate()
       if (!isFormCorrect) return
 
-      const created = await CreateUser(props.sendEmail, inputName.value, inputPassword.value)
-      if (created) {
+      try {
+        const created = await CreateUser(props.sendEmail, inputName.value, inputPassword.value)
+        if (created) {
           location.href = location.protocol + "//" +location.host + "/#/chat"
+        }
+      } catch (error) {
+        errorMessage.value = findErrorMessage(error)
+        isErrorAlertShow.value = true
       }
     }
 
@@ -58,7 +70,9 @@ export default {
       accountCreate,
       inputName,
       inputPassword,
-      v$
+      v$,
+      errorMessage,
+      isErrorAlertShow
     }
   }
 }

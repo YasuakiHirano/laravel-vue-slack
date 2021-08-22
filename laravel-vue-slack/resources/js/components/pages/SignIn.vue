@@ -54,7 +54,7 @@ export default {
         }
       } catch (error) {
         errorMessage.value = findErrorMessage(error)
-        isErrorAlertShow.value = true;
+        isErrorAlertShow.value = true
       }
     }
 
