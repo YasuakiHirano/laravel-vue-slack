@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ChannelEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChannelRequests\CountChannelRequest;
+use App\Http\Requests\ChannelRequests\CreateChannelRequest;
+use App\Http\Requests\ChannelRequests\DeleteChannelRequest;
+use App\Http\Requests\ChannelRequests\UpdateChannelRequest;
 use App\Models\Channel;
 use App\Models\ChannelUser;
 use Illuminate\Support\Facades\Auth;
@@ -15,16 +19,10 @@ class ChannelController extends Controller
     /**
      * チャンネルを作成する
      *
-     * @param Request $request
+     * @param CreateChannelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request) {
-        $request->validate([
-            'name' => 'required|unique:channels,name',
-            'description' => 'required',
-            'is_private' => 'required',
-        ]);
-
+    public function create(CreateChannelRequest $request) {
         $userId = Auth::id();
 
         $channel = Channel::create([
@@ -48,7 +46,6 @@ class ChannelController extends Controller
     /**
      * サインインユーザーに関連するチャンネル一覧取得
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function fetch() {
@@ -64,14 +61,10 @@ class ChannelController extends Controller
     /**
      * チャンネル(名前・説明・公開/非公開)を更新する
      *
-     * @param Request $request
+     * @param UpdateChannelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request) {
-        $request->validate([
-            'id' => 'required'
-        ]);
-
+    public function update(UpdateChannelRequest $request) {
         /** @var Channel|null */
         $channel = Channel::find($request->id);
 
@@ -92,14 +85,10 @@ class ChannelController extends Controller
     /**
      * チャンネルを削除する
      *
-     * @param Request $request
+     * @param DeleteChannelRequest $request
      * @return void
      */
-    public function delete(Request $request) {
-        $request->validate([
-            'channel_id' => 'required'
-        ]);
-
+    public function delete(DeleteChannelRequest $request) {
         $channel = Channel::find($request->channel_id);
         $channel->delete();
 
@@ -110,10 +99,10 @@ class ChannelController extends Controller
     /**
      * チャンネルに関連するユーザーの数を取得する
      *
-     * @param Request $request
+     * @param CountChannelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function countChannelUser(Request $request) {
+    public function countChannelUser(CountChannelRequest $request) {
         $count = ChannelUser::whereChannelId($request->channel_id)->count();
         return response()->json($count, Response::HTTP_OK);
     }
