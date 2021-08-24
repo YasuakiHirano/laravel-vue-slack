@@ -157,6 +157,14 @@ return [
         'channel_id' => 'チャンネルID',
         'content' => 'テキストの内容',
         'message_id' => 'メッセージID',
+        'description' => 'チャンネル説明',
+        'is_private' => 'プライベート設定',
+        'user_id' => 'ユーザーID',
+        'user_ids' => 'ユーザーID(複数)',
+        'reaction_id' => 'リアクションID',
+        'reaction_user_id' => 'リアクションをしたユーザーID',
+        'icon_code' => 'アイコンコード',
+        'icon' => 'アイコン',
     ],
 
 ];

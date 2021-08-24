@@ -29,4 +29,11 @@ class CreateChannelRequest extends FormRequest
             'is_private' => 'required',
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'チャンネル名'
+        ];
+    }
 }

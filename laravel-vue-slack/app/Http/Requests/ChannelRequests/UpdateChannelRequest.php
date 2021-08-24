@@ -27,4 +27,11 @@ class UpdateChannelRequest extends FormRequest
             'id' => 'required',
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'id' => 'チャンネルID'
+        ];
+    }
 }
