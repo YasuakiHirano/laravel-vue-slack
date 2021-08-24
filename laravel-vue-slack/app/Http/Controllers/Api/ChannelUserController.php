@@ -7,7 +7,8 @@ use App\Models\ChannelUser;
 use App\Models\User;
 use App\Models\Channel;
 use App\Events\ChannelUserEvent;
-use Illuminate\Http\Request;
+use App\Http\Requests\ChannelUserRequests\CreateChannelUserRequest;
+use App\Http\Requests\ChannelUserRequests\FetchChannelUserRequest;
 use \Symfony\Component\HttpFoundation\Response;
 
 class ChannelUserController extends Controller
@@ -15,15 +16,10 @@ class ChannelUserController extends Controller
     /**
      * チャンネルに関連するユーザーを作成する
      *
-     * @param Request $request
+     * @param CreateChannelUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request) {
-        $request->validate([
-            'channel_id' => 'required',
-            'user_ids' => 'required',
-        ]);
-
+    public function create(CreateChannelUserRequest $request) {
         foreach ($request->user_ids as $userId) {
             ChannelUser::create([
                 'channel_id' => $request->channel_id,
@@ -45,14 +41,10 @@ class ChannelUserController extends Controller
     /**
      * チャンネルIDに関連するユーザー一覧取得
      *
-     * @param Request $request
+     * @param FetchChannelUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fetch(Request $request) {
-        $request->validate([
-            'channel_id' => 'required'
-        ]);
-
+    public function fetch(FetchChannelUserRequest $request) {
         $channelUsers = (new ChannelUser())->fetchChannelUsers($request->channel_id);
 
         return response()->json($channelUsers, Response::HTTP_OK);
@@ -61,14 +53,10 @@ class ChannelUserController extends Controller
     /**
      * チャンネルIDに関連しないユーザー一覧取得
      *
-     * @param Request $request
+     * @param FetchChannelUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fetchNotChannelUsers(Request $request) {
-        $request->validate([
-            'channel_id' => 'required'
-        ]);
-
+    public function fetchNotChannelUsers(FetchChannelUserRequest $request) {
         $users = (new User())->fetchNotChannelUsers($request->channel_id);
 
         return response()->json($users, Response::HTTP_OK);
