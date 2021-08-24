@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ReactionEvent;
-use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\ReactionRequests\CreateReactionRequest;
+use App\Http\Requests\ReactionRequests\UpdateReactionRequest;
 use App\Models\Reaction;
 use App\Models\Message;
 use \Symfony\Component\HttpFoundation\Response;
@@ -15,17 +15,10 @@ class ReactionController extends Controller
     /**
      * リアクションを更新・作成する
      *
-     * @param Request $request
+     * @param CreateReactionRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateOrCreate(Request $request) {
-        $request->validate([
-            'message_id' => 'required',
-            'reaction_user_id' => 'required',
-            'icon_code' => 'required',
-            'icon' => 'required',
-        ]);
-
+    public function updateOrCreate(CreateReactionRequest $request) {
         $reaction = Reaction::whereMessageId($request->message_id)
                     ->whereIconCode($request->icon_code)->first();
 
@@ -51,15 +44,10 @@ class ReactionController extends Controller
     /**
      * リアクションの回数を+1する
      *
-     * @param Request $request
+     * @param UpdateReactionRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateReactionNumber(Request $request) {
-        $request->validate([
-            'reaction_id' => 'required',
-            'user_id' => 'required',
-        ]);
-
+    public function updateReactionNumber(UpdateReactionRequest $request) {
         $reaction = Reaction::find($request->reaction_id);
         $reaction->number += 1;
         $reaction->reaction_user_id = $request->user_id;
