@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Thread;
@@ -15,6 +14,7 @@ use App\Http\Requests\MessageRequests\UpdateMessageRequest;
 use App\Models\Mention;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use \Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
@@ -114,6 +114,10 @@ class MessageController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function fetchThreadMessage($parentMessageId) {
+        if (empty($parentMessageId)) {
+            return response()->json(Lang::get('message.message.parent_message_id_empty'), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $threads = Thread::whereParentMessageId($parentMessageId)->get();
 
         $messageQuery = (new Message())->createMessageQuery(null, $threads->pluck('message_id'));
@@ -179,7 +183,7 @@ class MessageController extends Controller
     public function delete(DeleteMessageRequest $request) {
         $message = Message::find($request->message_id);
         if ($message->user_id !== Auth::id()) {
-            return response()->json(['error' => '他のユーザーの投稿は削除できません。'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(Lang::get('message.message.other_user_post_delete'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $message->delete();
 

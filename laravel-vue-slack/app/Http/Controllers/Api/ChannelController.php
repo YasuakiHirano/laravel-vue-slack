@@ -12,7 +12,6 @@ use App\Models\Channel;
 use App\Models\ChannelUser;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {

@@ -156,6 +156,7 @@ return [
         'password' => 'パスワード',
         'channel_id' => 'チャンネルID',
         'content' => 'テキストの内容',
+        'message_id' => 'メッセージID',
     ],
 
 ];
