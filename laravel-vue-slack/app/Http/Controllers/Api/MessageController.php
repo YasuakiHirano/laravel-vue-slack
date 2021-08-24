@@ -8,6 +8,10 @@ use App\Models\Message;
 use App\Models\Thread;
 use App\Events\MessageEvent;
 use App\Events\MentionEvent;
+use App\Http\Requests\MessageRequests\CreateMessageRequest;
+use App\Http\Requests\MessageRequests\DeleteMessageRequest;
+use App\Http\Requests\MessageRequests\FetchMessageRequest;
+use App\Http\Requests\MessageRequests\UpdateMessageRequest;
 use App\Models\Mention;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,15 +22,10 @@ class MessageController extends Controller
     /**
      * メッセージを作成する
      *
-     * @param Request $request
+     * @param CreateMessageRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request) {
-        $request->validate([
-            'channel_id' => 'required',
-            'content' => 'required',
-        ]);
-
+    public function create(CreateMessageRequest $request) {
         // メッセージを作成する
         $isThreadMessage = isset($request->parent_message_id) ? true : false;
         $message = Message::create([
@@ -93,10 +92,10 @@ class MessageController extends Controller
     /**
      * メッセージ一覧を取得する
      *
-     * @param Request $request
+     * @param FetchMessageRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fetch(Request $request) {
+    public function fetch(FetchMessageRequest $request) {
         $messageQuery = (new Message())->createMessageQuery($request->channel_id);
 
         $messages = $messageQuery
@@ -111,7 +110,7 @@ class MessageController extends Controller
     /**
      * スレッドのメッセージ一覧を取得する
      *
-     * @param Request $request
+     * @param int $parentMessageId
      * @return \Illuminate\Http\JsonResponse
      */
     public function fetchThreadMessage($parentMessageId) {
@@ -128,6 +127,12 @@ class MessageController extends Controller
         return  response()->json($messages, Response::HTTP_OK);
     }
 
+    /**
+     * 取得したメッセージを編集する
+     *
+     * @param Collection $messages
+     * @return Collection
+     */
     private function editMessageProperty($messages) {
         // 全ユーザーのIDをキーに名前の配列を作成する
         $users = User::select(['id', 'name'])->get()->pluck('name', 'id');
@@ -152,16 +157,10 @@ class MessageController extends Controller
     /**
      * メッセージを更新する
      *
-     * @param Request $request
+     * @param UpdateMessageRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request) {
-        $request->validate([
-            'message_id' => 'required',
-            'content' => 'required',
-            'channel_id' => 'required',
-        ]);
-
+    public function update(UpdateMessageRequest $request) {
         $message = Message::find($request->message_id);
         $message->update([
             'content' => $request->content
@@ -174,15 +173,10 @@ class MessageController extends Controller
     /**
      * メッセージを削除する
      *
-     * @param Request $request
+     * @param DeleteMessageRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request) {
-        $request->validate([
-            'message_id' => 'required',
-            'channel_id' => 'required',
-        ]);
-
+    public function delete(DeleteMessageRequest $request) {
         $message = Message::find($request->message_id);
         if ($message->user_id !== Auth::id()) {
             return response()->json(['error' => '他のユーザーの投稿は削除できません。'], Response::HTTP_UNPROCESSABLE_ENTITY);
