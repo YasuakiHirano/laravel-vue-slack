@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateUserRequest;
 use App\Models\ChannelUser;
 use App\Models\UserInformation;
 use \Symfony\Component\HttpFoundation\Response;
@@ -20,21 +20,10 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request) {
-        /** @var Illuminate\Validation\Validator $validator */
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:users,name',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required'
-        ]);
-
+    public function create(CreateUserRequest $request) {
         $userInformation = UserInformation::whereSendEmail($request->email)->first();
         if (is_null($userInformation)) {
             return response()->json('Not found user entry data.', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // ユーザー作成

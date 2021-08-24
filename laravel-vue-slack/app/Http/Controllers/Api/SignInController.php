@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SignInRequest;
 use \Symfony\Component\HttpFoundation\Response;
 
 
@@ -17,13 +18,8 @@ class SignInController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signIn(Request $request) {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if (Auth::attempt($credentials)) {
+    public function signIn(SignInRequest $request) {
+        if (Auth::attempt($request->all())) {
             return response()->json('OK.', Response::HTTP_OK);
         }
 

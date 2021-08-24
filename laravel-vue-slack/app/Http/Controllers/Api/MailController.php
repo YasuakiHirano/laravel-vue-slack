@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Lang;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MailRequest;
 use Illuminate\Http\Request;
 use App\Models\UserInformation;
 use \Symfony\Component\HttpFoundation\Response;
@@ -24,11 +25,7 @@ class MailController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendInvitation(Request $request) {
-        $request->validate([
-            'email' => 'required|unique:users,email'
-        ]);
-
+    public function sendInvitation(MailRequest $request) {
         $imageNumber = mt_rand($this->randomImageMin, $this->randomImageMax);
         $userInformation = UserInformation::create([
             'image_number' => $imageNumber,
