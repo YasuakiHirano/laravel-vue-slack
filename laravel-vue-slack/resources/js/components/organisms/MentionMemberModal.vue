@@ -43,6 +43,11 @@ export default {
   props: ['channelUsers', 'showModal'],
   setup(props, context) {
     const selectUsers = ref([])
+
+    /**
+     * メンションするユーザーの選択処理
+     * @param {string} name ユーザー名
+     */
     const clickUser = (name) => {
       if (selectUsers.value.indexOf(name) !== -1) {
         let index = selectUsers.value.indexOf(name)
@@ -52,6 +57,10 @@ export default {
       }
     }
 
+    /**
+     * ユーザーが選択された場合に背景色をつける
+     * @param {string} name ユーザー名
+     */
     const selectUserStatus = (name) => {
       if (selectUsers.value !== null && selectUsers.value !== undefined) {
         if (selectUsers.value.indexOf(name) !== -1) {
@@ -61,6 +70,9 @@ export default {
       return ''
     }
 
+    /**
+     * 選択したユーザーを決定して、emitする
+     */
     const addUser = () => {
       context.emit('event:mentionUsers', selectUsers.value)
     }

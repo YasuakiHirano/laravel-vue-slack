@@ -404,6 +404,7 @@ export default {
 
     /**
      * チャンネル詳細モーダルのタブを切り替えたとき
+     * @param {boolean} value
      */
     const isChannelUpdate = (value) => {
       isChannelTab.value = value
@@ -411,6 +412,7 @@ export default {
 
     /**
      * テキストエリアの絵文字ピッカーで絵文字の選択時処理
+     * @param {object} emoji 絵文字オブジェクト
      */
     const inputEmoji = (emoji) => {
       if (chatInputArea.value.chatTextArea.text === undefined || chatInputArea.value.chatTextArea.text === null) {
@@ -463,6 +465,7 @@ export default {
 
     /**
      * メンションするユーザーを選択された時の処理
+     * @param {array} mentionUsers
      */
     const selectMentionUsers = (mentionUsers) => {
       chatInputArea.value.mentionUserArea.mentionUsers = mentionUsers
@@ -471,6 +474,7 @@ export default {
 
     /**
      * メンションの削除ボタンが押された時の処理
+     * @param {string} mentionUser メンションユーザー名
      */
     const deleteMentionUser = (mentionUser) => {
       chatInputArea.value.mentionUserArea.mentionUsers = chatInputArea.value.mentionUserArea.mentionUsers.filter((user) => { return user !== mentionUser })

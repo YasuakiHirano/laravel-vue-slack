@@ -22,18 +22,31 @@
 export default {
   props: ['messageId', 'channelId', 'isMyMessage', 'show', 'showThreadIcon'],
   setup(props, context) {
+
+    /**
+     * メッセージのリアクションボタンを押したときにemitする
+     */
     const reactionMessage = async () => {
       context.emit('event:reactionMessage', props.messageId)
     }
 
+    /**
+     * メッセージのスレッドボタンを押したときにemitする
+     */
     const threadMessage = async () => {
       context.emit('event:threadMessage', props.messageId)
     }
 
+    /**
+     * メッセージの削除ボタンを押したときにemitする
+     */
     const deleteMessage = async () => {
       context.emit('event:deleteMessage', props.messageId, props.channelId)
     }
 
+    /**
+     * メッセージの編集ボタンを押したときにemitする
+     */
     const editMessage = async () => {
       context.emit('event:editMessage', props.messageId)
     }

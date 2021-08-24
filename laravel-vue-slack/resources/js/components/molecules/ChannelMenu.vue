@@ -24,6 +24,9 @@ export default {
       toggleChannel: false
     });
 
+    /**
+     * チャンネル一覧の表示/非表示の切り替え
+     */
     const toggleChannels = () => {
       if (state.toggleChannel) {
         state.toggleChannel = false;

@@ -17,6 +17,9 @@ export default ({
       context.emit('evnet:deleteMentionUser', mentionUser)
     }
 
+    /**
+     * メンションユーザー一覧の開閉の切り替え
+     */
     const toggleArrow = () => {
       if (isArrowRight.value) {
         isArrowRight.value = false

@@ -101,31 +101,53 @@ export default {
       chatMessageItems.value = []
     })
 
+    /**
+     * スレッドメッセージ一覧のテキストエリアを配列に設定する
+     * @param {HTMLElement} el
+     */
     const chatMessages = (el) => {
       if (el) {
         chatMessageItems.value.push(el)
       }
     }
 
+    /**
+     * 一番下にスクロールさせる処理
+     */
     const scrollMessageListArea = () => {
       messageListArea.value.scrollTop = messageListArea.value.scrollHeight;
     }
 
+    /**
+     * メンションするユーザーを選択された時の処理
+     */
     const selectMentionUsers = (mentionUsers) => {
       threadChatInputArea.value.mentionUserArea.mentionUsers = mentionUsers
       isShowMentionMember.value = false
     }
 
+    /**
+     * リアクションボタンを押された時にemitする
+     * @param {int} messageId リアクションをつけるメッセージID
+     */
     const reactionMessage = (messageId) => {
       context.emit('event:reactionMessage', messageId)
     }
 
+    /**
+     * スレッドメッセージ一覧のメッセージ編集でリアクションがクリックされた時
+     * @param {int} index 選択したメッセージのキー
+     */
     const updateAreaReaction = (index) => {
       selectChatMessageKey = index
       isUpdateEditReaction = true
       isShowEmojiPicker.value = true
     }
 
+    /**
+     * テキストエリアの絵文字ピッカーで絵文字の選択時処理
+     * @param {object} emoji 絵文字オブジェクト
+     */
     const inputEmoji = (emoji) => {
       if (isUpdateEditReaction) {
         chatMessageItems.value[selectChatMessageKey].querySelector("textarea").value += emoji.native
@@ -144,6 +166,10 @@ export default {
       }
     }
 
+    /**
+     * メンションの削除ボタンが押された時の処理
+     * @param {string} mentionUser メンションユーザー名
+     */
     const deleteMentionUser = (mentionUser) => {
       threadChatInputArea.value.mentionUserArea.mentionUsers = threadChatInputArea.value.mentionUserArea.mentionUsers.filter((user) => { return user !== mentionUser })
       threadMentionMemberModal.value.selectUsers = threadMentionMemberModal.value.selectUsers.filter((user) => { return user !== mentionUser })

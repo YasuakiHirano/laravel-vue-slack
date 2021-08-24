@@ -36,6 +36,10 @@ export default {
       isShowList.value = toggle
     }
 
+    /**
+     * チャンネルを選択したときにemitする
+     * @param {boolean} channelId 選択したチャンネルのID
+     */
     const selectChannel = (channelId) => {
       context.emit('event:SelectChannel', channelId)
     }
