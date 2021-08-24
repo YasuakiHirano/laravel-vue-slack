@@ -1,150 +1,154 @@
 <template>
-    <div class="main">
-        <loading-display :isShow="showLoading" />
-        <chat-header class="header" :userName="userName" />
-        <side-menu
-          ref="sideMenu"
-          class="side-menu"
-          :channelId="selectChannel"
-          @event:SelectChannel="changeChannel"
-          @event:FetchChannels="fetchChannels"
-          @event:AddMember="showAddMember = true"
-          @event:AddChannel="showAddChannel = true" />
-        <div class="message-area">
-          <show-channel-name
-            :channelId="selectChannel"
-            :count="userCount"
-            @event:clickCountChannel="isChannelTab = false;showChannelDetail = true;"
-            @event:openChannelDetail="isChannelTab = true;showChannelDetail = true;"
-            @event:isChannelUpdate="isChannelUpdate"
-          >
-              <div class="flex">
-                <div v-if="isChannelPublic"><hash-icon class="mt-1 w-5 h-5"></hash-icon></div>
-                <div v-else><lock-icon class="mt-1 w-5 h-5"></lock-icon></div>
-                <div class="mr-1">{{ channelName }}</div>
-              </div>
-          </show-channel-name>
-          <div class="w-full overflow-y-scroll" ref="messageListArea">
-            <transition-group name="list" tag="div">
-              <div v-for="(message, index) in messages" :key="message.id" :ref="chatMessages">
-                 <chat-message
-                   class="mt-5 w-full"
-                   :channelId="selectChannel"
-                   :messageId="message.id"
-                   :date="message.date"
-                   :imagePath="message.imagePath"
-                   :postUserName="message.postUserName"
-                   :postTime="message.postTime"
-                   :reactions="message.reactions"
-                   :mentions="message.mentions"
-                   :content="message.content"
-                   :isMyMessage="userName === message.postUserName"
-                   :userId="userId"
-                   :isThreadCount="message.isThreadCount"
-                   :showThreadIcon="true"
-                   @event:reactionMessage="reactionMessage"
-                   @event:threadMessage="threadMessage"
-                   @event:updateAreaReaction="updateAreaReaction(index)" />
-              </div>
-            </transition-group>
+  <div class="main">
+    <loading-display :isShow="showLoading" />
+    <chat-header class="header" :userName="userName" />
+    <side-menu
+      ref="sideMenu"
+      class="side-menu"
+      :channelId="selectChannel"
+      @event:SelectChannel="changeChannel"
+      @event:FetchChannels="fetchChannels"
+      @event:AddMember="showAddMember = true"
+      @event:AddChannel="showAddChannel = true" />
+    <div class="message-area">
+      <show-channel-name
+        :channelId="selectChannel"
+        :count="userCount"
+        @event:clickCountChannel="isChannelTab = false;showChannelDetail = true;"
+        @event:openChannelDetail="isChannelTab = true;showChannelDetail = true;"
+        @event:isChannelUpdate="isChannelUpdate"
+      >
+          <div class="flex">
+            <div v-if="isChannelPublic"><hash-icon class="mt-1 w-5 h-5"></hash-icon></div>
+            <div v-else><lock-icon class="mt-1 w-5 h-5"></lock-icon></div>
+            <div class="mr-1">{{ channelName }}</div>
           </div>
-          <chat-input-area
-            ref="chatInputArea"
-            @event:clickMentionIcon="isShowMentionMember = true"
-            @event:clickReactionIcon="isShowEmojiPicker = true"
-            @evnet:deleteMentionUser="deleteMentionUser"
-            :userId="userId"
-            :channelId="selectChannel"
-            :channelName="channelName"
-            :isMention="true"
-            class="mt-2" />
-        </div>
-        <!--モーダル実装-->
-        <!----メンバー招待---->
-        <add-member-modal
-          ref="addMemberModal"
-          :showModal="showAddMember"
-          @event:modalAction="sendInvitationMail"
-          @event:modalClose="showAddMember = false"
-          @event:updateText="updateEmail" />
-        <add-member-success-modal
-          :showModal="showAddMemberSuccess"
-          @event:modalAction="showAddMemberSuccess = false" />
-        <!----チャンネル追加---->
-        <add-channel-modal
-          ref="addChannelModal"
-          :showModal="showAddChannel"
-          @event:modalClose="showAddChannel = false"
-          @event:modalAction="addChannel"
-          @event:updateAddChannelName="updateAddChannelName"
-          @event:updateAddChannelDescription="updateAddChannelDescription"
-          @event:updateAddChannelIsPrivate="updateAddChannelIsPrivate" />
-        <add-channel-success-modal
-          :showModal="showAddChannelSuccess"
-          @event:modalAction="showAddChannelSuccess = false" />
-        <!----チャンネル情報表示---->
-        <channel-detail-modal
-          :showModal="showChannelDetail"
-          :isChannelTab="isChannelTab"
-          :channelId="selectChannel"
-          :channelUsers="channelUsers"
-          :description="channelDescription"
-          :createUser="channelCreateUser"
-          :isChannelPublic="isChannelPublic"
-          :channelName="channelName"
-          @event:deleteChannel="deleteChannel"
-          @event:editChannelDescription="openDescriptionEditModal"
-          @event:addChannelMember="showAddChannelMember = true"
-          @event:modalAction="showChannelDetail = false" />
-        <!----チャンネル説明編集---->
-        <channel-description-edit-modal
-          ref="channelDescriptionEditModal"
-          :showModal="showEditChannelDescription"
-          @event:modalAction="updateChannelDescription"
-          @event:modalClose="showEditChannelDescription = false" />
-        <!----チャンネルメンバー追加---->
-        <channel-add-member-modal
-          ref="channelAddMemberModal"
-          :showModal="showAddChannelMember"
-          :notChannelUsers="notChannelUsers"
-          @event:addUsers="channelAddUsers"
-          @event:modalClose="showAddChannelMember = false" />
-        <!----リアクション用の絵文字ピッカー---->
-        <emoji-picker
-          class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
-          @event:selectEmoji="reactionEmoji"
-          :isShow="isShowCenterEmojiPicker" />
-        <div
-          class="absolute w-full h-full"
-          @click="isShowEmojiPicker = false"
-          v-show="isShowEmojiPicker">
-        </div>
-        <!----絵文字入力用の絵文字ピッカー---->
-        <emoji-picker
-          class="absolute bottom-20 right-4"
-          @event:selectEmoji="inputEmoji"
-          :isShow="isShowEmojiPicker" />
-        <!----メンションユーザー選択---->
-        <mention-member-modal
-          ref="mentionMemberModal"
-          :showModal="isShowMentionMember"
-          :channelUsers="channelUsers"
-          @event:modalClose="isShowMentionMember = false"
-          @event:mentionUsers="selectMentionUsers"
-        />
-        <!----スレッド---->
-        <thread-modal
-          ref="threadModal"
-          :showModal="isShowThread"
-          :message="threadMessageParam"
-          :channelId="selectChannel"
-          :channelUsers="channelUsers"
-          :userId="userId"
-          :userName="userName"
-          @event:reactionMessage="reactionMessage"
-          @event:modalClose="isShowThread = false"
-        />
+      </show-channel-name>
+      <div class="w-full overflow-y-scroll" ref="messageListArea">
+        <transition-group name="list" tag="div">
+          <div v-for="(message, index) in messages" :key="message.id" :ref="chatMessages">
+             <chat-message
+               class="mt-5 w-full"
+               :channelId="selectChannel"
+               :messageId="message.id"
+               :date="message.date"
+               :imagePath="message.imagePath"
+               :postUserName="message.postUserName"
+               :postTime="message.postTime"
+               :reactions="message.reactions"
+               :mentions="message.mentions"
+               :content="message.content"
+               :isMyMessage="userName === message.postUserName"
+               :userId="userId"
+               :isThreadCount="message.isThreadCount"
+               :showThreadIcon="true"
+               @event:reactionMessage="reactionMessage"
+               @event:threadMessage="threadMessage"
+               @event:updateAreaReaction="updateAreaReaction(index)" />
+          </div>
+        </transition-group>
+      </div>
+      <chat-input-area
+        ref="chatInputArea"
+        @event:clickMentionIcon="isShowMentionMember = true"
+        @event:clickReactionIcon="isShowEmojiPicker = true"
+        @evnet:deleteMentionUser="deleteMentionUser"
+        :userId="userId"
+        :channelId="selectChannel"
+        :channelName="channelName"
+        :isMention="true"
+        class="mt-2" />
     </div>
+    <!--モーダル実装-->
+    <!----メンバー招待---->
+    <add-member-modal
+      ref="addMemberModal"
+      :showModal="showAddMember"
+      @event:modalAction="sendInvitationMail"
+      @event:modalClose="showAddMember = false"
+      @event:updateText="updateEmail" />
+    <add-member-success-modal
+      :showModal="showAddMemberSuccess"
+      @event:modalAction="showAddMemberSuccess = false" />
+    <!----チャンネル追加---->
+    <add-channel-modal
+      ref="addChannelModal"
+      :showModal="showAddChannel"
+      @event:modalClose="showAddChannel = false"
+      @event:modalAction="addChannel"
+      @event:updateAddChannelName="updateAddChannelName"
+      @event:updateAddChannelDescription="updateAddChannelDescription"
+      @event:updateAddChannelIsPrivate="updateAddChannelIsPrivate" />
+    <add-channel-success-modal
+      :showModal="showAddChannelSuccess"
+      @event:modalAction="showAddChannelSuccess = false" />
+    <!----チャンネル情報表示---->
+    <channel-detail-modal
+      :showModal="showChannelDetail"
+      :isChannelTab="isChannelTab"
+      :channelId="selectChannel"
+      :channelUsers="channelUsers"
+      :description="channelDescription"
+      :createUser="channelCreateUser"
+      :isChannelPublic="isChannelPublic"
+      :channelName="channelName"
+      @event:deleteChannel="deleteChannel"
+      @event:editChannelDescription="openDescriptionEditModal"
+      @event:addChannelMember="showAddChannelMember = true"
+      @event:modalAction="showChannelDetail = false" />
+    <!----チャンネル説明編集---->
+    <channel-description-edit-modal
+      ref="channelDescriptionEditModal"
+      :showModal="showEditChannelDescription"
+      @event:modalAction="updateChannelDescription"
+      @event:modalClose="showEditChannelDescription = false" />
+    <!----チャンネルメンバー追加---->
+    <channel-add-member-modal
+      ref="channelAddMemberModal"
+      :showModal="showAddChannelMember"
+      :notChannelUsers="notChannelUsers"
+      @event:addUsers="channelAddUsers"
+      @event:modalClose="showAddChannelMember = false" />
+    <!----リアクション用の絵文字ピッカー---->
+    <emoji-picker
+      class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+      @event:selectEmoji="reactionEmoji"
+      :isShow="isShowCenterEmojiPicker" />
+    <div
+      class="absolute w-full h-full"
+      @click="isShowEmojiPicker = false"
+      v-show="isShowEmojiPicker">
+    </div>
+    <!----絵文字入力用の絵文字ピッカー---->
+    <emoji-picker
+      class="absolute bottom-20 right-4"
+      @event:selectEmoji="inputEmoji"
+      :isShow="isShowEmojiPicker" />
+    <!----メンションユーザー選択---->
+    <mention-member-modal
+      ref="mentionMemberModal"
+      :showModal="isShowMentionMember"
+      :channelUsers="channelUsers"
+      @event:modalClose="isShowMentionMember = false"
+      @event:mentionUsers="selectMentionUsers"
+    />
+    <!----スレッド---->
+    <thread-modal
+      ref="threadModal"
+      :showModal="isShowThread"
+      :message="threadMessageParam"
+      :channelId="selectChannel"
+      :channelUsers="channelUsers"
+      :userId="userId"
+      :userName="userName"
+      @event:reactionMessage="reactionMessage"
+      @event:modalClose="isShowThread = false"
+    />
+    <error-alert
+      :isShow="isErrorAlertShow"
+      :message="errorMessage"
+      @event:errorMessageClose="isErrorAlertShow = false" />
+  </div>
 </template>
 
 <script>
@@ -155,49 +159,52 @@ import { FetchMessages, FetchThreadMessages } from '../../apis/message.api.js'
 import { CreateChannel, UpdateChannel, DeleteChannel } from '../../apis/channel.api.js'
 import { CreateChannelUsers, FetchChannelUsers, FetchNotChannelUsers } from '../../apis/channelUser.api.js'
 import { CreateOrUpdateReaction } from '../../apis/reaction.api.js'
+import { findErrorMessage } from '../../util/ErrorUtil.js'
 
 export default {
   setup(props, context) {
-    const userId = ref(0)
-    const userName = ref('')
-    const userCount = ref(0)
-    const email = ref('')
-    const channelName = ref('')
-    const channelDescription = ref('')
+    const addChannelDescription = ref('')
+    const addChannelIsPrivate = ref(false)
+    const addChannelModal = ref(null)
+    const addChannelName = ref('')
+    const addMemberModal = ref(null)
+    const channelAddMemberModal = ref(null)
     const channelCreateUser = ref('')
+    const channelDescription = ref('')
+    const channelDescriptionEditModal = ref(null)
+    const channelName = ref('')
     const channelUsers = ref([])
-    const notChannelUsers = ref([])
-    const isChannelTab = ref(true)
+    const chatInputArea = ref(null)
+    const chatMessageItems = ref([])
+    const email = ref('')
+    const errorMessage = ref('')
     const isChannelPublic = ref(false)
-    const selectChannel = ref(1)
+    const isChannelTab = ref(true)
+    const isErrorAlertShow = ref(false)
+    const isShowCenterEmojiPicker = ref(false)
+    const isShowEmojiPicker = ref(false)
+    const isShowMentionMember = ref(false)
+    const isShowThread = ref(false)
+    const mentionMemberModal = ref(null)
+    const messageListArea = ref(null)
     const messages = ref([])
-    const showLoading = ref(true)
+    const notChannelUsers = ref([])
+    const selectChannel = ref(1)
+    const selectMessageId = ref(0)
+    const showAddChannel = ref(false)
+    const showAddChannelMember = ref(false)
+    const showAddChannelSuccess = ref(false)
     const showAddMember = ref(false)
     const showAddMemberSuccess = ref(false)
     const showChannelDetail = ref(false)
     const showEditChannelDescription = ref(false)
-    const showAddChannelMember = ref(false)
-    const messageListArea = ref(null)
-    const showAddChannel = ref(false)
-    const showAddChannelSuccess = ref(false)
-    const addChannelName = ref('')
-    const addChannelDescription = ref('')
-    const addChannelIsPrivate = ref(false)
-    const isShowEmojiPicker = ref(false)
-    const isShowCenterEmojiPicker = ref(false)
-    const isShowMentionMember = ref(false)
-    const threadMessageParam = ref([])
-    const isShowThread = ref(false)
-    const selectMessageId = ref(0)
-    const chatInputArea = ref(null)
-    const mentionMemberModal = ref(null)
-    const threadModal = ref(null)
-    const chatMessageItems = ref([])
-    const addChannelModal = ref(null)
-    const addMemberModal = ref(null)
-    const channelAddMemberModal = ref(null)
+    const showLoading = ref(true)
     const sideMenu = ref(null)
-    const channelDescriptionEditModal = ref(null)
+    const threadMessageParam = ref([])
+    const threadModal = ref(null)
+    const userCount = ref(0)
+    const userId = ref(0)
+    const userName = ref('')
 
     let isUpdateEditReaction = false
     let selectChatMessageKey = 0
@@ -241,8 +248,15 @@ export default {
       showAddMember.value = false
       showLoading.value = true
 
-      // 招待メールの送信
-      await SendInvitationMail(email.value)
+      try {
+        // 招待メールの送信
+        await SendInvitationMail(email.value)
+      } catch (error) {
+        errorMessage.value = findErrorMessage(error)
+        isErrorAlertShow.value = true
+        showLoading.value = false
+        return;
+      }
 
       // 入力値のクリア
       addMemberModal.value.checkEmailAddress = ''
@@ -287,8 +301,15 @@ export default {
       showAddChannel.value = false
       showLoading.value = true
 
-      // チャンネルを作成する
-      await CreateChannel(addChannelName.value, addChannelDescription.value, addChannelIsPrivate.value)
+      try {
+        // チャンネルを作成する
+        await CreateChannel(addChannelName.value, addChannelDescription.value, addChannelIsPrivate.value)
+      } catch (error) {
+        errorMessage.value = findErrorMessage(error)
+        isErrorAlertShow.value = true
+        showLoading.value = false
+        return;
+      }
 
       // 入力した内容のクリア
       addChannelModal.value.channelName.text = ''
@@ -682,65 +703,67 @@ export default {
     })
 
     return {
-      userId,
-      userName,
-      email,
-      userCount,
-      showLoading,
-      showAddMember,
-      showAddMemberSuccess,
-      showAddChannel,
-      showAddChannelSuccess,
-      showChannelDetail,
-      showEditChannelDescription,
-      showAddChannelMember,
-      sendInvitationMail,
-      updateEmail,
       addChannel,
-      fetchChannels,
-      messages,
-      channelName,
-      channelDescription,
-      channelCreateUser,
-      channelUsers,
-      channelAddUsers,
-      notChannelUsers,
-      isChannelTab,
-      isChannelPublic,
-      isChannelUpdate,
-      selectChannel,
-      messageListArea,
-      reactionMessage,
-      threadMessage,
-      changeChannel,
-      updateAddChannelName,
-      updateAddChannelDescription,
-      updateAddChannelIsPrivate,
-      updateChannelDescription,
-      addChannelName,
       addChannelDescription,
       addChannelIsPrivate,
-      isShowEmojiPicker,
+      addChannelModal,
+      addChannelName,
+      addMemberModal,
+      changeChannel,
+      channelAddMemberModal,
+      channelAddUsers,
+      channelCreateUser,
+      channelDescription,
+      channelDescriptionEditModal,
+      channelName,
+      channelUsers,
+      chatInputArea,
+      chatMessages,
+      deleteChannel,
+      deleteMentionUser,
+      email,
+      errorMessage,
+      fetchChannels,
+      inputEmoji,
+      isChannelPublic,
+      isChannelTab,
+      isChannelUpdate,
+      isErrorAlertShow,
       isShowCenterEmojiPicker,
+      isShowEmojiPicker,
       isShowMentionMember,
       isShowThread,
-      selectMentionUsers,
       mentionMemberModal,
-      deleteMentionUser,
-      inputEmoji,
+      messageListArea,
+      messages,
+      notChannelUsers,
+      openDescriptionEditModal,
       reactionEmoji,
-      chatInputArea,
+      reactionMessage,
+      selectChannel,
+      selectMentionUsers,
+      sendInvitationMail,
+      showAddChannel,
+      showAddChannelMember,
+      showAddChannelSuccess,
+      showAddMember,
+      showAddMemberSuccess,
+      showChannelDetail,
+      showEditChannelDescription,
+      showLoading,
+      sideMenu,
+      threadMessage,
       threadMessageParam,
       threadModal,
-      chatMessages,
+      updateAddChannelDescription,
+      updateAddChannelIsPrivate,
+      updateAddChannelName,
       updateAreaReaction,
-      addChannelModal,
-      addMemberModal,
-      channelAddMemberModal,
-      deleteChannel,
-      sideMenu,
-      channelDescriptionEditModal,
-      openDescriptionEditModal
+      updateChannelDescription,
+      updateEmail,
+      userCount,
+      userId,
+      userName,
     }
   },
 }
