@@ -32,8 +32,12 @@ export default({
     const chatTextArea = ref(null)
     const mentionUserArea = ref(null)
     const isDiableSendMessageButton = ref(true)
+
+    /**
+     * 送信アイコンの活性・非活性設定
+     */
     const isDisableSendMessage = () => {
-      if (chatTextArea.value.text !== undefined && chatTextArea.value.text !== '') {
+      if (chatTextArea.value.text !== undefined) {
         isDiableSendMessageButton.value = (chatTextArea.value.text.length == 0)
       }
     }

@@ -164,6 +164,7 @@ export default {
         threadChatInputArea.value.chatTextArea.text += emoji.native
         isShowEmojiPicker.value = false
       }
+      threadChatInputArea.value.isDisableSendMessage()
     }
 
     /**

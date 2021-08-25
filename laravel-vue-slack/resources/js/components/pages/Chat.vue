@@ -420,6 +420,7 @@ export default {
       }
 
       chatInputArea.value.chatTextArea.text += emoji.native
+      chatInputArea.value.isDisableSendMessage()
       isShowEmojiPicker.value = false
     }
 
@@ -448,6 +449,7 @@ export default {
         await CreateOrUpdateReaction(selectMessageId.value, userId.value, emoji.id, emoji.native)
         isShowCenterEmojiPicker.value = false
       }
+      chatInputArea.value.chatTextArea.text += emoji.native
     }
 
     /**
