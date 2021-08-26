@@ -24,7 +24,7 @@ class ChannelUser extends Model
     {
         return $this::select([
                     'users.name',
-                    DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as imagePath"),
+                    DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as \"imagePath\""),
                 ])
                 ->from('channel_users')
                 ->join('users', function($join) {

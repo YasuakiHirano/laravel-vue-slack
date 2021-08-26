@@ -55,7 +55,7 @@ class User extends Authenticatable
         return $this::select([
                     'users.id',
                     'users.name',
-                    DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as imagePath"),
+                    DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as \"imagePath\""),
                 ])
                 ->from('users')
                 ->join('user_information', function($join) {

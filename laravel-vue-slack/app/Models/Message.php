@@ -43,12 +43,12 @@ class Message extends Model
     public function createMessageQuery($channelId, $messageIds = null) {
         $query = $this::select([
             'messages.id',
-            DB::raw("DATE_FORMAT(messages.created_at, '%Y年%m月%d日') as date"),
-            DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as imagePath"),
+            DB::raw("TO_CHAR(messages.created_at, 'YYYY年MM月DD日') as \"date\""),
+            DB::raw("CONCAT('image/user_image_', user_information.image_number, '.png') as \"imagePath\""),
             "users.name as postUserName",
-            DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') as postTime"),
+            DB::raw("TO_CHAR(messages.created_at, 'HH24:MI') as \"postTime\""),
             "messages.content",
-            DB::raw("(SELECT count(*) FROM threads WHERE parent_message_id = messages.id) as isThreadCount"),
+            DB::raw("(SELECT count(*) FROM threads WHERE parent_message_id = messages.id) as \"isThreadCount\""),
         ])
        ->from('messages')
        ->join('users', function($join) {
@@ -78,6 +78,6 @@ class Message extends Model
      * @return void
      */
     public function countTodayMessage() {
-        return $this::where(DB::raw("DATE_FORMAT(messages.created_at, '%Y-%m-%d')"), '=', Carbon::now()->format('Y-m-d'))->count();
+        return $this::where(DB::raw("TO_CHAR(messages.created_at, 'YYYY-MM-DD')"), '=', Carbon::now()->format('Y-m-d'))->count();
     }
 }
