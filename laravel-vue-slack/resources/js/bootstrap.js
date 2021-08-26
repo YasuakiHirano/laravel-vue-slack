@@ -31,15 +31,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import Echo from "laravel-echo"
 
-window.Pusher = require('pusher-js');
+import Pusher from "pusher-js"
+const client = new Pusher("my-keys", {
+    cluster: "ap3",
+})
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'laravel_vue_chat_key',
-    wsHost: window.location.hostname,
-    wsPort: 6001,
-    forceTLS: false,
-    disableStats: true,
-});
+    key: 'my-keys',
+    cluster: 'my-clusters',
+    client: client,
+    encrypted: true
+})
+
 
 window.Push = require('push.js');
