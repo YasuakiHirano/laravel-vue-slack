@@ -449,7 +449,6 @@ export default {
         await CreateOrUpdateReaction(selectMessageId.value, userId.value, emoji.id, emoji.native)
         isShowCenterEmojiPicker.value = false
       }
-      chatInputArea.value.chatTextArea.text += emoji.native
     }
 
     /**
