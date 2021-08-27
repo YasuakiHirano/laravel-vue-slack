@@ -14,6 +14,8 @@ class MessageEvent implements ShouldBroadcast
 
     public $channel;
 
+    public $channelId;
+
     public $message;
 
     public $messageId;
@@ -25,9 +27,10 @@ class MessageEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($channel, $message, $messageId, $isThreadMessage)
+    public function __construct($channel, $channelId, $message, $messageId, $isThreadMessage)
     {
         $this->channel = $channel;
+        $this->channelId = $channelId;
         $this->message = $message;
         $this->messageId = $messageId;
         $this->isThreadMessage = $isThreadMessage;
