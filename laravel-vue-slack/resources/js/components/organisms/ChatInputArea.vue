@@ -49,10 +49,10 @@ export default({
       if (props.isUpdate) {
         context.emit('event:updateMessage', props.messageId, chatTextArea.value.text)
       } else {
+        isDiableSendMessageButton.value = true
         await CreateMessage(props.channelId, chatTextArea.value.text, props.userId, mentionUserArea.value.mentionUsers, props.parentMessageId)
         chatTextArea.value.text = ''
         mentionUserArea.value.mentionUsers = []
-        isDisableSendMessage()
       }
     }
 
