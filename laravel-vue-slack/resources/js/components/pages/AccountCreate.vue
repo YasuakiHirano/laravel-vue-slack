@@ -17,7 +17,7 @@
         <div v-if="error.$validator == 'required'">パスワードは必須です。</div>
         <div v-if="error.$validator == 'maxLength'">パスワードは50文字以下で入力してください。</div>
       </div>
-      <account-create-button class="mt-5" @event:AccountCreate="accountCreate" />
+      <account-create-button class="mt-5" @event:AccountCreate="accountCreate" :disabled="isDisableCreateButton" />
     </div>
     <error-alert
       :isShow="isErrorAlertShow"
@@ -40,6 +40,7 @@ export default {
     const inputPassword = ref('')
     const errorMessage = ref('')
     const isErrorAlertShow = ref(false)
+    const isDisableCreateButton = ref(false)
 
     /**
      * 入力値からアカウントを作成する
@@ -49,6 +50,7 @@ export default {
       if (!isFormCorrect) return
 
       try {
+        isDisableCreateButton.value = true
         const created = await CreateUser(props.sendEmail, inputName.value, inputPassword.value)
         if (created) {
           location.href = location.protocol + "//" +location.host + "/#/chat"
@@ -57,6 +59,8 @@ export default {
         errorMessage.value = findErrorMessage(error)
         isErrorAlertShow.value = true
       }
+
+      isDisableCreateButton.value = false
     }
 
     const rules = {
@@ -70,9 +74,10 @@ export default {
       accountCreate,
       inputName,
       inputPassword,
+      isDisableCreateButton,
       v$,
       errorMessage,
-      isErrorAlertShow
+      isErrorAlertShow,
     }
   }
 }
