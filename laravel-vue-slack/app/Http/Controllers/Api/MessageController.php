@@ -84,7 +84,7 @@ class MessageController extends Controller
         }
 
         // 作成したメッセージをブロードキャストで送信する
-        broadcast(new MessageEvent('create-message', $selectMessage->toArray(), null, $message->is_thread_message));
+        broadcast(new MessageEvent('create-message', $request->channel_id, $selectMessage->toArray(), null, $message->is_thread_message));
 
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }
@@ -170,7 +170,7 @@ class MessageController extends Controller
             'content' => $request->content
         ]);
 
-        broadcast(new MessageEvent('update-message', $request->content, $message->id, $message->is_thread_message));
+        broadcast(new MessageEvent('update-message', null, $request->content, $message->id, $message->is_thread_message));
         return response()->json('Message update completed.', Response::HTTP_OK);
     }
 
@@ -187,7 +187,7 @@ class MessageController extends Controller
         }
         $message->delete();
 
-        broadcast(new MessageEvent('delete-message', null, $message->id, $message->is_thread_message));
+        broadcast(new MessageEvent('delete-message', null, null, $message->id, $message->is_thread_message));
         return response()->json('Message delete completed.', Response::HTTP_OK);
     }
 }

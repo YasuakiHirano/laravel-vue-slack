@@ -558,7 +558,7 @@ export default {
         nextTick(() => {
           threadModal.value.scrollMessageListArea()
         })
-      } else {
+      } else if (result.channelId == selectChannel.value) {
         messages.value.push(result.message)
 
         nextTick(() => {
