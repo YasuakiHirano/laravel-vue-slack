@@ -13,12 +13,13 @@ RUN apt-get update && apt-get install -y \
    libonig-dev \
    libc-client-dev \
    libkrb5-dev \
-   libxml2-dev 
+   libxml2-dev \
+   libpq-dev
 
 RUN rm -r /var/lib/apt/lists/*
 
 RUN PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install zip pdo_mysql mysqli mbstring imap soap
+    && docker-php-ext-install zip pdo_mysql mysqli mbstring imap soap pdo_pgsql
 
 
 # composer install
