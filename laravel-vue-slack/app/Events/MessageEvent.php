@@ -22,18 +22,21 @@ class MessageEvent implements ShouldBroadcast
 
     public $isThreadMessage;
 
+    public $threadMessageCount;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($channel, $channelId, $message, $messageId, $isThreadMessage)
+    public function __construct($channel, $channelId, $message, $messageId, $isThreadMessage, $threadMessageCount = 0)
     {
         $this->channel = $channel;
         $this->channelId = $channelId;
         $this->message = $message;
         $this->messageId = $messageId;
         $this->isThreadMessage = $isThreadMessage;
+        $this->threadMessageCount = $threadMessageCount;
     }
 
     /**
