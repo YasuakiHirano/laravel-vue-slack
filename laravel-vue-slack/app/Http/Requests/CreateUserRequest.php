@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Lang;
 
 class CreateUserRequest extends FormRequest
 {
@@ -27,6 +28,13 @@ class CreateUserRequest extends FormRequest
             'name' => 'required|unique:users,name',
             'email' => 'required|email|unique:users,email',
             'password' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'email.unique' => Lang::get('message.user.unique_email')
         ];
     }
 }

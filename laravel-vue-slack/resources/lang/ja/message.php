@@ -11,5 +11,8 @@ return [
     'message' => [
         'parent_message_id_empty' => 'スレッドの親メッセージIDが空です。',
         'other_user_post_delete' => '他のユーザーの投稿は削除できません。'
+    ],
+    'user' => [
+        'unique_email' => 'メールアドレスが既に登録されています。ログインしてください。'
     ]
 ];
