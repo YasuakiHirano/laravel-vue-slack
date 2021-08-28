@@ -10,6 +10,7 @@
       :channelName="channelName"
       :content="content"
       @event:updateTextArea="isDisableSendMessage"
+      @blur="isDisableSendMessage"
       class="mt-2"
     />
     <text-area-icons
