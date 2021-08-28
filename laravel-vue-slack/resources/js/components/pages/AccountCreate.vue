@@ -51,6 +51,7 @@ export default {
 
       try {
         isDisableCreateButton.value = true
+        isErrorAlertShow.value = false
         const created = await CreateUser(props.sendEmail, inputName.value, inputPassword.value)
         if (created) {
           location.href = location.protocol + "//" +location.host + "/#/chat"

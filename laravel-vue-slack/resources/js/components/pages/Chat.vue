@@ -250,6 +250,7 @@ export default {
 
       try {
         // 招待メールの送信
+        isErrorAlertShow.value = false
         await SendInvitationMail(email.value)
       } catch (error) {
         errorMessage.value = findErrorMessage(error)
@@ -303,6 +304,7 @@ export default {
 
       try {
         // チャンネルを作成する
+        isErrorAlertShow.value = false
         await CreateChannel(addChannelName.value, addChannelDescription.value, addChannelIsPrivate.value)
       } catch (error) {
         errorMessage.value = findErrorMessage(error)
