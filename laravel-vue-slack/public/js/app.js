@@ -21237,14 +21237,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     window.Echo.channel("create-message").listen('.MessageEvent', function (result) {
       if (result.isThreadMessage) {
-        threadModal.value.threadMessages.push(result.message);
+        var parentMessageId = result.messageId;
+
+        if (parentMessageId === threadModal.value.parentMessageId) {
+          threadModal.value.threadMessages.push(result.message);
+          (0,vue__WEBPACK_IMPORTED_MODULE_1__.nextTick)(function () {
+            threadModal.value.scrollMessageListArea();
+          });
+        }
+
         messages.value.filter(function (message) {
-          if (message.id == threadMessageParam.value.id) {
-            message.isThreadCount = threadModal.value.threadMessages.length;
+          if (message.id == parentMessageId) {
+            message.isThreadCount = result.threadMessageCount;
           }
-        });
-        (0,vue__WEBPACK_IMPORTED_MODULE_1__.nextTick)(function () {
-          threadModal.value.scrollMessageListArea();
         });
       } else if (result.channelId == selectChannel.value) {
         messages.value.push(result.message);

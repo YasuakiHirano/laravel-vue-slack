@@ -54,6 +54,7 @@ class MessageController extends Controller
         }
 
         $messageModel = new Message();
+        $threadMessageCount = 0;
         if ($isThreadMessage) {
             // スレッドの場合は、スレッドのメッセージとして関連付ける
             Thread::create([
@@ -63,6 +64,7 @@ class MessageController extends Controller
 
             $messageQuery = $messageModel->createMessageQuery(null, [$message->id]);
             $selectMessage = $messageQuery->first();
+            $threadMessageCount = Thread::whereParentMessageId($request->parent_message_id)->count();
         } else {
             $messageQuery = $messageModel->createMessageQuery($request->channel_id);
             $selectMessage = $messageQuery
@@ -84,7 +86,7 @@ class MessageController extends Controller
         }
 
         // 作成したメッセージをブロードキャストで送信する
-        broadcast(new MessageEvent('create-message', $request->channel_id, $selectMessage->toArray(), null, $message->is_thread_message));
+        broadcast(new MessageEvent('create-message', $request->channel_id, $selectMessage->toArray(), $request->parent_message_id, $message->is_thread_message, $threadMessageCount));
 
         return response()->json('Message registration completed.', Response::HTTP_OK);
     }

@@ -547,15 +547,20 @@ export default {
      */
     window.Echo.channel("create-message").listen('.MessageEvent', result => {
       if (result.isThreadMessage) {
-        threadModal.value.threadMessages.push(result.message)
-        messages.value.filter(function (message) {
-          if (message.id == threadMessageParam.value.id) {
-            message.isThreadCount = threadModal.value.threadMessages.length
-          }
-        })
+        const parentMessageId = result.messageId
 
-        nextTick(() => {
-          threadModal.value.scrollMessageListArea()
+        if (parentMessageId === threadModal.value.parentMessageId) {
+          threadModal.value.threadMessages.push(result.message)
+
+          nextTick(() => {
+            threadModal.value.scrollMessageListArea()
+          })
+        }
+
+        messages.value.filter(function (message) {
+          if (message.id == parentMessageId) {
+            message.isThreadCount = result.threadMessageCount
+          }
         })
       } else if (result.channelId == selectChannel.value) {
         messages.value.push(result.message)
