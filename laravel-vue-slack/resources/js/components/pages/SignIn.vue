@@ -48,6 +48,7 @@ export default {
       if (!isFormCorrect) return
 
       try {
+        isErrorAlertShow.value = false
         const isSignIn = await UserSignIn(emailAddress.value, password.value)
         if (isSignIn) {
           router.push({ path: 'chat' })
