@@ -17,7 +17,7 @@ class CreateChannelsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description', 1024)->nullable();
-            $table->bigInteger('make_user_id')->nullable();
+            $table->foreignId('make_user_id')->constrained('users');
             $table->boolean('is_public')->nullable()->default(true);
             $table->timestamps();
             $table->softDeletes();

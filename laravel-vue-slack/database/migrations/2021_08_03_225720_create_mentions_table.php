@@ -15,9 +15,9 @@ class CreateMentionsTable extends Migration
     {
         Schema::create('mentions', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('message_id');
-            $table->bigInteger('user_id');
-            $table->bigInteger('create_user_id');
+            $table->foreignId('message_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('create_user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

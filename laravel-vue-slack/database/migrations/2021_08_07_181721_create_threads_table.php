@@ -15,8 +15,8 @@ class CreateThreadsTable extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('parent_message_id');
-            $table->bigInteger('message_id');
+            $table->foreignId('parent_message_id')->constrained('messages');
+            $table->foreignId('message_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

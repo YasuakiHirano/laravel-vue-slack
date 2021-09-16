@@ -15,10 +15,11 @@ class CreateChannelUsersTable extends Migration
     {
         Schema::create('channel_users', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('channel_id');
-            $table->bigInteger('user_id');
+            $table->foreignId('channel_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
@@ -30,5 +31,7 @@ class CreateChannelUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('channel_users');
+        Schema::dropForeign('channel_users_channel_id_foreign');
+        Schema::dropForeign('channel_users_user_id_foreign');
     }
 }

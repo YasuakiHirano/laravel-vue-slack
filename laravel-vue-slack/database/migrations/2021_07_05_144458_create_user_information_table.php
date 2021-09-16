@@ -15,7 +15,7 @@ class CreateUserInformationTable extends Migration
     {
         Schema::create('user_information', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->nullable();
+            $table->foreignId('user_id')->constrained();
             $table->integer('image_number')->nullable();
             $table->string('send_email')->nullable();
             $table->integer('status')->nullable();
